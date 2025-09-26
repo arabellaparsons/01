@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Ultra • Crypto Airdrop CRM Profit Dashboard</title>
+
+<style>
+  @import url("https://fonts.googleapis.com/css2?family=Audiowide&family=Noto+Sans+TC:wght@400;800&display=swap");
+  :root{
+    --card:#0e1526cc; /* glass */
+    --panel:#0b1222;
+    --accent:#6df3ff;
+    --accent-2:#9a6dff;
+    --text:#ffffff;
+    --muted:#a8b5c7;
+    --ring: rgba(109,243,255,0.5);
+    --glow: 0 0 .75rem rgba(109,243,255,.6), 0 0 2rem rgba(154,109,255,.35);
+    --radius: 18px;
+    --ok:#6dffb8; --warn:#ffd36d; --danger:#ff6d8d;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{margin:0; background: radial-gradient(1200px 700px at 10% -10%, rgba(109,243,255,.05), transparent 40%), radial-gradient(1200px 700px at 110% 30%, rgba(154,109,255,.06), transparent 40%), #0a0f1d; color:var(--text); font-family:'Noto Sans TC', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;}
+
+
+/* ===== Popup Box ===== */
+/* 背景遮罩 + 模糊 */
+#popupOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.3);
+  backdrop-filter: blur(6px);
+  display: none;            /* 預設隱藏 */
+  z-index: 9999;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 內容框 */
+/* 背景遮罩 + 模糊 */
+#popupOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.3);
+  backdrop-filter: blur(6px);
+  display: none;            /* 預設隱藏 */
+  z-index: 9999;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 正方形內容框 */
+#popupBox {
+  position: relative;
+  width: 800px;
+  height: 800px;
+  max-width: 90vw;  /* 手機也保持正方形 */
+  max-height: 90vw;
+  background: radial-gradient(circle at 30% 30%, #282828, #000 60%, #187575);
+  border-radius: 20px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+}
+
+/* 關閉按鈕 (右上角) */
+#popupClose {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 2rem;
+  color: #fff;
+  cursor: pointer;
+  line-height: 1;
+}
+#popupClose:hover {
+  color: #ff0000;
+}
+
+.popupContent {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: white;
+  padding: 20px;
+  max-width: 90%;
+}
+
+/* 注意文字 */
+.popupContent h1 {
+  font-size: 50px;
+  color: red;
+  margin-bottom: 20px;
+  font-family: 'Noto Sans TC', serif;
+  font-weight: bold;
+}
+
+.popupContent p {
+  font-size: 30px;
+  font-family: 'Noto Sans TC', serif;
+  color: white;
+  margin-bottom: 30px;
+}
+
+/* 響應式：手機調整文字大小 */
+@media (max-width: 768px) {
+    .popupContent {
+    width: 90%;
+  }
+  .popupContent h1 {
+    font-size: 30px;
+  }
+  .popupContent p {
+    font-size: 20px;
+  }
+  .popupButton {
+    font-size: 20px;
+    padding: 20px 0;
+  }
+}
+
+/* 修改後的按鈕樣式 */
+.popupButton {
+  width: 100%;
+  font-size: 30px;
+  font-family: 'Noto Sans TC', serif;
+  font-weight: bold;
+  background: linear-gradient(180deg, #e3ba62 0%, #7a572b 100%);
+  padding: 30px 0;
+  border: 1px solid #e7c477;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  color: #000;
+}
+
+  /* ===== Top Persistent Bar ===== */
+.topbar{ position:fixed; inset:0 0 auto 0; height:100px; padding: 10px 18px; z-index:50;
+    background: linear-gradient(90deg, rgba(109,243,255,.10), rgba(154,109,255,.10));
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,.06), 0 10px 30px rgba(0,0,0,.45);
+    backdrop-filter: blur(10px);display: flex;
+  align-items: center; 
+  }
+  .topbar-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+  .top-left{display:flex; align-items:center; gap:12px}
+  .logo{ width:60px; height:60px; border-radius:8px; background: radial-gradient(circle at 30% 30%, #187575, #000 60%, #004808); box-shadow: 0 0 18px rgba(109,243,255,.6), inset 0 0 1px rgba(255,255,255,.6); display:grid; place-items:center; padding: 5px; }
+  .logo svg{ width:24px; height:24px; filter: drop-shadow(0 0 8px rgba(109,243,255,.8)); }
+  .brand{ font-family:'Audiowide', sans-serif; letter-spacing:.3px; font-size: clamp(16px,2vw,20px); color:#e9fbff; text-shadow: 0 0 10px rgba(109,243,255,.65); }
+.cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  border-radius: 999px;
+  cursor: pointer;
+  color: #3b2900;
+  font-weight: 800;
+  text-decoration: none;
+  transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.3s ease;
+  background: radial-gradient(120% 120% at 30% 30%, #fff6d1, #ffd36d 50%, #ffb700 100%);
+  box-shadow: 0 0 1.2rem rgba(255, 215, 0, 0.6), 0 0 2.4rem rgba(255, 181, 36, 0.5), inset 0 -6px 18px rgba(255,255,255,.4);
+  border: none;
+}
+
+.cta:hover {
+  transform: translateY(-1px) scale(1.02);
+  box-shadow: 0 0 1.6rem rgba(255, 215, 0, 0.9), 0 0 2.8rem rgba(255, 181, 36, 0.6);
+}
+
+.cta:active {
+  transform: translateY(0) scale(0.99);
+}
+
+  @media (max-width: 520px){ .brand{ display:none; } .topbar{ height:72px; } .logo{ width:50px; height:50px; } }
+
+  .wrap{ max-width: 1280px; margin: clamp(16px,3vw,32px) auto; padding: calc(64px + clamp(16px,3vw,32px)) clamp(16px,3vw,32px) clamp(16px,3vw,32px);
+    border-radius: calc(var(--radius) + 6px);
+    background: linear-gradient(180deg, rgba(109,243,255,.05), rgba(154,109,255,.05));
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,.04), 0 20px 60px rgba(0,0,0,.45);
+    position: relative;
+  }
+
+  .headline{ display:flex; flex-wrap:wrap; align-items:center; gap:16px; justify-content:space-between; }
+  .badge{
+    display:inline-flex; align-items:center; gap:8px; padding:8px 12px; border-radius: 999px;
+    color: var(--text); background: linear-gradient(90deg, rgba(109,243,255,.16), rgba(154,109,255,.16));
+    box-shadow: inset 0 0 0 1px rgba(109,243,255,.25), 0 0 24px rgba(109,243,255,.25);
+    text-shadow: 0 0 8px rgba(109,243,255,.65);
+    font-size: 13px; letter-spacing:.3px; font-family:'Audiowide', sans-serif; margin: 18px 0 10px;
+  }
+
+  .panel{ margin-top: 20px; padding: clamp(14px,2vw,20px); border-radius: var(--radius);
+    background: linear-gradient(180deg, rgba(14,21,38,.85), rgba(14,21,38,.68)); backdrop-filter: blur(10px);
+    box-shadow: var(--glow), inset 0 0 0 1px rgba(109,243,255,.25);
+  }
+
+  .grid{ display:grid; gap:16px; }
+  .grid.cols-4{ grid-template-columns: repeat(4, 1fr); }
+  .grid.cols-3{ grid-template-columns: repeat(3, 1fr); }
+  .grid.cols-2{ grid-template-columns: repeat(2, 1fr); }
+  .grid.cols-1{ grid-template-columns: 1fr; }
+  @media (max-width: 1100px){ .grid.cols-4{ grid-template-columns: repeat(2, 1fr);} }
+  @media (max-width: 640px){ .grid.cols-3,.grid.cols-2,.grid.cols-4{ grid-template-columns: 1fr;} }
+
+  .section{ margin-top: 60px; }
+  .section > .section-title{ margin: 10px 0 12px; }
+
+  .card{ position:relative; padding:16px; border-radius: var(--radius);
+    background: linear-gradient(180deg, rgba(23,31,57,.75), rgba(23,31,57,.55));
+    backdrop-filter: blur(8px);
+    box-shadow: 0 10px 30px rgba(0,0,0,.45), inset 0 0 0 1px rgba(255,255,255,.06);
+    overflow:hidden; transition: transform .5s ease, box-shadow .15s ease, opacity .5s ease; opacity:0; transform: translateY(14px);
+  }
+  .card.reveal.revealed{ opacity:1; transform: translateY(0); }
+  .card:hover{ box-shadow: var(--glow), 0 18px 50px rgba(0,0,0,.55); }
+  .card::after{ content:""; position:absolute; inset:-1px; border-radius:inherit; background:
+      linear-gradient(120deg, rgba(109,243,255,.35), rgba(154,109,255,.28), transparent 55%);
+    mask: linear-gradient(black, black) content-box, linear-gradient(black, black);
+    -webkit-mask-composite: xor; mask-composite: exclude; padding:1px; pointer-events:none; opacity:.75; }
+
+  .card-head{ display:flex; align-items:flex-start; justify-content:space-between; gap:12px; margin-bottom:10px; }
+  .card-title{ font-size:14px; color:#c9e8ff; letter-spacing:.3px; }
+  .kpi{ font-family:'Audiowide', sans-serif; font-size: clamp(20px, 3vw, 28px); font-weight:900; color:#fff; text-shadow: 0 0 6px rgba(109,243,255,.8), 0 0 12px rgba(154,109,255,.7); }
+  .sub{ font-size:12px; color: var(--muted); }
+  .row{ display:flex; align-items:center; justify-content:space-between; gap:12px; }
+
+  .tabs{ display:flex; gap:8px; background:rgba(255,255,255,.04); padding:6px; border-radius:999px; box-shadow: inset 0 0 0 1px rgba(255,255,255,.06); }
+  .tab{ padding:6px 10px; border-radius:999px; font-size:12px; color:#cfefff; cursor:pointer; user-select:none; }
+  .tab.active{ background: linear-gradient(90deg, rgba(109,243,255,.22), rgba(154,109,255,.22)); box-shadow: inset 0 0 0 1px rgba(109,243,255,.35); color:#fff; }
+
+  .progress{ height:8px; border-radius:999px; background: #1a2240; box-shadow: inset 0 0 0 1px rgba(255,255,255,.06); overflow:hidden; }
+  .progress > span{ display:block; height:100%; background: linear-gradient(90deg, var(--accent), var(--accent-2)); box-shadow: 0 0 18px rgba(109,243,255,.55) inset; width:0; }
+  .progress.start > span{ animation: fill 1.8s ease forwards; }
+  @keyframes fill{ from{ width:0 } to{ width:var(--to,60%) } }
+
+  /* ===== Idle (灰階) shimmer for not-started state ===== */
+  .skeleton{ position:relative; border-radius:6px; background: #121a31; overflow:hidden; }
+  .skeleton::after{ content:""; position:absolute; inset:0; transform: translateX(-100%); animation: shimmer 1.2s linear infinite; background: linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,.08), rgba(255,255,255,0)); }
+  .skeleton-text{ height:14px; display:block; }
+  .skeleton-sm{ height:10px; }
+  @keyframes shimmer{ 100%{ transform: translateX(100%); } }
+
+  .progress.idle{ background:#141a2c; }
+  .progress.idle > span{ width:100%; background: linear-gradient(90deg, rgba(255,255,255,.06), rgba(255,255,255,.16), rgba(255,255,255,.06)); animation: shimmer 1.2s linear infinite; }
+
+  .pill{ display:inline-flex; align-items:center; gap:6px; padding:6px 10px; border-radius:999px; font-size:12px; color:#c9e8ff; background: linear-gradient(90deg, rgba(109,243,255,.16), rgba(154,109,255,.16)); box-shadow: inset 0 0 0 1px rgba(109,243,255,.28); }
+
+  .table{ width:100%; border-collapse:separate; border-spacing:0; font-size:13px; color:#d9e7ff; }
+  .table th, .table td{ text-align:left; padding:12px 10px; }
+  .table thead th{ position:sticky; top:0; background: rgba(18,24,44,.85); backdrop-filter: blur(6px); font-weight:800; color:#e7f9ff; }
+  .table tbody tr{ background: rgba(23,31,57,.55); }
+  .table tbody tr + tr{ border-top: 1px solid rgba(255,255,255,.06); }
+  .table .t-right{ text-align:right; }
+
+  .mini{ font-size:11px; color:var(--muted); }
+  .spark{ height:44px; width:100%; display:block; }
+
+  .wallet{ display:flex; align-items:center; gap:10px; }
+  .dot{ width:8px; height:8px; border-radius:50%; box-shadow:0 0 10px currentColor; }
+  .ok{ color: var(--ok);} .warn{ color: var(--warn);} .danger{ color: var(--danger);} 
+
+  .footer-note{ margin-top:14px; font-size:12px; color:var(--muted); text-align:right; }
+
+  /* decorative scanlines */
+  .scanlines{ pointer-events:none; position:absolute; inset:0; background: repeating-linear-gradient(180deg, transparent, transparent 28px, rgba(255,255,255,.02) 28px, rgba(255,255,255,.02) 29px); mix-blend-mode:overlay; opacity:.35; border-radius: inherit; }
+
+  /* ===== Preloader ===== */
+  .preloader{ position:fixed; inset:0; background: radial-gradient(1000px 600px at 30% 20%, rgba(109,243,255,.08), transparent 40%), #060a16; display:grid; place-items:center; z-index:100; overflow:hidden; }
+  .load-box{ width:min(560px, 86vw); padding:22px; text-align:center;}
+  .load-title{ margin-bottom:10px; font-weight:800; letter-spacing:.3px; }
+  .load-bar{ height:10px; border-radius:999px; background:#0f1730; box-shadow: inset 0 0 0 1px rgba(255,255,255,.06); overflow:hidden; }
+  .load-bar > span{ display:block; height:100%; width:0%; background: linear-gradient(90deg, var(--accent), var(--accent-2)); box-shadow: 0 0 20px rgba(109,243,255,.8); animation: neonFlow 1s linear infinite; position:relative; }
+  .load-pct{ margin-top:8px; font-family:'Audiowide', monospace; }
+  @keyframes neonFlow{ 0%{ filter: hue-rotate(0deg) } 100%{ filter: hue-rotate(20deg) } }
+
+  /* appear animation for main */
+  .appear{ animation: enter .7s cubic-bezier(.2,.8,.2,1) both; }
+  @keyframes enter{ from{ opacity:0; transform: translateY(12px) scale(.98) } to{ opacity:1; transform: translateY(0) scale(1) } }
+</style>
+</head>
+<body>
+
+<!-- === Popup Box === -->
+<div id="popupOverlay">
+  <div id="popupBox">
+    <button id="popupClose" aria-label="關閉">×</button>
+    <div class="popupContent">
+      <h1>⚠️注意！</h1>
+      <p>你的系統尚未開通，點擊按鈕觀看開通教學</p>
+      <button class="popupButton" onclick="location.href='activate.html'">⚡觀看開通教學</button>
+    </div>
+  </div>
+</div>
+
+
+  <!-- Top persistent bar -->
+  <div class="topbar">
+    <div class="topbar-inner">
+    <div class="top-left">
+      <div class="logo" title="Logo">
+         <img src="https://arftk.com/imgs/wlogo.svg" alt="Logo">
+      </div>
+      <div class="brand">Rewards • Dashboard</div>
+    </div>
+    <a class="cta" href="activate.html" target="_blank" rel="noopener" title="點此啟動系統">⚡ 點此開通系統</a>
+  </div>
+  </div>
+
+  <!-- Preloader -->
+  <div class="preloader" id="preloader">
+    <div class="load-box">
+      <div class="badge" style="margin:0 0 8px">⚡ Dashboard • 載入中</div>
+      <div class="load-title">正在蒐集數據...</div>
+      <div class="load-bar"><span id="loadBar"></span></div>
+      <div class="load-pct" id="loadPct">0%</div>
+    </div>
+  </div>
+
+  <main id="appMain" style="opacity:0">
+  <div class="wrap">
+    <div class="headline appear">
+      <div class="badge">💠 儀表板 • 總覽</div>
+    </div>
+
+    <!-- KPI + Tabs -->
+    <div class="panel section reveal">
+      <div class="row" style="margin-bottom:10px">
+        <div class="badge section-title">💎 總覽 • Airdrop 獎金</div>
+        <div class="tabs" id="kpiTabs">
+          <div class="tab active" data-key="total">總計</div>
+          <div class="tab" data-key="week">本週</div>
+          <div class="tab" data-key="month">本月</div>
+        </div>
+      </div>
+      <div class="grid cols-4">
+        <div class="card reveal">
+          <div class="card-head"><div class="card-title">累積空投獎金</div><span class="pill">USD</span></div>
+          <div class="kpi" id="k_total_bonus">$ 0</div>
+          <div class="sub" id="k_total_sub">來自 0 個任務 • 0 個鏈</div>
+        </div>
+        <div class="card reveal">
+          <div class="card-head"><div class="card-title">有效任務數</div><span class="pill">自動化</span></div>
+          <div class="kpi" id="k_active_tasks">0</div>
+          <div class="sub">正在排程與執行</div>
+        </div>
+        <div class="card reveal">
+          <div class="card-head"><div class="card-title">已綁定錢包</div><span class="pill">多鏈</span></div>
+          <div class="kpi" id="k_wallets">0</div>
+          <div class="sub">ETH • SOL • BSC • BASE</div>
+        </div>
+        <div class="card reveal">
+          <div class="card-head"><div class="card-title">策略健康度</div><span class="pill">風控</span></div>
+          <div class="kpi" id="k_health">--</div>
+          <div class="sub">風險分散良好</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ongoing Tasks + Wallets + Daily Profit -->
+    <div class="panel section reveal">
+      <div class="badge section-title">🛰️ 進行中 • 系統運行</div>
+      <div class="grid cols-3">
+        <div class="card reveal">
+          <div class="card-head"><div class="card-title">正在進行中的 Airdrop 任務</div><span class="pill">進度</span></div>
+          <div class="row mini"><span>執行排程</span><span id="cronNext">下次：--:--</span></div>
+          <div class="skeleton skeleton-text" style="--to:0%; margin:8px 0 14px"><span></span></div>
+          <div class="grid cols-1" id="taskList"></div>
+        </div>
+
+        <div class="card reveal">
+          <div class="card-head"><div class="card-title">正在使用中的 Crypto Wallet</div><span class="pill">連線</span></div>
+          <div class="grid cols-1" id="walletList" style="gap:10px"></div>
+          <div class="row mini" style="margin-top:10px">
+            <span>API 延遲</span>
+            <span id="apiLatency">-- ms</span>
+          </div>
+        </div>
+
+        <div class="card reveal">
+          <div class="card-head"><div class="card-title">過去7天獲利</div><span class="pill">7D</span></div>
+          <svg class="spark" viewBox="0 0 320 60" preserveAspectRatio="none" id="sparkline"></svg>
+          <div class="row mini"><span id="sparkLabel">Mon → Sun</span><span class="pill" id="sparkChange">+0.0%</span></div>
+          <div style="max-height:200px; overflow:auto; border-radius:12px; margin-top:10px">
+            <table class="table">
+              <thead><tr><th>日期</th><th class="t-right">當日獎金</th><th class="t-right">% change</th></tr></thead>
+              <tbody id="profitRows"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Completed Tasks + Payouts -->
+    <div class="panel section reveal">
+      <div class="badge section-title">📦 歷史 • 任務與撥款</div>
+      <div class="grid cols-2">
+        <div class="card reveal">
+          <div class="card-head"><div class="card-title">過去已完成的 Airdrop 任務</div><span class="pill">近 30 天</span></div>
+          <div style="max-height:260px; overflow:auto; border-radius:12px">
+            <table class="table">
+              <thead><tr><th>任務</th><th>鏈</th><th>日期</th><th class="t-right">收益</th></tr></thead>
+              <tbody id="doneTasks"></tbody>
+            </table>
+          </div>
+        </div>
+        <div class="card reveal">
+          <div class="card-head"><div class="card-title">過去的 Crypto Airdrop 獎金 Payout</div><span class="pill">已入帳</span></div>
+          <div style="max-height:260px; overflow:auto; border-radius:12px">
+            <table class="table">
+              <thead><tr><th>交易哈希</th><th>錢包</th><th>日期</th><th class="t-right">金額</th></tr></thead>
+              <tbody id="payouts"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Professional widgets: more futuristic charts -->
+    <div class="panel section reveal">
+      <div class="badge section-title">🧠 系統狀態</div>
+      <div class="grid cols-3">
+        <div class="card reveal">
+          <div class="card-head"><div class="card-title">鏈別資金配置</div><span class="pill">Smart Switch</span></div>
+          <div class="sub" id="alloc">ETH 35% • SOL 25% • BASE 20% • BSC 20%</div>
+          <div class="progress start" style="--to:35%; margin-top:10px"><span></span></div>
+          <div class="progress start" style="--to:25%; margin-top:8px"><span></span></div>
+          <div class="progress start" style="--to:20%; margin-top:8px"><span></span></div>
+          <div class="progress start" style="--to:20%; margin-top:8px"><span></span></div>
+        </div>
+
+        <div class="card reveal">
+          <div class="card-head"><div class="card-title">風險監控</div><span class="pill">Alert</span></div>
+          <div class="row" style="margin:6px 0"><span class="wallet"><span class="dot ok"></span>智能合約互動</span><span class="mini">正常</span></div>
+          <div class="row" style="margin:6px 0"><span class="wallet"><span class="dot warn"></span>Gas 成本</span><span class="mini">上升中</span></div>
+          <div class="row" style="margin:6px 0"><span class="wallet"><span class="dot ok"></span>KYC / 地區</span><span class="mini">通過</span></div>
+          <div class="row" style="margin:6px 0"><span class="wallet"><span class="dot ok"></span>錢包黑名單</span><span class="mini">無命中</span></div>
+          <div class="row" style="margin:6px 0"><span class="wallet"><span class="dot danger"></span>可疑交易峰值</span><span class="mini">需關注</span></div>
+        </div>
+
+        
+
+        <div class="card reveal">
+          <div class="card-head"><div class="card-title">系統吞吐量 TPS</div><span class="pill">Bar</span></div>
+          <svg id="barTPS"></svg>
+          <div class="mini">最近 8 個時段</div>
+        </div>
+
+        
+      </div>
+    </div>
+
+    <div class="footer-note">此儀表板僅作為會員臨時區,因你的帳號尚未開通!</div>
+    <div class="scanlines"></div>
+  </div>
+  </main>
+
+<script>
+  const fmtUSD = n => '$ ' + n.toLocaleString(undefined, {maximumFractionDigits:0});
+  const byId = id => document.getElementById(id);
+
+  /* ===== Popup 每分鐘跳出 ===== */
+  setInterval(()=>{ byId('popupOverlay').style.display = 'flex'; },15000);
+  byId('popupClose').addEventListener('click', ()=>{
+  byId('popupOverlay').style.display = 'none';
+});
+
+  /* ===== TPS Bar Chart 動態新增 bar ===== */
+  const svg = byId('barTPS');
+const barWidth = 10;
+const spacing = 2;      // 每根 bar 之間間距
+const totalBars = Math.floor(320 / (barWidth + spacing)); // SVG 320px 寬可放多少根
+let heights = [];
+
+// 一開始填滿
+for(let i=0;i<totalBars;i++){
+  heights.push(Math.floor(Math.random()*100)+10);
+}
+
+// 渲染函數
+function renderBars(){
+  svg.innerHTML = '';
+  heights.forEach((h,i)=>{
+    const rect = document.createElementNS("http://www.w3.org/2000/svg","rect");
+    rect.setAttribute('x', i*(barWidth+spacing));
+    rect.setAttribute('y', 120 - h);
+    rect.setAttribute('width', barWidth);
+    rect.setAttribute('height', h);
+    rect.setAttribute('fill','url(#grad)');
+    rect.setAttribute('stroke','#6df3ff');
+    rect.setAttribute('stroke-width','1');
+    svg.appendChild(rect);
+  });
+}
+
+// 初次渲染
+renderBars();
+
+// 每 5 秒滾動
+setInterval(()=>{
+  // 移除最左邊，新增右邊
+  heights.shift();
+  heights.push(Math.floor(Math.random()*100)+10);
+  renderBars();
+},5000);
+
+
+  /* ===== Preloader logic (3s to 100%) ===== */
+  (function preload(){
+    const box = byId('preloader');
+    const bar = byId('loadBar');
+    const pct = byId('loadPct');
+    let p=0; const total=100; const dur=3000; const tick=30; const step = total/(dur/tick);
+    const int = setInterval(()=>{
+      p = Math.min(100, p+step);
+      bar.style.width = p.toFixed(0) + '%';
+      pct.textContent = p.toFixed(0) + '%';
+      if(p>=100){ clearInterval(int);
+        setTimeout(()=>{
+          box.style.opacity = '0'; box.style.transition = 'opacity .5s ease';
+          setTimeout(()=>{ box.style.display='none';
+            const main = byId('appMain');
+            main.style.opacity = '1';
+            main.classList.add('appear');
+            // kick off reveal animations after preload
+            observeReveal();
+          }, 500);
+        }, 150);
+      }
+    }, tick);
+  })();
+
+  /* ===== KPI Tabs demo data (全部歸零) ===== */
+  const kpiData = {
+    total: { bonus: 0, tasks: 0, wallets: 0, health: '--' },
+    week:  { bonus: 0, tasks: 0, wallets: 0, health: '--' },
+    month: { bonus: 0, tasks: 0, wallets: 0, health: '--' }
+  };
+  const tabs = Array.from(document.querySelectorAll('#kpiTabs .tab'));
+  tabs.forEach(t => t.addEventListener('click', () => {
+    tabs.forEach(x => x.classList.remove('active')); t.classList.add('active');
+    const data = kpiData[t.dataset.key];
+    byId('k_total_bonus').textContent = fmtUSD(data.bonus);
+    byId('k_active_tasks').textContent = data.tasks;
+    byId('k_wallets').textContent = data.wallets;
+    byId('k_health').textContent = data.health;
+    byId('k_total_sub').textContent = '來自 0 個任務 • 0 個鏈';
+  }));
+
+  /* ===== Ongoing tasks ===== */
+  const tasks = [
+    { name:'BASE Chain', chain:'0', progress:0 },
+    { name:'ETH Chain', chain:'0', progress:0 },
+    { name:'SOL Chain', chain:'0', progress:0 },
+    { name:'BSc Chain', chain:'0', progress:0 }
+  ];
+  const tWrap = byId('taskList');
+  tasks.forEach(t => {
+    const row = document.createElement('div');
+    row.className = 'row';
+    row.innerHTML = `<div><div>${t.name}</div><div class="mini">數量：${t.chain}</div></div>
+                     <div style="min-width:120px;">
+                       <span class="skeleton skeleton-text" style="display:inline-block; width:100px" title="尚未啟動"></span>
+                     </div>`;
+    tWrap.appendChild(row);
+  });
+
+  /* ===== Wallets ===== */
+  const wallets = [
+    { label:'主錢包 #1', addr:'0xa1...c9F3', net:'ETH', status:'ok' },
+    { label:'收益錢包 #A', addr:'SoL1...8sd', net:'SOL', status:'ok' },
+    { label:'Gas Vault', addr:'0x91...3b1', net:'BASE', status:'warn' },
+    { label:'備援錢包', addr:'0xb3...77d', net:'BSC', status:'ok' },
+  ];
+  const wWrap = byId('walletList');
+  wallets.forEach(w => {
+    const row = document.createElement('div');
+    row.className = 'row';
+    row.innerHTML = `<div class="wallet"><span class="dot ${w.status}"></span>${w.label}<span class="mini" style="opacity:.8">(${w.net})</span></div>
+                     <div class="mini" style="width:100px"><span class="skeleton skeleton-text" title="尚未啟動"></span></div>`;
+    wWrap.appendChild(row);
+  });
+
+  /* ===== Simple sparkline (SVG) + 7D table ===== */
+  const days = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  // 讓線圖呈現「一直線」：使用相同的固定值
+  const profits = [1000,1000,1000,1000,1000,1000,1000];
+  function renderSpark(){
+    const svg = byId('sparkline');
+    const w = 320, h = 60, p = 6;
+    const max = Math.max(...profits) * 1.1, min = 0;
+    const x = i => p + i * ((w - p*2) / (profits.length - 1));
+    const y = v => h - p - (v-min)/(max-min) * (h - p*2);
+    let d = '';
+    profits.forEach((v,i)=>{ d += (i?'L':'M') + x(i) + ' ' + y(v) + ' '; });
+    svg.innerHTML = `
+      <defs>
+        <linearGradient id="g" x1="0" x2="0" y1="0" y2="1">
+          <stop offset="0%" stop-color="${getComputedStyle(document.documentElement).getPropertyValue('--accent').trim()}" stop-opacity=".95" />
+          <stop offset="100%" stop-color="${getComputedStyle(document.documentElement).getPropertyValue('--accent-2').trim()}" stop-opacity=".95" />
+        </linearGradient>
+      </defs>
+      <path d="${d}" fill="none" stroke="url(#g)" stroke-width="2.5"/>
+      <circle cx="${x(profits.length-1)}" cy="${y(profits[profits.length-1])}" r="3.5" fill="url(#g)" />`;
+
+    const pct = 0;
+    byId('sparkChange').textContent = (pct>=0?'+':'') + pct.toFixed(1) + '%';
+    byId('sparkLabel').textContent = days[0] + ' → ' + days.at(-1);
+
+    // Table rows for last 7 days
+    const tbody = byId('profitRows');
+    tbody.innerHTML = '';
+    const today = new Date();
+    for(let i=0;i<7;i++){
+      const d = new Date(today); d.setDate(today.getDate() - i);
+      const label = `${d.getMonth()+1}/${d.getDate()}`;
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td>${label}</td>
+                      <td class="t-right"><span class="skeleton skeleton-text" style="display:inline-block; width:80px" title="尚未啟動"></span></td>
+                      <td class="t-right"><span class="skeleton skeleton-sm" style="display:inline-block; width:60px" title="尚未啟動"></span></td>`;
+      tbody.appendChild(tr);
+    }
+  }
+  renderSpark();
+
+  /* ===== Completed tasks table (全部灰階動畫) ===== */
+  const done = Array.from({length:5},()=>({}));
+  const doneT = byId('doneTasks');
+  done.forEach(() => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td><span class="skeleton skeleton-text" style="width:140px; display:inline-block"></span></td>
+      <td><span class="skeleton skeleton-sm" style="width:50px; display:inline-block"></span></td>
+      <td><span class="skeleton skeleton-sm" style="width:80px; display:inline-block"></span></td>
+      <td class="t-right"><span class="skeleton skeleton-text" style="width:80px; display:inline-block"></span></td>`;
+    doneT.appendChild(tr);
+  });
+
+  /* ===== Payouts table (全部灰階動畫) ===== */
+  const pays = Array.from({length:4},()=>({}));
+  const pT = byId('payouts');
+  pays.forEach(() => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td><span class="skeleton skeleton-text" style="width:120px; display:inline-block"></span></td>
+      <td><span class="skeleton skeleton-sm" style="width:90px; display:inline-block"></span></td>
+      <td><span class="skeleton skeleton-sm" style="width:80px; display:inline-block"></span></td>
+      <td class="t-right"><span class="skeleton skeleton-text" style="width:80px; display:inline-block"></span></td>`;
+    pT.appendChild(tr);
+  });
+
+  /* ===== System charts ===== */
+  // Bar TPS
+  const tps = [120, 140, 160, 150, 180, 220, 210, 240];
+  (function renderBar(){
+    const svg = byId('barTPS'); const w=320, h=120, pad=12; const bw = (w - pad*2) / tps.length - 8;
+    let x = pad; let bars=''; const max = Math.max(...tps)*1.2;
+    tps.forEach(v=>{ const bh = (v/max)*(h-pad*2); const y=h-pad-bh; bars += `<rect x="${x}" y="${y}" width="${bw}" height="${bh}" rx="6" fill="url(#bg)" />`; x += bw+8; });
+    svg.innerHTML = `
+      <defs>
+        <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="${getComputedStyle(document.documentElement).getPropertyValue('--accent').trim()}" />
+          <stop offset="100%" stop-color="${getComputedStyle(document.documentElement).getPropertyValue('--accent-2').trim()}" />
+        </linearGradient>
+      </defs>
+      ${bars}`;
+  })();
+
+  // Line Tasks
+  const taskSeries = [6,7,5,9,8,10,12,11,13,14];
+  (function renderLine(){
+    const svg = byId('lineTasks'); const w=320, h=120, p=10; const max=Math.max(...taskSeries)*1.2; const min=0;
+    const x=i=> p + i*((w-p*2)/(taskSeries.length-1)); const y=v=> h-p - (v-min)/(max-min)*(h-p*2);
+    let d=''; taskSeries.forEach((v,i)=>{ d += (i?'L':'M')+x(i)+' '+y(v)+' '; });
+    svg.innerHTML = `
+      <defs>
+        <linearGradient id="lineG" x1="0" x2="0" y1="0" y2="1">
+          <stop offset="0%" stop-color="${getComputedStyle(document.documentElement).getPropertyValue('--accent').trim()}" />
+          <stop offset="100%" stop-color="${getComputedStyle(document.documentElement).getPropertyValue('--accent-2').trim()}" />
+        </linearGradient>
+      </defs>
+      <path d="${d}" fill="none" stroke="url(#lineG)" stroke-width="2.5"/>`;
+  })();
+
+  // Gauge error rate (semi-donut)
+  (function renderGauge(){
+    const svg = byId('gauge'); const rate = 0.8; // %
+    const cx=80, cy=90, r=60, sw=12; const start= Math.PI, end=0; // semicircle
+    const toXY = ang => `${cx + r*Math.cos(ang)} ${cy + r*Math.sin(ang)}`;
+    const bg = `<path d="M ${toXY(start)} A ${r} ${r} 0 0 1 ${toXY(end)}" stroke="#172444" stroke-width="${sw}" fill="none" stroke-linecap="round"/>`;
+    const valAng = start + (end-start) * (rate/100);
+    const val = `<path d="M ${toXY(start)} A ${r} ${r} 0 0 1 ${toXY(valAng)}" stroke="url(#gG)" stroke-width="${sw}" fill="none" stroke-linecap="round"/>`;
+    svg.innerHTML = `
+      <defs><linearGradient id="gG" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="${getComputedStyle(document.documentElement).getPropertyValue('--accent').trim()}"/><stop offset="100%" stop-color="${getComputedStyle(document.documentElement).getPropertyValue('--accent-2').trim()}"/></linearGradient></defs>
+      ${bg}${val}`;
+    byId('gaugeText').textContent = rate.toFixed(1) + '% Error';
+  })();
+
+  /* ===== Live-feel numbers ===== */
+  function tick(){
+    const now = new Date();
+    byId('cronNext').textContent = `下次：${now.getHours().toString().padStart(2,'0')}:${((now.getMinutes()+5)%60).toString().padStart(2,'0')}`;
+    byId('apiLatency').textContent = Math.floor(120 + Math.random()*60) + ' ms';
+  }
+  setInterval(tick, 4000); tick();
+
+  /* ===== Reveal on viewport ===== */
+  function observeReveal(){
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('revealed'); io.unobserve(e.target); } });
+    }, { threshold:.12 });
+    document.querySelectorAll('.reveal').forEach(el=> io.observe(el));
+    document.querySelectorAll('.progress').forEach(el=> el.classList.add('start'));
+  }
+</script>
+
+
+</body>
+</html>
