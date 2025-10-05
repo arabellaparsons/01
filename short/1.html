@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="content-language" content="zh-Hant">
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.5">
+    <link rel="stylesheet" type="text/css" href="css/black.css">
+    <title>男子的秘密曝光...</title>
+    <style type="text/css">
+         .video-block {
+              min-width:100%;
+            margin: 0px 0;
+            position: relative;
+                    border-radius: 10px;
+      overflow: hidden;
+        }
+        video {
+            width: 100%;
+        }
+.play-pause-btn {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(213, 0, 0, 0.7);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    z-index: 10;
+    padding: 6px 12px;
+    animation: btn 2s infinite;
+}
+    .play-pause-btn:hover {
+    background: rgba(255, 0, 0, 0.9);
+    box-shadow: 0 4px 12px rgba(255, 0, 0, 0.4);
+}
+@keyframes btn{
+  0% {
+        box-shadow: 0 0 0 0px rgba(255,255,255,.5);
+    }
+    
+    100% {
+        box-shadow: 0 0 0 60px rgba(255,255,255,0);
+    }
+    
+
+  
+}
+
+
+        .icon {
+            width: 25px;
+            height: 25px;
+        } 
+
+@media (min-width: 1024px) {
+    .play-pause-btn {
+        padding: 12px 32px; /* 增加 padding 大小，按比例放大 */
+    }
+
+    .icon {
+        width: 50px;  /* 增加 icon 大小 */
+        height: 50px; /* 增加 icon 大小 */
+    }
+}
+
+}
+
+
+.fade-in-up {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.fade-in-up.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.arrow2{
+    transform: rotate(255deg);
+}
+
+
+@property --gradient-angle {
+  syntax: "<angle>";
+  initial-value: 90deg;
+  inherits: false;
+}
+
+:root {
+  --clr-card: #2b0a0a; /* 深暗紅 / 巧克力色背景 */
+  --clr-1: #ff3b3b;    /* 鮮紅色 */
+  --clr-2: #ff7f3b;    /* 橘紅色 */
+  --clr-3: #ffb347;    /* 淺橘色 */
+}
+
+*,
+*::after,
+*::before {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+
+.card {
+  border-radius: 0.45rem;
+  cursor: pointer;
+  background-color: var(--clr-card);
+}
+
+.card::after,
+.card::before {
+  content: " ";
+  position: absolute;
+  z-index: -1;
+  inset: -0.25rem;
+  background: conic-gradient(
+    from var(--gradient-angle),
+    var(--clr-card),
+    var(--clr-1),
+    var(--clr-2),
+    var(--clr-3),
+    var(--clr-2),
+    var(--clr-1),
+    var(--clr-card)
+  );
+  border-radius: inherit;
+  animation: rotate 2.5s linear infinite;
+}
+
+.card::after {
+  filter: blur(3rem);
+}
+
+@keyframes rotate {
+  0% {
+    --gradient-angle: 0deg;
+  }
+  100% {
+    --gradient-angle: 360deg;
+  }
+}
+
+
+    </style>
+</head>
+
+<body>
+
+    <div id="container" align="left">
+         <style>
+.date{
+font-size: 35px;
+text-align:center;
+color:#fff;
+}
+</style>
+<div class="date">
+<script>
+var month = ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"];
+var dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+var mydate = new Date();
+function gDay() {
+document.write(month[mydate.getMonth()] + " " + mydate.getDate() + ", " + mydate.getFullYear());
+}
+</script>
+<script>
+gDay()
+</script>
+</div>
+        <div id="q00" class="toggleDiv" style="display: block;" align="center">
+            <div id="top" align="center"><span style="color:#ff0000;font-size: 25px;line-height: 1em;">⚠️警告:這部爭議影片今天就會刪除</span></br></br>男大生看完這部影片之後竟在<span style="color:#ffdc1d;">19天內賺進$2,719,053台幣</span>並直接退學,教授怒批「不勞而獲且可恥!」</div>
+            </br>
+            <span style="font-size: 25px;line-height: 1em;">點擊播放按鈕開始觀看影片👇🏻</span></br>
+            <div id="box" align="center">
+                <a href="https://www.google.com" target="_blank" style="text-decoration: none;" draggable="false">
+    <div class="video-block">
+<video src="img/cb.mp4" muted="" loop=""></video>
+        <button class="play-pause-btn">
+            <img class="icon" src="img/play.svg" alt="Play Icon" draggable="false">
+        </button>
+</div>
+</a>
+            </div>
+        </div>
+    </div>
+     <script>
+    const videoBlocks = document.querySelectorAll('.video-block');
+
+    videoBlocks.forEach(block => {
+        const video = block.querySelector('video');
+
+        // 不再需要 play/pause 按鈕，這邊不綁定任何點擊事件
+    });
+
+    const observerOptions = {
+        root: null,
+        threshold: 0.5
+    };
+
+    const observerCallback = (entries) => {
+        entries.forEach(entry => {
+            const videos = entry.target.querySelectorAll('video');
+            videos.forEach(video => {
+                if (entry.isIntersecting) {
+                    if (video.paused) {
+                        video.play().catch(error => {
+                            console.error('播放失敗:', error);
+                        });
+                    }
+                } else {
+                    if (!video.paused) {
+                        video.pause();
+                    }
+                }
+            });
+        });
+    };
+
+    const observer = new IntersectionObserver(observerCallback, observerOptions);
+    videoBlocks.forEach(block => observer.observe(block));
+</script>
+</body>
+</html>
