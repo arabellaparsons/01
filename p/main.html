@@ -633,7 +633,26 @@ background: linear-gradient(to bottom, #0010a3 0%, #0019ff 100%);
 		</style>
 
 	</head>
-		<body class="wp-singular page-template-default page page-id-3723 wp-embed-responsive wp-theme-twentytwentytwo tve_lp"style="" data-css="tve-u-1831867765b"> 				<div class="wrp cnt bSe" style="display: none">
+		<body class="wp-singular page-template-default page page-id-3723 wp-embed-responsive wp-theme-twentytwentytwo tve_lp"style="" data-css="tve-u-1831867765b"> 		<script src="https://fast.wistia.net/assets/external/E-v1.js" async=""></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const animatedElements = document.querySelectorAll(".fade-in-up, .fade-in-left");
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("visible");
+          observer.unobserve(entry.target); // 一次性觸發
+        }
+      });
+    }, {
+      threshold: 0.1
+    });
+
+    animatedElements.forEach(el => observer.observe(el));
+  });
+</script>
+		<div class="wrp cnt bSe" style="display: none">
 			<div class="awr"></div>
 		</div>
 		<div class="tve_wrap_all" id="tcb_landing_page">
