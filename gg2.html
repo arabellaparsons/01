@@ -265,12 +265,96 @@
         .promise-box::before { content: 'PROMISE'; position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--nk-bg-darkest); padding: 0 20px; color: var(--nk-gold-rich); font-family: var(--nk-font-en); letter-spacing: 3px; }
         
         /* --- 4. TESTIMONIALS --- */
-        .testimonials { display: grid; grid-template-columns: repeat(auto-fit, minmax(480px, 1fr)); gap: 40px; margin-top: 60px; justify-content: center; }
+        .testimonials { display: grid; grid-template-columns: repeat(auto-fit, minmax(480px, 1fr)); gap: 40px; margin-top: 60px; /* --- 容器置中與限制 --- */
+    width: 100%;
+    max-width: 1200px; /* 鎖死最大寬度 */
+    margin-left: auto; /* 左邊自動推 */
+    margin-right: auto; /* 右邊自動推 (達成置中) */justify-content: center; }
         .testi-card { background: var(--nk-bg-card); border: 1px solid #222; padding: 0; overflow: hidden; transition: transform 0.3s; }
         .testi-card:hover { transform: translateY(-5px); border-color: var(--nk-gold-dark); }
-        .testi-content { padding: 30px; text-align: center; }
-        .testi-name { font-family: var(--nk-font-en); color: var(--nk-gold-rich); font-size: 1.4rem; margin-bottom: 10px; display: block; }
-        .testi-quote { font-style: italic; color: #fff; font-size: 1.1rem; line-height: 1.6; }
+        /* --- UPDATED TESTIMONIAL STYLES (Profit First Layout) --- */
+
+.testi-content {
+    padding: 30px;
+    text-align: center; /* 預設置中 */
+    position: relative;
+}
+
+/* 1. 巨大的獲利數字 (最上面) */
+.testi-amount {
+    font-family: var(--nk-font-en);
+    font-size: 2.8rem; /* 字體超大 */
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: 15px;
+    display: block;
+    
+    /* 繼承你的黑金漸層文字效果 */
+    background: linear-gradient(to bottom, #fff 10%, var(--nk-gold-rich) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 2px 10px rgba(197, 160, 89, 0.2));
+}
+
+/* 2. 引言內容 (中間) */
+.testi-quote {
+    font-style: italic;
+    color: #ccc; /* 稍微亮一點的灰 */
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: 25px;
+    text-align: justify; /* 左右對齊看起來比較整齊 */
+}
+
+/* 3. 名字與國籍 (右下角) */
+.testi-meta {
+    display: block;
+    text-align: right; /* 靠右對齊 */
+    font-family: var(--nk-font-en); /* 用無襯線字體比較像簽名檔 */
+    color: var(--nk-gold-rich);
+    font-size: 1.1rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    border-top: 1px solid #333; /* 加一條淡淡的分隔線 */
+    padding-top: 15px;
+}
+
+/* 手機版微調 */
+@media (max-width: 768px) {
+    .testi-amount { font-size: 2.2rem; }
+    .testi-content { padding: 20px; }
+}
+
+/* --- NEW: Profit Badge Pill (獲利膠囊標籤) --- */
+.testi-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px 18px; /* 膠囊的厚度與寬度 */
+    border-radius: 50px; /* 極致圓角創造膠囊感 */
+    
+    /* 奢華黑金漸層背景 (稍微透一點，製造層次感) */
+    background: linear-gradient(135deg, rgba(197, 160, 89, 0.15) 0%, rgba(5, 5, 5, 0.8) 100%);
+    border: 1px solid rgba(197, 160, 89, 0.4); /* 微亮的金邊 */
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3), inset 0 0 10px rgba(197, 160, 89, 0.1); /* 外部陰影 + 內部微光 */
+    
+    color: var(--nk-gold-rich); /* 文字金色 */
+    font-size: 0.9rem;
+    font-weight: 500;
+    letter-spacing: 1px;
+    margin-bottom: 0px; /* 與下方大數字拉開距離 */
+    backdrop-filter: blur(5px); /* 稍微模糊背景，增加高級感 (支援的瀏覽器) */
+}
+
+/* SVG Icon 樣式 */
+.testi-badge svg {
+    width: 16px;
+    height: 16px;
+    margin-right: 8px; /* Icon 與文字的間距 */
+    stroke: var(--nk-gold-rich); /* 確保 icon 顏色跟文字一樣金 */
+    filter: drop-shadow(0 0 5px rgba(197, 160, 89, 0.5)); /* 讓 Icon 自己發光 */
+}
 
         /* --- MARQUEE --- */
         .marquee-wrapper { width: 100vw; position: relative; left: 50%; margin-left: -50vw; margin-top: 80px; margin-bottom: 20px; overflow: hidden; }
@@ -457,7 +541,7 @@
             
             /* Deep Dive Mobile */
             .feature-row { grid-template-columns: 1fr; gap: 0; padding: 0; border-radius: 0; }
-            .feature-row .video-wrapper { padding: 0; border: none; width: 100%; border-bottom: 1px solid var(--nk-gold-dark); border-top: 1px solid var(--nk-gold-dark); }
+            .feature-row .video-wrapper { padding: 0; border: 1px solid var(--nk-gold-dark); width: 100%; border-bottom: 1px solid var(--nk-gold-dark); border-top: 1px solid var(--nk-gold-dark); }
             .feature-row .video-wrapper::before { display: none; }
             .feature-content { padding: 30px 20px; }
 
@@ -887,6 +971,73 @@
         margin: 0 !important;
     }
 }
+
+/* --- FEATURE LIST SEQUENTIAL ANIMATION --- */
+
+/* 1. 初始狀態：透明 + 往左偏移 30px */
+.feature-list li {
+    opacity: 0;
+    transform: translateX(-30px);
+    /* 使用貝茲曲線讓移動更有質感，不是死板的直線 */
+    transition: all 0.6s cubic-bezier(0.215, 0.610, 0.355, 1.000); 
+}
+
+/* 2. 觸發狀態 (由 JS 加入 .visible)：完全顯現 */
+.feature-list.visible li {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* 3. 設定延遲時間：讓它們一個接一個進場 (Staggered Animation) */
+.feature-list.visible li:nth-child(1) { transition-delay: 0.1s; }
+.feature-list.visible li:nth-child(2) { transition-delay: 0.3s; }
+.feature-list.visible li:nth-child(3) { transition-delay: 0.5s; }
+.feature-list.visible li:nth-child(4) { transition-delay: 0.7s; }
+.feature-list.visible li:nth-child(5) { transition-delay: 0.9s; }
+
+/* --- STICKY FEATURE ROW (左側影片固定，右側長內容捲動) --- */
+
+/* 僅在桌面版生效 (大於 768px) */
+@media (min-width: 769px) {
+    .feature-row.sticky-mode {
+        /* 關鍵 1: 改為靠上對齊，不然 sticky 會失效 (預設是 center) */
+        align-items: start; 
+    }
+
+    .feature-row.sticky-mode .sticky-video-col {
+        /* 關鍵 2: 設定黏性定位 */
+        position: sticky;
+        top: 100px; /* 距離頂部 100px (避開 Header) */
+        
+        /* 稍微調整一下左邊寬度，讓右邊多一點空間放長內容 */
+        width: 100%; 
+    }
+}
+
+/* 右側內容區塊的優化 */
+.scrollable-content-col {
+    display: flex;
+    flex-direction: column;
+    gap: 60px; /* 每個段落之間的間距 */
+}
+
+.content-block {
+    border-bottom: 1px solid #222; /* 段落分隔線 */
+    padding-bottom: 40px;
+}
+.content-block:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+/* 右側內部的小標題 */
+.sticky-content-title {
+    color: var(--nk-gold-rich);
+    font-size: 1.3rem;
+    margin-bottom: 15px;
+    display: block;
+    font-weight: 700;
+}
     </style>
 </head>
 <body>
@@ -941,7 +1092,7 @@
                 <div class="marquee-glow-line"></div>
             </div>
 
-            <div class="text-center" style="margin-bottom: 50px;">
+            <div class="text-center" style="margin-bottom: 0px;">
                 <span class="subtitle-en">SYSTEM REVEALED</span>
                 <div class="hero-text-only">
                 <h1>任何人都能用「這個系統」每個月賺進數萬至數十萬美金<br>
@@ -1103,26 +1254,41 @@
 
             <div class="testimonials">
                 <div class="testi-card">
-                    <div class="video-wrapper" style="margin-top: 0; box-shadow: none; border: none; padding: 10px;">
-                        <script src="https://fast.wistia.com/embed/b3q7co67ui.js" async="" type="module"></script>
-                        <wistia-player media-id="b3q7co67ui" seo="false" aspect="1.7777777777777777"></wistia-player>
-                    </div>
-                    <div class="testi-content">
-                        <span class="testi-name">Matthew</span>
-                        <p class="testi-quote">"當年他遭公司裁員, 銀行帳戶只剩 $456 美金, 現在他開著勞斯萊斯, 住在要價上億的湖畔豪宅裡"</p>
-                    </div>
-                </div>
+        <div class="video-wrapper" style="margin-top: 0; box-shadow: none; border: none; padding: 10px;">
+            <script src="https://fast.wistia.com/embed/b3q7co67ui.js" async type="module"></script>
+            <wistia-player media-id="b3q7co67ui" seo="false" aspect="1.7777777777777777"></wistia-player>
+        </div>
+        <div class="testi-content">
+            <span class="testi-amount">$178,013</span>
+            
+            <p class="testi-quote">
+                "原本是毫無金融交易經驗的高中老師，透過這個系統，我上個月的被動收入竟然超過了我十年的薪水總和。"
+            </p>
+            
+            <div class="testi-meta">
+                🇬🇧 SARA W.
+            </div>
+        </div>
+    </div>
 
-                <div class="testi-card">
-                    <div class="video-wrapper" style="margin-top: 0; box-shadow: none; border: none; padding: 10px;">
-                        <script src="https://fast.wistia.com/embed/b3q7co67ui.js" async="" type="module"></script>
-                        <wistia-player media-id="b3q7co67ui" seo="false" aspect="1.7777777777777777"></wistia-player>
-                    </div>
-                    <div class="testi-content">
-                        <span class="testi-name">30 Days Profit</span>
-                        <p class="testi-quote">"30 天獲利高達 $1,463,347 美金, 現在他開著千萬名車, 帶全家人住進上億豪宅"</p>
-                    </div>
-                </div>
+    <div class="testi-card">
+        <div class="video-wrapper" style="margin-top: 0; box-shadow: none; border: none; padding: 10px;">
+            <script src="https://fast.wistia.com/embed/b3q7co67ui.js" async type="module"></script>
+            <wistia-player media-id="b3q7co67ui" seo="false" aspect="1.7777777777777777"></wistia-player>
+        </div>
+        <div class="testi-content">
+            <span class="testi-amount">$178,013</span>
+            
+            <p class="testi-quote">
+                "原本是毫無金融交易經驗的高中老師，透過這個系統，我上個月的被動收入竟然超過了我十年的薪水總和。"
+            </p>
+            
+            <div class="testi-meta">
+                🇬🇧 SARA W.
+            </div>
+        </div>
+    </div>
+
             </div>
             
             <div class="text-center" style="margin-top: 50px;">
@@ -1230,20 +1396,8 @@
                 <wistia-player media-id="b3q7co67ui" seo="false" aspect="1.7777777777777777"></wistia-player>
             </div>
 
-            <div class="text-center">
-                <span class="subtitle-en">ADVANCED TECHNOLOGY</span>
-                <h2>系統的獲利流程</h2>
-                <img src="https://arftk.com/imgs1/sys0001.jpg" alt="Devices" style="margin: 40px auto; max-width: 800px;">
-                
-                <p style="margin-top: 40px;">2016 年的 AlphaGo 擊敗世界棋王, 至 2023 年轟動全球的 ChatGPT, 皆為 AI 科技的應用</p>
-                <h3>AI 在金融交易中又有何優勢？</h3>
-            </div><ul class="feature-list" style="margin: 0 auto 80px;">
-                <li>直接連接至多個大型資料庫, 在數秒鐘內抓取上千萬筆即時財金與經濟數據</li>
-                <li>在數秒之內, 完成人類需要數日才能完成的分析與計算</li>
-                <li>利用複雜演算法 (Algorithm) 完成分析以及比對內建交易條件</li>
-                <li>沒有任何情緒與體力因素, 100% 按照交易策略進行</li>
-                <li>計算與執行不但快速, 並且比人類更精準, 無人為誤差</li>
-            </ul><div class="text-center" style="margin-bottom: 50px;">
+          
+            <div class="text-center" style="margin-bottom: 50px;">
                 <span class="subtitle-en">SYSTEM REVEALED</span>
                 <h2>獨家揭密：系統實戰運作邏輯</h2>
                 <div class="divider"></div>
@@ -1255,6 +1409,130 @@
                     <span></span>
                 </div>
             </div>
+
+            <div class="feature-row sticky-mode">
+    
+    <div class="sticky-video-col">
+        <div class="video-wrapper">
+            <div class="video-block">
+                <video src="https://arftk.com/imgs/arf.mp4" muted loop playsinline></video>
+                <button class="play-pause-btn">
+                    <img decoding="async" class="icon" src="https://arftk.com/imgs/play.svg">
+                </button>
+            </div>
+        </div>
+        <p style="margin-top: 20px; font-size: 0.9rem; text-align: center; color: #666;">
+            ▲ 系統實時運作監控畫面
+        </p>
+    </div>
+
+    <div class="feature-content scrollable-content-col">
+        
+        <div class="content-block">
+            <span class="feature-reason-tag">STEP 01</span>
+            <h3 class="sticky-content-title">訊號偵測與過濾</h3>
+            <p>
+                系統首先會掃描全球 12 大交易所的即時報價，過濾掉 99% 的無效雜訊。只有當價格波動符合「高機率獲利模型」時，AI 才會將其標記為潛在機會。
+            </p>
+            <div class="video-wrapper" style="margin-top: 20px;">
+                <div class="video-block">
+                    <video src="https://arftk.com/imgs/arf.mp4" muted loop playsinline></video>
+                    <button class="play-pause-btn"><img class="icon" src="https://arftk.com/imgs/play.svg"></button>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-block">
+            <span class="feature-reason-tag">STEP 02</span>
+            <h3 class="sticky-content-title">資金部位計算</h3>
+            <p>
+                確認訊號後，第二步是風險控管。系統會根據您帳戶目前的總資金，自動計算出最安全的進場手數，確保單筆交易風險不超過總資產的 2%。
+            </p>
+            <div class="video-wrapper" style="margin-top: 20px;">
+                <div class="video-block">
+                    <video src="https://arftk.com/imgs/arf.mp4" muted loop playsinline></video>
+                    <button class="play-pause-btn"><img class="icon" src="https://arftk.com/imgs/play.svg"></button>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-block">
+            <span class="feature-reason-tag">STEP 03</span>
+            <h3 class="sticky-content-title">自動出場獲利</h3>
+            <p>
+                進場的瞬間，止損點 (Stop Loss) 與獲利點 (Take Profit) 便已同時設定完成。一旦達到預設獲利目標，系統毫秒級自動平倉，將利潤鎖入您的帳戶。
+            </p>
+            <div class="video-wrapper" style="margin-top: 20px;">
+                <div class="video-block">
+                    <video src="https://arftk.com/imgs/arf.mp4" muted loop playsinline></video>
+                    <button class="play-pause-btn"><img class="icon" src="https://arftk.com/imgs/play.svg"></button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+            <div class="feature-row">
+    
+    <div class="video-wrapper">
+        <div class="video-block">
+            <video src="https://arftk.com/imgs/arf.mp4" muted loop playsinline></video>
+            <button class="play-pause-btn">
+                <img decoding="async" class="icon" src="https://arftk.com/imgs/play.svg">
+            </button>
+        </div>
+    </div>
+
+    <div class="feature-content">
+        
+        <div class="feature-title-group">
+            <span class="feature-reason-tag">ABSOLUTE ADVANTAGE</span>
+            <h3 class="feature-heading-styled">
+                AI 在金融交易的絕對優勢
+                <div class="feature-heading-line"></div>
+            </h3>
+        </div>
+
+        <ul class="feature-list" id="animated-feature-list" style="margin: 0; width: 100%;">
+            <li style="padding: 15px; font-size: 0.95rem;">
+                直接連接至多個大型資料庫，毫秒抓取千萬筆數據
+            </li>
+            <li style="padding: 15px; font-size: 0.95rem;">
+                在數秒之內，完成人類需要數日才能完成的分析與計算
+            </li>
+            <li style="padding: 15px; font-size: 0.95rem;">
+                沒有任何情緒與體力因素，100% 按照交易策略執行
+            </li>
+            <li style="padding: 15px; font-size: 0.95rem;">
+                計算與執行不但快速，並且比人類更精準，無誤差
+            </li>
+        </ul>
+
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // 設定偵測器：當列表進入畫面 30% 時觸發
+        const listObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    // 加上 .visible class，CSS 就會開始跑動畫
+                    entry.target.classList.add('visible');
+                    // 動畫跑一次就好，跑完就取消偵測，避免來回滑動一直閃
+                    listObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.3 });
+
+        // 開始偵測所有 feature-list
+        document.querySelectorAll('.feature-list').forEach(list => {
+            listObserver.observe(list);
+        });
+    });
+</script>
 
             <div class="feature-row">
                 <div class="video-wrapper">
@@ -1273,6 +1551,19 @@
 
                     <p>NσK® 系統核心連接全球 12 大交易所數據中心當人類交易員還在閱讀新聞標題時, 系統已經完成了 3,000 次以上的數據比對與風險計算</p>
                     <p style="margin-bottom: 0;">這種速度上的絕對優勢, 讓我們能在市場趨勢形成前的 0.5 秒內完成佈局, 賺取最豐厚的一段利潤</p>
+                </div>
+            </div>
+
+            <div class="text-center" style="margin-bottom: 50px;">
+                <span class="subtitle-en">SYSTEM REVEALED</span>
+                <h2>獨家揭密：系統實戰運作邏輯</h2>
+                <div class="divider"></div>
+                <p>為何系統能做到精準的自動化獲利？</p>
+                
+                <div class="arrow-scroll">
+                    <span></span>
+                    <span></span>
+                    <span></span>
                 </div>
             </div>
 
@@ -1334,39 +1625,66 @@
             </div>
             
             <div class="testimonials">
-                <div class="testi-card">
-                    <div class="video-wrapper" style="margin-top: 0; box-shadow: none; border: none; padding: 10px;">
-                        <script src="https://fast.wistia.com/embed/b3q7co67ui.js" async="" type="module"></script>
-                        <wistia-player media-id="b3q7co67ui" seo="false" aspect="1.7777777777777777"></wistia-player>
-                    </div>
-                    <div class="testi-content">
-                        <span class="testi-name">Sara W.</span>
-                        <p class="testi-quote">"原本是毫無金融交易經驗的高中老師, 現在月入超過 $178,013 美金"</p>
-                    </div>
-                </div>
-
-                <div class="testi-card">
-                    <div class="video-wrapper" style="margin-top: 0; box-shadow: none; border: none; padding: 10px;">
-                        <script src="https://fast.wistia.com/embed/b3q7co67ui.js" async="" type="module"></script>
-                        <wistia-player media-id="b3q7co67ui" seo="false" aspect="1.7777777777777777"></wistia-player>
-                    </div>
-                    <div class="testi-content">
-                        <span class="testi-name">Gary S.</span>
-                        <p class="testi-quote">"平凡的退休人士, 竟然在 82 歲致富並買下多輛夢幻超跑"</p>
-                    </div>
-                </div>
-                
-                 <div class="testi-card">
-                    <div class="video-wrapper" style="margin-top: 0; box-shadow: none; border: none; padding: 10px;">
-                        <script src="https://fast.wistia.com/embed/b3q7co67ui.js" async="" type="module"></script>
-                        <wistia-player media-id="b3q7co67ui" seo="false" aspect="1.7777777777777777"></wistia-player>
-                    </div>
-                    <div class="testi-content">
-                        <span class="testi-name">Hubert S.</span>
-                        <p class="testi-quote">"系統 2 天之內的獲利已經是我工作 2 個月的薪水！"</p>
-                    </div>
-                </div>
+    
+    <div class="testi-card">
+        <div class="video-wrapper" style="margin-top: 0; box-shadow: none; border: none; padding: 10px;">
+            <script src="https://fast.wistia.com/embed/b3q7co67ui.js" async type="module"></script>
+            <wistia-player media-id="b3q7co67ui" seo="false" aspect="1.7777777777777777"></wistia-player>
+        </div>
+        <div class="testi-content">
+            <div class="testi-badge">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+                上月獲利
             </div>
+            <span class="testi-amount">$178,013</span>
+            
+            <p class="testi-quote">
+                "原本是毫無金融交易經驗的高中老師，透過這個系統，我上個月的被動收入竟然超過了我十年的薪水總和。"
+            </p>
+            
+            <div class="testi-meta">
+                🇬🇧 SARA W.
+            </div>
+        </div>
+    </div>
+
+    <div class="testi-card">
+        <div class="video-wrapper" style="margin-top: 0; box-shadow: none; border: none; padding: 10px;">
+            <script src="https://fast.wistia.com/embed/b3q7co67ui.js" async type="module"></script>
+            <wistia-player media-id="b3q7co67ui" seo="false" aspect="1.7777777777777777"></wistia-player>
+        </div>
+        <div class="testi-content">
+            <span class="testi-amount">$1,463,347</span>
+            
+            <p class="testi-quote">
+                "平凡的退休人士，竟然在 82 歲致富並買下多輛夢幻超跑。現在我能帶全家人住進上億的湖畔豪宅。"
+            </p>
+            
+            <div class="testi-meta">
+                🇺🇸 GARY S.
+            </div>
+        </div>
+    </div>
+
+    <div class="testi-card">
+        <div class="video-wrapper" style="margin-top: 0; box-shadow: none; border: none; padding: 10px;">
+            <script src="https://fast.wistia.com/embed/b3q7co67ui.js" async type="module"></script>
+            <wistia-player media-id="b3q7co67ui" seo="false" aspect="1.7777777777777777"></wistia-player>
+        </div>
+        <div class="testi-content">
+            <span class="testi-amount">$56,290</span>
+            
+            <p class="testi-quote">
+                "系統 2 天之內的獲利已經是我工作 2 個月的薪水！我從來沒想過賺錢可以這麼輕鬆且自動化。"
+            </p>
+            
+            <div class="testi-meta">
+                🇩🇪 HUBERT S.
+            </div>
+        </div>
+    </div>
+
+</div>
             
             <div class="text-center" style="margin-top: 50px;">
                 <p>我們要求所有分享經驗的會員實名露面, 對自己的承諾負責, 也代表對系統獲利的絕對自信</p>
@@ -1446,6 +1764,32 @@
                     <p>透過亞洲區會員的連線與使用, 我們才得以了解如何調整我們的伺服器, 以達最佳化效能</p>
                 </div>
             </div>
+
+            <div class="split-section">
+    
+    <div class="video-wrapper" style="margin-top: 0;">
+        <div class="video-block">
+            <video src="https://arftk.com/imgs/arf.mp4" muted loop playsinline></video>
+            <button class="play-pause-btn">
+                <img decoding="async" class="icon" src="https://arftk.com/imgs/play.svg">
+            </button>
+        </div>
+    </div>
+    
+    <div class="feature-text-block">
+        <div class="feature-title-group">
+            <span class="feature-reason-tag">REASON 03</span>
+            <h3 class="feature-heading-styled">
+                全自動化交易執行
+                <div class="feature-heading-line"></div>
+            </h3>
+        </div>
+        
+        <p>這不是那些需要你整天盯盤的半自動軟體。一旦你設定好風險參數，系統便接管一切。</p>
+        <p>影片中可以看到，系統如何在毫秒之間偵測訊號並自動進場、出場。當你在睡覺、旅遊或陪伴家人時，AI 正在全球市場為你 24 小時不間斷地工作。</p>
+    </div>
+
+</div>
 
         </div>
     </section>
