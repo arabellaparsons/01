@@ -1333,6 +1333,247 @@
     /* 手機版取消延遲，讓使用者滑到就直接顯示，反應比較快 */
     .nk-stagger-item:nth-child(even) { transition-delay: 0s; }
 }
+
+/* --- TIER & CALCULATOR STYLES (Optimized) --- */
+
+/* 容器設定 */
+.nk-tier-section {
+    position: relative;
+    width: 100%;
+}
+
+.nk-tier-container-v2 { 
+    width: 100%; 
+    max-width: 1000px; 
+    margin: 0 auto; 
+    box-sizing: border-box; 
+    padding: 0 10px; 
+}
+
+/* Grid 佈局 */
+.nk-tier-grid-v2 { 
+    display: grid; 
+    grid-template-columns: repeat(2, 1fr); 
+    gap: 30px; 
+}
+
+/* 卡片樣式 */
+.nk-tier-card-v2 {
+    background: #0a0a0a;
+    border: 1px solid #222; 
+    border-top: 1px solid #333;
+    position: relative; 
+    overflow: hidden;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    transition: all 0.5s ease;
+}
+
+.nk-tier-card-v2:hover { 
+    transform: translateY(-5px); 
+    border-color: var(--nk-gold-dark); 
+    box-shadow: 0 30px 60px rgba(197, 160, 89, 0.15); 
+}
+
+/* 標頭區塊 */
+.nk-header-box {
+    padding: 30px 0 20px; 
+    text-align: center; 
+    position: relative;
+    background: linear-gradient(180deg, #141414 0%, #0a0a0a 100%);
+    border-bottom: 1px solid rgba(197, 160, 89, 0.2);
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    gap: 15px;
+}
+
+.nk-header-logo { 
+    height: 35px; 
+    width: auto; 
+    transition: all 0.5s;
+}
+
+/* --- 恢復：為不同 Tier 的 Logo 提供專屬金屬質感濾鏡 --- */
+.tier-1 .nk-header-logo { filter: grayscale(1) brightness(2) drop-shadow(0 0 5px rgba(255,255,255,0.3)); } /* 銀色 Silver */
+.tier-2 .nk-header-logo { filter: grayscale(1) sepia(1) hue-rotate(90deg) saturate(3) brightness(0.8); } /* 銅綠 Green/Bronze */
+.tier-3 .nk-header-logo { filter: grayscale(1) sepia(1) hue-rotate(320deg) saturate(4) brightness(0.7); } /* 紅金 Red/Copper */
+.tier-4 .nk-header-logo { filter: brightness(0.8) contrast(1.2) sepia(1) hue-rotate(5deg) saturate(1.5) drop-shadow(0 0 10px rgba(212, 175, 55, 0.6)); } /* 純金 Gold */
+/* 計算機 Logo 也使用純金 */
+.nk-calc-card .nk-header-logo { filter: brightness(0.8) contrast(1.2) sepia(1) hue-rotate(5deg) saturate(1.5) drop-shadow(0 0 10px rgba(212, 175, 55, 0.6)); }
+
+/* 標題樣式 */
+.nk-tier-title {
+    font-family: var(--nk-font-en); 
+    font-size: 2.2rem; 
+    font-weight: 600; 
+    letter-spacing: 2px;
+    color: var(--nk-gold-rich); 
+}
+
+.nk-calc-title {
+    font-family: var(--nk-font-tc); 
+    font-size: 1.8rem;
+    font-weight: 500;
+    letter-spacing: 2px;
+    color: #fff;
+}
+
+.nk-card-content { padding: 0; }
+
+.nk-data-item-box {
+    padding: 20px 30px; 
+    border-bottom: 1px solid #1a1a1a; 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center;
+}
+.nk-data-item-box:last-child { border-bottom: none; }
+
+/* --- 新增：文字標籤與 SVG Icon 對齊 --- */
+.nk-label-text { 
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Icon 與文字的間距 */
+    font-size: 0.95rem; 
+    color: #888; 
+    letter-spacing: 1px; 
+}
+
+.nk-label-text svg {
+    width: 16px;
+    height: 16px;
+    stroke: var(--nk-gold-dark); /* 讓 Icon 帶有低調的黑金色 */
+    opacity: 0.9;
+}
+
+/* 數值字體大小與顏色調整 */
+.nk-value-v2 {
+    font-family: var(--nk-font-en); 
+    font-size: 1.6rem; 
+    color: #eee; 
+    line-height: 1; 
+    font-weight: 500;
+}
+.nk-highlight { color: var(--nk-gold-rich); }
+
+/* --- Calculator Specific --- */
+.nk-calc-card { 
+    margin-top: 60px;
+    border: 1px solid rgba(197, 160, 89, 0.3); 
+}
+
+.nk-input-section { 
+    padding: 40px; 
+    border-bottom: 1px solid #222; 
+}
+
+.nk-input-label-row { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: flex-end; 
+    margin-bottom: 25px; 
+}
+
+.nk-input-value { 
+    font-family: var(--nk-font-en); 
+    font-size: 3rem; 
+    color: var(--nk-gold-rich); 
+    line-height: 1; 
+    font-weight: 700;
+}
+
+.nk-range-wrapper { 
+    height: 4px; 
+    background: #333; 
+    width: 100%; 
+    position: relative; 
+    border-radius: 2px; 
+    margin-bottom: 15px;
+}
+
+.nk-range-limits {
+    display: flex;
+    justify-content: space-between; 
+    color: #666;
+    font-family: var(--nk-font-en);
+    font-size: 1rem;
+    margin-top: 10px;
+}
+
+.nk-range-slider { 
+    -webkit-appearance: none; 
+    width: 100%; 
+    height: 100%; 
+    background: transparent; 
+    outline: none; 
+    position: absolute; 
+    top: 0; 
+    z-index: 2; 
+    cursor: pointer; 
+}
+.nk-range-track-fill { 
+    position: absolute; 
+    top: 0; 
+    left: 0; 
+    height: 100%; 
+    background: var(--nk-gold-rich); 
+    width: 50%; 
+    box-shadow: 0 0 10px rgba(197, 160, 89, 0.5); 
+}
+.nk-range-slider::-webkit-slider-thumb {
+    -webkit-appearance: none; 
+    width: 24px; 
+    height: 24px; 
+    background: #000; 
+    border: 2px solid var(--nk-gold-rich); 
+    border-radius: 50%; 
+    cursor: grab; 
+    margin-top: -10px;
+    box-shadow: 0 0 15px rgba(197, 160, 89, 0.5);
+    transition: transform 0.2s;
+}
+.nk-range-slider::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+    background: var(--nk-gold-rich);
+}
+
+.nk-result-grid { display: grid; grid-template-columns: repeat(3, 1fr); }
+.nk-result-box {
+    padding: 30px 20px; 
+    text-align: center; 
+    border-right: 1px solid #222;
+}
+.nk-result-box:last-child { 
+    border-right: none; 
+    background: linear-gradient(180deg, rgba(197, 160, 89, 0.05) 0%, rgba(0,0,0,0) 100%); 
+}
+.nk-sub-text { font-size: 0.9rem; color: #555; margin-top: 5px; }
+
+
+/* --- RWD: Mobile Specific --- */
+@media (max-width: 768px) {
+    .nk-tier-grid-v2 { grid-template-columns: 1fr; gap: 30px; }
+    .nk-tier-container-v2 { padding: 0 20px !important; }
+
+    .nk-tier-title { font-size: 2rem; }
+    .nk-calc-title { font-size: 1.5rem; }
+    .nk-input-value { font-size: 2.5rem; }
+    
+    .nk-result-grid { grid-template-columns: 1fr; }
+    .nk-result-box { 
+        border-right: none; 
+        border-bottom: 1px solid #222; 
+        padding: 25px; 
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .nk-result-box .nk-label-text { margin-bottom: 0 !important; }
+    .nk-result-box > div { text-align: right; }
+    
+    .nk-input-label-row { flex-direction: column; align-items: flex-start; gap: 10px; }
+    .nk-input-value { align-self: flex-end; }
+}
     </style>
 </head>
 <body>
@@ -1432,6 +1673,203 @@
             
         </div>
     </section>
+
+<section class="nk-tier-section">
+    <div class="nk-tier-container-v2">
+        
+        <div class="nk-tier-grid-v2">
+            <div class="nk-tier-card-v2 tier-1">
+                <div class="nk-header-box">
+                    <img src="https://arftk.com/imgs1/logo1.png" class="nk-header-logo" alt="Logo">
+                    <span class="nk-tier-title">TIER 1</span>
+                </div>
+                <div class="nk-card-content">
+                    <div class="nk-data-item-box">
+                        <span class="nk-label-text">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/></svg>
+                            存款範圍
+                        </span>
+                        <div class="nk-value-v2">$5,500 ~ $9,999</div>
+                    </div>
+                    <div class="nk-data-item-box">
+                        <span class="nk-label-text">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+                            每月收益 %
+                        </span>
+                        <div class="nk-value-v2 nk-highlight">200% ~ 225%</div>
+                    </div>
+                    <div class="nk-data-item-box">
+                        <span class="nk-label-text">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 18V6"/></svg>
+                            每月收益 $
+                        </span>
+                        <div class="nk-value-v2">$11,000+</div>
+                    </div>
+                    <div class="nk-data-item-box">
+                        <span class="nk-label-text">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                            存款期限
+                        </span>
+                        <div class="nk-value-v2">12 Months</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="nk-tier-card-v2 tier-2">
+                <div class="nk-header-box">
+                    <img src="https://arftk.com/imgs1/logo1.png" class="nk-header-logo" alt="Logo">
+                    <span class="nk-tier-title">TIER 2</span>
+                </div>
+                <div class="nk-card-content">
+                    <div class="nk-data-item-box">
+                        <span class="nk-label-text">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/></svg>
+                            存款範圍
+                        </span>
+                        <div class="nk-value-v2">$10,000 ~ $24,999</div>
+                    </div>
+                    <div class="nk-data-item-box">
+                        <span class="nk-label-text">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+                            每月收益 %
+                        </span>
+                        <div class="nk-value-v2 nk-highlight">250% ~ 275%</div>
+                    </div>
+                    <div class="nk-data-item-box">
+                        <span class="nk-label-text">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 18V6"/></svg>
+                            每月收益 $
+                        </span>
+                        <div class="nk-value-v2">$25,000+</div>
+                    </div>
+                    <div class="nk-data-item-box">
+                        <span class="nk-label-text">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                            存款期限
+                        </span>
+                        <div class="nk-value-v2">12 Months</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="nk-tier-card-v2 tier-3">
+                 <div class="nk-header-box">
+                    <img src="https://arftk.com/imgs1/logo1.png" class="nk-header-logo" alt="Logo">
+                    <span class="nk-tier-title">TIER 3</span>
+                </div>
+                <div class="nk-card-content">
+                    <div class="nk-data-item-box">
+                        <span class="nk-label-text">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/></svg>
+                            存款範圍
+                        </span>
+                        <div class="nk-value-v2">$25,000 ~ $49,999</div>
+                    </div>
+                    <div class="nk-data-item-box">
+                        <span class="nk-label-text">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+                            每月收益 %
+                        </span>
+                        <div class="nk-value-v2 nk-highlight">300% ~ 325%</div>
+                    </div>
+                    <div class="nk-data-item-box">
+                        <span class="nk-label-text">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 18V6"/></svg>
+                            每月收益 $
+                        </span>
+                        <div class="nk-value-v2">$75,000+</div>
+                    </div>
+                    <div class="nk-data-item-box">
+                        <span class="nk-label-text">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                            存款期限
+                        </span>
+                        <div class="nk-value-v2">6 Months</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="nk-tier-card-v2 tier-4">
+                 <div class="nk-header-box">
+                    <img src="https://arftk.com/imgs1/logo1.png" class="nk-header-logo" alt="Logo">
+                    <span class="nk-tier-title">TIER 4</span>
+                </div>
+                <div class="nk-card-content">
+                    <div class="nk-data-item-box">
+                        <span class="nk-label-text">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/></svg>
+                            存款範圍
+                        </span>
+                        <div class="nk-value-v2">$50,000+</div>
+                    </div>
+                    <div class="nk-data-item-box">
+                        <span class="nk-label-text">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+                            每月收益 %
+                        </span>
+                        <div class="nk-value-v2 nk-highlight">350% ~ 375%</div>
+                    </div>
+                    <div class="nk-data-item-box">
+                        <span class="nk-label-text">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 18V6"/></svg>
+                            每月收益 $
+                        </span>
+                        <div class="nk-value-v2">$175,000+</div>
+                    </div>
+                    <div class="nk-data-item-box">
+                        <span class="nk-label-text">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                            存款期限
+                        </span>
+                        <div class="nk-value-v2">6 Months</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="nk-tier-card-v2 nk-calc-card">
+            <div class="nk-header-box">
+                <img src="https://arftk.com/imgs1/logo1.png" class="nk-header-logo" alt="Logo">
+                <span class="nk-calc-title">獲利試算器</span>
+            </div>
+
+            <div class="nk-card-content">
+                <div class="nk-input-section">
+                    <div class="nk-input-label-row">
+                        <span class="nk-label-text" style="font-size: 1.1rem;">調整預計投入金額 (USDT)</span>
+                        <span class="nk-input-value">$<span id="nk-slider-val">25,000</span></span>
+                    </div>
+                    <div class="nk-range-wrapper">
+                        <input type="range" min="2500" max="50000" step="500" value="25000" class="nk-range-slider" id="nk-profit-slider">
+                        <div class="nk-range-track-fill" id="nk-track-fill"></div>
+                    </div>
+                    <div class="nk-range-limits">
+                        <span>$2,500</span>
+                        <span>$50,000</span>
+                    </div>
+                </div>
+
+                <div class="nk-result-grid">
+                    <div class="nk-result-box">
+                        <span class="nk-label-text" style="display:block; margin-bottom: 10px;">所屬 Tier</span>
+                        <div class="nk-value-v2" id="nk-res-tier">TIER 2</div>
+                    </div>
+                    <div class="nk-result-box">
+                        <span class="nk-label-text" style="display:block; margin-bottom: 10px;">最低月收益</span>
+                        <div class="nk-value-v2" id="nk-res-min">$62,500</div>
+                        <div class="nk-sub-text" id="nk-sub-min">(250%)</div>
+                    </div>
+                    <div class="nk-result-box highlight-box">
+                        <span class="nk-label-text" style="display:block; margin-bottom: 10px;">預估月收益 (總金額)</span>
+                        <div class="nk-value-v2 nk-highlight" id="nk-res-max">$68,750</div>
+                        <div class="nk-sub-text" id="nk-sub-max">(275%)</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
 
 <section class="nk-gallery-section" style="background: var(--nk-bg-panel);">
     <div class="container text-center">
@@ -2433,5 +2871,75 @@
             }
         });
     </script>
+
+    <script>
+    (function(){
+        // 獲取 DOM 元素
+        const slider = document.getElementById('nk-profit-slider');
+        const displayVal = document.getElementById('nk-slider-val');
+        const trackFill = document.getElementById('nk-track-fill');
+        const resTier = document.getElementById('nk-res-tier');
+        const resMin = document.getElementById('nk-res-min');
+        const resMax = document.getElementById('nk-res-max');
+        const subMin = document.getElementById('nk-sub-min');
+        const subMax = document.getElementById('nk-sub-max');
+
+        // 定義 Tier 規則
+        const tiers = [
+            { min: 50000, name: 'TIER 4', pMin: 3.50, pMax: 3.75 },
+            { min: 25000, name: 'TIER 3', pMin: 3.00, pMax: 3.25 },
+            { min: 10000, name: 'TIER 2', pMin: 2.50, pMax: 2.75 },
+            { min: 5500,  name: 'TIER 1', pMin: 2.00, pMax: 2.25 },
+            { min: 0,     name: '未達標',  pMin: 0,    pMax: 0 }
+        ];
+
+        // 格式化金額函數 (加逗號)
+        function formatMoney(num) {
+            return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+
+        // 更新計算函數
+        function updateCalc() {
+            const val = parseInt(slider.value);
+            displayVal.innerText = formatMoney(val);
+            
+            // 計算滑桿填充條寬度
+            const percent = ((val - slider.min) / (slider.max - slider.min)) * 100;
+            trackFill.style.width = percent + '%';
+
+            // 判斷目前 Tier
+            let currentTier = tiers[tiers.length - 1]; 
+            for (let t of tiers) {
+                if (val >= t.min) {
+                    currentTier = t;
+                    break;
+                }
+            }
+
+            // 更新畫面
+            if (currentTier.pMin === 0) {
+                resTier.innerHTML = "<span style='color:#666; font-size:1.2rem'>未達最低門檻</span>";
+                resMin.innerText = "$0";
+                resMax.innerText = "$0";
+                subMin.innerText = "需大於 $5,500";
+                subMax.innerText = "";
+            } else {
+                resTier.innerText = currentTier.name;
+                const minProfit = Math.floor(val * currentTier.pMin);
+                const maxProfit = Math.floor(val * currentTier.pMax);
+                resMin.innerText = "$" + formatMoney(minProfit);
+                resMax.innerText = "$" + formatMoney(maxProfit);
+                subMin.innerText = `(${currentTier.pMin * 100}%)`;
+                subMax.innerText = `(${currentTier.pMax * 100}%)`;
+            }
+        }
+
+        // 監聽事件
+        slider.addEventListener('input', updateCalc);
+        
+        // 初始化
+        updateCalc();
+    })();
+</script>
 </body>
 </html>
