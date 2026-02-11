@@ -1038,6 +1038,123 @@
     display: block;
     font-weight: 700;
 }
+
+/* --- NK WIDE LUXURY OPTIN FORM --- */
+.optin-gold-card {
+    /* 外層卡片最大寬度改為 900px */
+    max-width: 900px;
+    width: 100%;
+    margin: 0 auto;
+    background: #141414;
+    border: 1px solid var(--nk-gold-dark);
+    box-shadow: 0 30px 60px rgba(0,0,0,0.7);
+    overflow: hidden;
+    position: relative;
+    transition: 0.3s;
+}
+
+.optin-gold-card:hover {
+    border-color: var(--nk-gold-rich);
+    box-shadow: 0 0 40px rgba(197, 160, 89, 0.15);
+}
+
+.optin-header {
+    background: linear-gradient(180deg, #1a1a1a 0%, #141414 100%);
+    padding: 40px 20px 20px;
+    border-bottom: 1px solid #222;
+    text-align: center;
+}
+
+.optin-body {
+    padding: 40px;
+    background: #141414;
+    /* 讓內部的 highlight box 置中 */
+    display: flex;
+    justify-content: center;
+}
+
+/* --- 重點：這是你要的 Highlight 區塊 (仿照 Final Price Box) --- */
+.optin-highlight-box {
+    width: 100%;
+    /* 桌面版限制表單最大寬度 650px */
+    max-width: 650px;
+    
+    /* 繼承 Final Price Box 的奢華樣式 */
+    background: linear-gradient(135deg, rgba(197, 160, 89, 0.1) 0%, rgba(0,0,0,0) 100%);
+    border: 1px solid rgba(197, 160, 89, 0.3);
+    border-radius: 8px;
+    padding: 40px;
+    
+    position: relative;
+}
+
+/* 輸入框樣式微調 */
+.nk-input-group {
+    margin-bottom: 25px;
+    text-align: left;
+}
+
+.nk-input-label {
+    display: block;
+    color: var(--nk-gold-rich);
+    font-family: var(--nk-font-en);
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+    letter-spacing: 1px;
+    font-weight: 600;
+}
+
+/* 針對所有 input 的 placeholder 進行設定 */
+.nk-input-field::placeholder {
+    color: #ccc !important;           /* 強制設定顏色為 #ccc */
+    font-family: var(--nk-font-tc);   /* 使用 Noto Serif TC (襯線體) */
+    font-weight: 300;                 /* 字體細一點，比較優雅 */
+    font-style: italic;               /* 斜體，增加質感 (選用) */
+    opacity: 0.7;                     /* 稍微透一點，不要搶走輸入框的風采 */
+    letter-spacing: 1px;
+}
+
+.nk-input-field {
+    width: 100%;
+    padding: 18px;
+    /* 讓輸入框深一點，對比 highlight box */
+    background-color: rgba(0, 0, 0, 0.6);
+    border: 1px solid #444;
+    color: #fff;
+    font-size: 1.1rem;
+    font-family: var(--nk-font-sans);
+    transition: 0.3s;
+}
+
+.nk-input-field:focus {
+    border-color: var(--nk-gold-rich);
+    background-color: #000;
+    box-shadow: 0 0 15px rgba(197, 160, 89, 0.2);
+}
+
+/* --- FORM LABEL ICONS --- */
+.nk-input-label {
+    display: flex;          /* 讓 Icon 跟文字並排 */
+    align-items: center;    /* 垂直置中對齊 */
+    gap: 8px;              /* Icon 與文字的間距 */
+}
+
+.nk-input-label svg {
+    width: 16px;            /* 設定 Icon 大小 */
+    height: 16px;
+    fill: var(--nk-gold-rich); /* 強制設定為金色 */
+    opacity: 0.9;
+}
+
+/* --- RWD MOBILE --- */
+@media (max-width: 768px) {
+    .optin-body { padding: 20px; }
+    .optin-highlight-box {
+        padding: 25px 20px; /* 手機版內距縮小 */
+        width: 100%; /* 手機版填滿 */
+    }
+}
+
     </style>
 </head>
 <body>
@@ -1415,7 +1532,7 @@
     <div class="sticky-video-col">
         <div class="video-wrapper">
             <div class="video-block">
-                <video src="https://arftk.com/imgs/arf.mp4" muted loop playsinline></video>
+                <video src="https://arftk.com/imgs1/dash.mp4" muted loop playsinline></video>
                 <button class="play-pause-btn">
                     <img decoding="async" class="icon" src="https://arftk.com/imgs/play.svg">
                 </button>
@@ -1427,6 +1544,33 @@
     </div>
 
     <div class="feature-content scrollable-content-col">
+
+        <div class="content-block">
+            <div class="feature-title-group">
+            <span class="feature-reason-tag">ABSOLUTE ADVANTAGE</span>
+            <h3 class="feature-heading-styled">
+                AI 在金融交易的絕對優勢
+                <div class="feature-heading-line"></div>
+            </h3>
+        </div>
+
+        <ul class="feature-list" id="animated-feature-list" style="margin: 0; width: 100%;">
+            <li style="padding: 15px; font-size: 0.95rem;">
+                直接連接至多個大型資料庫，毫秒抓取千萬筆數據
+            </li>
+            <li style="padding: 15px; font-size: 0.95rem;">
+                在數秒之內，完成人類需要數日才能完成的分析與計算
+            </li>
+            <li style="padding: 15px; font-size: 0.95rem;">
+                沒有任何情緒與體力因素，100% 按照交易策略執行
+            </li>
+            <li style="padding: 15px; font-size: 0.95rem;">
+                計算與執行不但快速，並且比人類更精準，無誤差
+            </li>
+        </ul>
+        </div>
+
+
         
         <div class="content-block">
             <span class="feature-reason-tag">STEP 01</span>
@@ -1436,7 +1580,7 @@
             </p>
             <div class="video-wrapper" style="margin-top: 20px;">
                 <div class="video-block">
-                    <video src="https://arftk.com/imgs/arf.mp4" muted loop playsinline></video>
+                    <video src="https://arftk.com/imgs1/abm.mp4" muted loop playsinline></video>
                     <button class="play-pause-btn"><img class="icon" src="https://arftk.com/imgs/play.svg"></button>
                 </div>
             </div>
@@ -1450,7 +1594,7 @@
             </p>
             <div class="video-wrapper" style="margin-top: 20px;">
                 <div class="video-block">
-                    <video src="https://arftk.com/imgs/arf.mp4" muted loop playsinline></video>
+                    <video src="https://arftk.com/imgs1/rrm.mp4" muted loop playsinline></video>
                     <button class="play-pause-btn"><img class="icon" src="https://arftk.com/imgs/play.svg"></button>
                 </div>
             </div>
@@ -1464,7 +1608,7 @@
             </p>
             <div class="video-wrapper" style="margin-top: 20px;">
                 <div class="video-block">
-                    <video src="https://arftk.com/imgs/arf.mp4" muted loop playsinline></video>
+                    <video src="https://arftk.com/imgs1/axis.mp4" muted loop playsinline></video>
                     <button class="play-pause-btn"><img class="icon" src="https://arftk.com/imgs/play.svg"></button>
                 </div>
             </div>
@@ -1824,6 +1968,61 @@
                 
                 
             </div>
+
+            <div class="optin-gold-card">
+    
+    <div class="video-wrapper" style="margin-top: 0; border: none; border-bottom: 1px solid var(--nk-gold-dark);">
+        <div class="video-block">
+            <video src="https://arftk.com/imgs/arf.mp4" muted loop playsinline></video>
+            <button class="play-pause-btn">
+                <img decoding="async" class="icon" src="https://arftk.com/imgs/play.svg">
+            </button>
+        </div>
+    </div>
+
+    <div class="optin-header">
+        <span class="subtitle-en" style="color: #fff; opacity: 0.7;">LIMITED ACCESS</span>
+        <h3 style="margin-bottom: 10px; color: var(--nk-gold-rich); font-size: 2rem;">立即獲取系統權限</h3>
+        <p style="font-size: 1rem; margin: 0; color: #ccc;">名額有限，請填寫下方資料以鎖定您的席位</p>
+    </div>
+
+    <div class="optin-body">
+        
+        <div class="optin-highlight-box">
+            <form id="sib-form" method="POST" action="https://xxxxxxxx">
+                
+                <div class="nk-input-group">
+    <label for="full_name" class="nk-input-label">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+        FULL NAME
+    </label>
+    <input type="text" id="full_name" name="full_name" class="nk-input-field" placeholder="請輸入您的真實姓名" required>
+</div>
+
+<div class="nk-input-group">
+    <label for="email" class="nk-input-label">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+        EMAIL ADDRESS
+    </label>
+    <input type="email" id="email" name="email" class="nk-input-field" placeholder="請輸入您最常用的 Email 信箱" required>
+</div>
+
+                <button type="submit" class="nk-btn" style="width: 100%; margin-top: 15px;">
+                    GET INSTANT ACCESS
+                    <span style="font-size: 0.8rem; display: block; font-weight: 300; margin-top: 5px; opacity: 0.7;">Secure 256-bit SSL Payment</span>
+                </button>
+                
+                <p style="text-align: center; font-size: 0.85rem; color: #666; margin-top: 20px; margin-bottom: 0;">
+                    <span style="color: var(--nk-gold-dark);">🔒 100% Secure.</span> We never share your info.
+                </p>
+
+            </form>
+        </div>
+        
+    </div>
+</div>
+
+
             <div class="pricing-unified-card">
 
                 <div class="video-wrapper" style="max-width: 900px; margin: 0 auto;">
