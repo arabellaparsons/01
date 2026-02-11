@@ -1061,12 +1061,13 @@
 .optin-header {
     background: linear-gradient(180deg, #1a1a1a 0%, #141414 100%);
     padding: 40px 20px 20px;
-    border-bottom: 1px solid #222;
+    border-bottom: 0px solid #222;
     text-align: center;
 }
 
 .optin-body {
     padding: 40px;
+    padding-top: 0px;
     background: #141414;
     /* 讓內部的 highlight box 置中 */
     display: flex;
@@ -1155,6 +1156,102 @@
     }
 }
 
+/* --- STAGGERED HIGH-LOW GALLERY (With Fade In Up Animation) --- */
+.nk-stagger-section {
+    padding: 80px 0;
+    overflow: hidden;
+}
+
+.nk-stagger-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.nk-stagger-item {
+    position: relative;
+    height: 400px;
+    border: 1px solid var(--nk-gold-dark);
+    overflow: hidden;
+    cursor: pointer;
+    background: #000;
+    
+    /* --- ★ 動畫初始狀態 (隱藏 + 下沉 60px) ★ --- */
+    opacity: 0;
+    transform: translateY(60px); 
+    
+    /* 設定過渡動畫：0.8秒，使用優雅的貝茲曲線 */
+    transition: opacity 0.8s ease-out, transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), border-color 0.3s, box-shadow 0.3s;
+}
+
+/* --- 高低差設定 --- */
+.nk-stagger-item:nth-child(even) {
+    margin-top: 60px; /* 偶數項往下推 */
+    
+    /* --- ★ 關鍵：偶數項 (右邊) 延遲 0.2 秒進場 ★ --- */
+    /* 這會創造出 左(1) -> 右(2) -> 左(3) -> 右(4) 的節奏 */
+    transition-delay: 0.2s; 
+}
+
+/* --- ★ 觸發狀態 (由 JS 加入 .visible) ★ --- */
+.nk-stagger-item.visible {
+    opacity: 1;
+    transform: translateY(0); /* 回到正常位置 (這就是 Fade In Up) */
+}
+
+/* Hover 特效 (保留原本的) */
+.nk-stagger-item:hover {
+    border-color: var(--nk-gold-rich);
+    box-shadow: 0 10px 40px rgba(197, 160, 89, 0.2);
+    /* Hover 時不改變 transform 位置，只改變 scale (在 img 上做) */
+}
+
+/* 圖片本體 */
+.nk-stagger-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    filter: grayscale(20%);
+}
+
+.nk-stagger-item:hover img {
+    transform: scale(1.1);
+    filter: grayscale(0%);
+}
+
+/* --- 黑色漸層遮罩 & 文字動畫 (保留原本設定) --- */
+.nk-stagger-overlay {
+    position: absolute; bottom: 0; left: 0; width: 100%; height: 60%;
+    background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.6) 50%, transparent 100%);
+    display: flex; flex-direction: column; justify-content: flex-end; padding: 30px;
+    pointer-events: none;
+}
+
+.nk-stagger-text {
+    color: #fff; font-family: var(--nk-font-tc);
+    opacity: 0; transform: translateX(-40px);
+    transition: all 0.8s cubic-bezier(0.215, 0.610, 0.355, 1.000);
+}
+
+/* 當卡片浮現後，文字也跟著浮現 (但在圖片動畫之後) */
+.nk-stagger-item.visible .nk-stagger-text {
+    opacity: 1; transform: translateX(0);
+    transition-delay: 0.4s; /* 等圖片浮上來之後，文字再滑進來 */
+}
+
+.nk-stagger-title { font-size: 1.5rem; font-weight: 700; margin-bottom: 8px; display: block; color: #fff; }
+.nk-stagger-desc { font-size: 1rem; color: #ccc; font-weight: 300; }
+
+/* RWD Mobile */
+@media (max-width: 768px) {
+    .nk-stagger-grid { grid-template-columns: 1fr; gap: 20px; }
+    .nk-stagger-item { height: 300px; margin-top: 0 !important; }
+    /* 手機版取消延遲，讓使用者滑到就直接顯示，反應比較快 */
+    .nk-stagger-item:nth-child(even) { transition-delay: 0s; }
+}
     </style>
 </head>
 <body>
@@ -1250,27 +1347,8 @@
                         </button>
                     </div>
                 </div><p>即將在亞洲開放 <strong>100個使用名額</strong></p>
-                <p style="font-family: var(--nk-font-en); font-size: 1.2rem; color: #fff; margin-top: 30px;">
-                    MANAGED MORE THAN <span class="highlight">$700,000,000</span> IN PRIVATE BANKING FUND
-                </p>
                 
-                <img src="assets/img/partn.jpg" alt="Partners" style="margin: 40px auto; opacity: 0.7;">
-            </div>
-
-            <div class="split-section">
-                <div class="text-right">
-                    <img src="assets/img/mikem.jpg" alt="Mike M." style="border: 1px solid #333; max-width: 400px;">
-                </div>
-                <div>
-                    <h3 style="font-size: 1.8rem; line-height: 1.5;">
-                        「我敢保證這 100 人在使用系統的 30 天內, <br>
-                        獲利至少 <span class="highlight">$100,000 美金</span>」
-                    </h3>
-                    <p>
-                        NσK® Trading System 每年能夠在完全自動的情況下獲利上百萬美金現在我們即將在亞洲開放 100 人, 並且我親自保證這 100 人在使用系統的每月獲利至少 $100,000 美金以上
-                    </p>
-                </div>
-            </div>
+            
         </div>
     </section>
 
@@ -1306,6 +1384,76 @@
 
     </div>
 </section>
+
+<section class="nk-stagger-section">
+    <div class="container text-center" style="margin-bottom: 50px;">
+        <span class="subtitle-en">LIFESTYLE GALLERY</span>
+        <h2>加入會員後的真實生活改變</h2>
+        <div class="divider"></div>
+    </div>
+
+    <div class="nk-stagger-grid">
+        
+        <div class="nk-stagger-item">
+            <img src="https://arftk.com/imgs/10m1.jpg" alt="Luxury Car">
+            <div class="nk-stagger-overlay">
+                <div class="nk-stagger-text">
+                    <span class="nk-stagger-title">頂級超跑</span>
+                    <span class="nk-stagger-desc">從負債累累到擁有夢想車庫</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="nk-stagger-item">
+            <img src="https://arftk.com/imgs/10m2.jpg" alt="First Class">
+            <div class="nk-stagger-overlay">
+                <div class="nk-stagger-text">
+                    <span class="nk-stagger-title">環球旅行</span>
+                    <span class="nk-stagger-desc">隨時出發，體驗頭等艙的奢華</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="nk-stagger-item">
+            <img src="https://arftk.com/imgs/10m3.jpg" alt="Mansion">
+            <div class="nk-stagger-overlay">
+                <div class="nk-stagger-text">
+                    <span class="nk-stagger-title">湖畔豪宅</span>
+                    <span class="nk-stagger-desc">給家人最安全舒適的居住環境</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="nk-stagger-item">
+            <img src="https://arftk.com/imgs/10m5.jpg" alt="Freedom">
+            <div class="nk-stagger-overlay">
+                <div class="nk-stagger-text">
+                    <span class="nk-stagger-title">時間自由</span>
+                    <span class="nk-stagger-desc">不再被工作綁架，享受陪伴的時光</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const staggerObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    // 動畫跑一次後取消偵測
+                    staggerObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.3 }); // 進入畫面 30% 時觸發
+
+        document.querySelectorAll('.nk-stagger-item').forEach(item => {
+            staggerObserver.observe(item);
+        });
+    });
+</script>
 
 
     <section class="section-padding nk-collage-section">
@@ -1981,9 +2129,15 @@
     </div>
 
     <div class="optin-header">
-        <span class="subtitle-en" style="color: #fff; opacity: 0.7;">LIMITED ACCESS</span>
-        <h3 style="margin-bottom: 10px; color: var(--nk-gold-rich); font-size: 2rem;">立即獲取系統權限</h3>
+        <span class="subtitle-en">LIMITED ACCESS</span>
+        <h2 style="margin-bottom: 10px;">立即獲取系統權限</h2>
         <p style="font-size: 1rem; margin: 0; color: #ccc;">名額有限，請填寫下方資料以鎖定您的席位</p>
+        <div class="arrow-scroll">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+
     </div>
 
     <div class="optin-body">
@@ -2051,7 +2205,8 @@
                     <span></span>
                     <span></span>
                     <span></span>
-                </div><div class="final-price-box">
+                </div>
+                <div class="final-price-box">
                         <span class="deposit-label">一次性會員保證金</span>
                         <div class="final-price">$199<span style="font-size: 0.4em; margin-left: 5px;">USD</span></div>
                         <p style="font-size: 0.9rem; color: #888; margin-bottom: 0;">(Fully Refundable 90-Day Guarantee)</p>
