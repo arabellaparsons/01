@@ -1,14 +1,15 @@
 <!DOCTYPE html>
-<html lang="zh-TW"><head>
+<html lang="zh-TW">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NσK® INVESTMENT GROUP &amp; SYSTEM</title>
+    <title>NσK® INVESTMENT GROUP & SYSTEM</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Infant:wght@400;500;600;700&amp;family=Noto+Serif+TC:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500&amp;display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Infant:wght@400;500;600;700&family=Noto+Serif+TC:wght@300;400;500;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
 
-    <script src="https://fast.wistia.com/player.js" async=""></script>
+    <script src="https://fast.wistia.com/player.js" async></script>
 
    <style>
         /* --- CORE: Black Gold Luxury Variables --- */
@@ -73,7 +74,7 @@
 
         /* --- UTILITIES --- */
         .container { width: 100%; max-width: 1000px; margin: 0 auto; padding: 0 10px; position: relative; z-index: 2; }
-        .container-wide { max-width: 1200px; } 
+        .container-wide { max-width: 1500px; } 
         .text-center { text-align: center; }
         .text-right { text-align: right; }
         .section-padding { padding: 100px 0; }
@@ -415,11 +416,91 @@
 
         .pricing-header { padding: 40px; border-bottom: 1px solid #222; background: linear-gradient(180deg, #1a1a1a 0%, #141414 100%); }
         .pricing-body { padding: 90px; }
-        .price-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px dashed #333; }
+        
+        .price-row {
+    max-width: 550px;        /* 強制限制最大寬度為 550px */
+    margin-left: auto;       /* 讓區塊水平置中 */
+    margin-right: auto;      /* 讓區塊水平置中 */
+    
+    /* 確保原本的 Flex 排版與底部間距不變 */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px dashed #333;
+}
         .price-row:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+        
         .row-label { font-size: 1.1rem; color: #888; text-align: left; }
-        .row-value { font-family: var(--nk-font-en); font-size: 1.3rem; color: #666; text-decoration: line-through; }
-        .final-price-box { background: linear-gradient(135deg, rgba(197, 160, 89, 0.1) 0%, rgba(0,0,0,0) 100%); border: 1px solid rgba(197, 160, 89, 0.3); border-radius: 8px; padding: 30px; margin-top: 20px; }
+        
+        /* --- 7.1 MODIFIED PRICING ROW STYLES (Dynamic Strikethrough) --- */
+        .row-value { 
+            font-family: var(--nk-font-en); 
+            font-size: 1.3rem; 
+            
+            /* 【修改】預設改為亮色，不預先劃線 */
+            color: var(--nk-text-main); 
+            text-decoration: none !important; /* 確保沒有預設刪除線 */
+            position: relative; /* 為了讓偽元素定位 */
+            display: inline-block;
+            transition: color 0.5s ease 0.3s; /* 延遲文字變灰，配合畫線動畫 */
+        }
+
+        /* 偽元素：動態畫線 */
+        .row-value::after {
+            content: '';
+            position: absolute;
+            top: 55%; /* 線的位置 */
+            left: 0;
+            width: 0%; /* 初始寬度為 0 */
+            height: 2px;
+            background-color: #666; /* 刪除線顏色 */
+            transition: width 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94); /* 畫線動畫 */
+        }
+
+        /* --- 7.2 PRICING ANIMATION CLASSES --- */
+        /* 每一行的初始狀態：隱藏 + 下沉 */
+        .pricing-anim-row {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+
+        /* 狀態 1: Fade In Up (只顯示，還沒劃掉) */
+        .pricing-anim-row.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* 狀態 2: Struck (劃掉 + 反灰) */
+        .pricing-anim-row.struck .row-value {
+            color: #444; /* 文字變深灰 */
+        }
+        .pricing-anim-row.struck .row-value::after {
+            width: 100%; /* 線條寬度變 100%，產生畫線效果 */
+        }
+
+        /* --- 7.3 FINAL PRICE BOX ANIMATION --- */
+        .final-price-box { 
+            background: linear-gradient(135deg, rgba(197, 160, 89, 0.1) 0%, rgba(0,0,0,0) 100%); 
+            border: 1px solid rgba(197, 160, 89, 0.3); 
+            border-radius: 8px; 
+            padding: 30px; 
+            margin-top: 20px; 
+            overflow: hidden; /* 確保動畫不溢出 */
+        }
+
+        .final-price-anim {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .final-price-anim.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
         .deposit-label { display: block; color: var(--nk-gold-rich); font-size: 1rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 5px; }
         .final-price { font-family: var(--nk-font-en); font-size: 5rem; line-height: 1; font-weight: 700; color: #fff; background: linear-gradient(to bottom, #fff 0%, var(--nk-gold-light) 50%, var(--nk-gold-rich) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 10px; filter: drop-shadow(0 5px 15px rgba(197, 160, 89, 0.2)); }
         .pricing-footer { background: #0a0a0a; padding: 20px 40px; border-top: 1px solid #222; font-size: 0.9rem; color: #666; display: flex; align-items: center; justify-content: center; gap: 10px; }
@@ -1277,29 +1358,29 @@
             </div>
 
             <div class="video-wrapper">
-                <script src="https://fast.wistia.com/embed/b3q7co67ui.js" async="" type="module"></script>
+                <script src="https://fast.wistia.com/embed/b3q7co67ui.js" async type="module"></script>
                 <wistia-player media-id="b3q7co67ui" seo="false" aspect="1.7777777777777777"></wistia-player>
             </div>
 
-            <div class="marquee-wrapper marquee-lg" style="margin-bottom: 80px;">
-                <div class="text-center" style="margin-bottom: 20px;">
+            <div class="marquee-wrapper marquee-rect" style="margin-bottom: 80px;">
+                <div class="text-center" style="margin-bottom: 20px; padding: 0 15px;">
                     <span class="subtitle-en" style="letter-spacing: 5px; font-size: 0.9rem;">REAL MEMBER RESULTS</span>
-                <h2>華爾街基金經理聯手NσK®團隊共同打造</h2></div>
+                <h2>華爾街基金經理聯手NσK®團隊共同打造AI全自動交易系統</h2></div>
                 
                 <div class="marquee-glow-line"></div>
                 
                 <div class="marquee-viewport">
                     <div class="marquee-track">
-                        <div class="marquee-item"><img src="https://arftk.com/imgs/10m1.jpg"></div>
-                        <div class="marquee-item"><img src="https://arftk.com/imgs/10m2.jpg"></div>
-                        <div class="marquee-item"><img src="https://arftk.com/imgs/10m3.jpg"></div>
-                        <div class="marquee-item"><img src="https://arftk.com/imgs/10m4.jpg"></div>
-                        <div class="marquee-item"><img src="https://arftk.com/imgs/10m5.jpg"></div>
-                        <div class="marquee-item"><img src="https://arftk.com/imgs/10m1.jpg"></div>
-                        <div class="marquee-item"><img src="https://arftk.com/imgs/10m2.jpg"></div>
-                        <div class="marquee-item"><img src="https://arftk.com/imgs/10m3.jpg"></div>
-                        <div class="marquee-item"><img src="https://arftk.com/imgs/10m4.jpg"></div>
-                        <div class="marquee-item"><img src="https://arftk.com/imgs/10m5.jpg"></div>
+                        <div class="marquee-item"><img src="https://arftk.com/imgs1/trading15.jpg"></div>
+                        <div class="marquee-item"><img src="https://arftk.com/imgs/trading08.jpg"></div>
+                        <div class="marquee-item"><img src="https://arftk.com/imgs1/trading11.jpg"></div>
+                        <div class="marquee-item"><img src="https://arftk.com/imgs1/team03.jpg"></div>
+                        <div class="marquee-item"><img src="https://arftk.com/imgs1/team00.jpg"></div>
+                        <div class="marquee-item"><img src="https://arftk.com/imgs1/trading15.jpg"></div>
+                        <div class="marquee-item"><img src="https://arftk.com/imgs/trading08.jpg"></div>
+                        <div class="marquee-item"><img src="https://arftk.com/imgs1/trading11.jpg"></div>
+                        <div class="marquee-item"><img src="https://arftk.com/imgs1/team03.jpg"></div>
+                        <div class="marquee-item"><img src="https://arftk.com/imgs1/team00.jpg"></div>
                     </div>
                 </div>
                 
@@ -1323,7 +1404,7 @@
 
 
             
-           
+            
     </div></header>
 
     
@@ -1341,7 +1422,7 @@
                 
                 <div class="video-wrapper" style="max-width: 800px; margin: 40px auto;">
                     <div class="video-block">
-                        <video src="https://arftk.com/imgs/arf.mp4" muted="" loop="" playsinline=""></video>
+                        <video src="https://arftk.com/imgs/arf.mp4" muted loop playsinline></video>
                         <button class="play-pause-btn">
                             <img decoding="async" class="icon" src="https://arftk.com/imgs/play.svg">
                         </button>
@@ -1518,31 +1599,38 @@
             </div>
 
             <div class="testimonials">
-                <div class="testi-card">
-        <div class="video-wrapper" style="margin-top: 0; box-shadow: none; border: none; padding: 10px;">
-            <script src="https://fast.wistia.com/embed/b3q7co67ui.js" async type="module"></script>
-            <wistia-player media-id="b3q7co67ui" seo="false" aspect="1.7777777777777777"></wistia-player>
-        </div>
-        <div class="testi-content">
-            <span class="testi-amount">$178,013</span>
-            
-            <p class="testi-quote">
-                "原本是毫無金融交易經驗的高中老師，透過這個系統，我上個月的被動收入竟然超過了我十年的薪水總和。"
-            </p>
-            
-            <div class="testi-meta">
-                🇬🇧 SARA W.
-            </div>
-        </div>
-    </div>
-
+    
     <div class="testi-card">
         <div class="video-wrapper" style="margin-top: 0; box-shadow: none; border: none; padding: 10px;">
             <script src="https://fast.wistia.com/embed/b3q7co67ui.js" async type="module"></script>
             <wistia-player media-id="b3q7co67ui" seo="false" aspect="1.7777777777777777"></wistia-player>
         </div>
         <div class="testi-content">
-            <span class="testi-amount">$178,013</span>
+            <div class="testi-badge">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+                上月獲利
+            </div>
+            <span class="testi-amount">$178,013<span style="font-size: 0.4em; margin-left: 15px;">USD</span></span>
+            
+            <p class="testi-quote">
+                "原本是毫無金融交易經驗的高中老師，透過這個系統，我上個月的被動收入竟然超過了我十年的薪水總和。"
+            </p>
+            
+            <div class="testi-meta">
+                🇬🇧 SARA W.
+            </div>
+        </div>
+    </div><div class="testi-card">
+        <div class="video-wrapper" style="margin-top: 0; box-shadow: none; border: none; padding: 10px;">
+            <script src="https://fast.wistia.com/embed/b3q7co67ui.js" async type="module"></script>
+            <wistia-player media-id="b3q7co67ui" seo="false" aspect="1.7777777777777777"></wistia-player>
+        </div>
+        <div class="testi-content">
+            <div class="testi-badge">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+                上月獲利
+            </div>
+            <span class="testi-amount">$178,013<span style="font-size: 0.4em; margin-left: 15px;">USD</span></span>
             
             <p class="testi-quote">
                 "原本是毫無金融交易經驗的高中老師，透過這個系統，我上個月的被動收入竟然超過了我十年的薪水總和。"
@@ -1554,7 +1642,11 @@
         </div>
     </div>
 
-            </div>
+    
+
+    
+
+</div>
             
             <div class="text-center" style="margin-top: 50px;">
                  <p style="color: #fff;">不論你是真的有財務困難, 或者只是單純不滿意自己目前的薪水待遇, 都能夠使用系統後每月賺進 $100,000 美金以上</p>
@@ -1657,7 +1749,7 @@
             </div>
 
             <div class="video-wrapper deep-dive-hero-video" style="max-width: 900px; margin: 0 auto 80px;">
-                <script src="https://fast.wistia.com/embed/b3q7co67ui.js" async="" type="module"></script>
+                <script src="https://fast.wistia.com/embed/b3q7co67ui.js" async type="module"></script>
                 <wistia-player media-id="b3q7co67ui" seo="false" aspect="1.7777777777777777"></wistia-player>
             </div>
 
@@ -1703,16 +1795,16 @@
         </div>
 
         <ul class="feature-list" id="animated-feature-list" style="margin: 0; width: 100%;">
-            <li style="padding: 15px; font-size: 0.95rem;">
+            <li style="padding: 15px; font-size: 1.1rem;">
                 直接連接至多個大型資料庫，毫秒抓取千萬筆數據
             </li>
-            <li style="padding: 15px; font-size: 0.95rem;">
+            <li style="padding: 15px; font-size: 1.1rem;">
                 在數秒之內，完成人類需要數日才能完成的分析與計算
             </li>
-            <li style="padding: 15px; font-size: 0.95rem;">
+            <li style="padding: 15px; font-size: 1.1rem;">
                 沒有任何情緒與體力因素，100% 按照交易策略執行
             </li>
-            <li style="padding: 15px; font-size: 0.95rem;">
+            <li style="padding: 15px; font-size: 1.1rem;">
                 計算與執行不但快速，並且比人類更精準，無誤差
             </li>
         </ul>
@@ -1828,7 +1920,7 @@
 
             <div class="feature-row">
                 <div class="video-wrapper">
-                    <script src="https://fast.wistia.com/embed/b3q7co67ui.js" async="" type="module"></script>
+                    <script src="https://fast.wistia.com/embed/b3q7co67ui.js" async type="module"></script>
                     <wistia-player media-id="b3q7co67ui" seo="false" aspect="1.7777777777777777"></wistia-player>
                 </div>
                 <div class="feature-content">
@@ -1861,7 +1953,7 @@
 
             <div class="feature-row">
                 <div class="video-wrapper">
-                    <script src="https://fast.wistia.com/embed/b3q7co67ui.js" async="" type="module"></script>
+                    <script src="https://fast.wistia.com/embed/b3q7co67ui.js" async type="module"></script>
                     <wistia-player media-id="b3q7co67ui" seo="false" aspect="1.7777777777777777"></wistia-player>
                 </div>
                 <div class="feature-content">
@@ -1882,15 +1974,15 @@
         </div>
     </section>
 
-    <section class="section-padding" style="background: var(--nk-bg-panel);">
-        <div class="container">
-            <div class="text-center">
-                <span class="subtitle-en">REAL STORIES</span>
+<section class="section-padding">
+        <div class="container container-wide">
+            <div class="text-center" style="margin-bottom: 50px;">
+                <span class="subtitle-en">SYSTEM REVEALED</span>
                 <div class="hero-text-only">
-                <h1>
-                    不論你的年齡與職業, 必定能在未來30天內賺進至少 <br>
+                <h1>不論你的年齡與職業, 必定能在未來30天內賺進至少<br>
                     <span class="hero-number-block">$3,291,684</span>
                 </h1>
+            </div>
                 
                 <div class="arrow-scroll">
                     <span></span>
@@ -1898,18 +1990,13 @@
                     <span></span>
                 </div>
             </div>
-                
-                
-                
-            </div>
 
-            <div class="video-wrapper" style="max-width: 900px; margin: 0 auto;">
-                <script src="https://fast.wistia.com/embed/b3q7co67ui.js" async="" type="module"></script>
+            <div class="video-wrapper deep-dive-hero-video" style="max-width: 900px; margin: 0 auto 80px;">
+                <script src="https://fast.wistia.com/embed/b3q7co67ui.js" async type="module"></script>
                 <wistia-player media-id="b3q7co67ui" seo="false" aspect="1.7777777777777777"></wistia-player>
             </div>
-        </div>
-    </section><section class="section-padding">
-        <div class="container container-wide">
+
+
             <div class="text-center">
                 <span class="subtitle-en">REAL STORIES</span>
                 <h2>以下所有影片當中的人/事/言論皆為真實, 絕非特殊個案</h2>
@@ -1928,7 +2015,27 @@
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
                 上月獲利
             </div>
-            <span class="testi-amount">$178,013</span>
+            <span class="testi-amount">$178,013<span style="font-size: 0.4em; margin-left: 15px;">USD</span></span>
+            
+            <p class="testi-quote">
+                "原本是毫無金融交易經驗的高中老師，透過這個系統，我上個月的被動收入竟然超過了我十年的薪水總和。"
+            </p>
+            
+            <div class="testi-meta">
+                🇬🇧 SARA W.
+            </div>
+        </div>
+    </div><div class="testi-card">
+        <div class="video-wrapper" style="margin-top: 0; box-shadow: none; border: none; padding: 10px;">
+            <script src="https://fast.wistia.com/embed/b3q7co67ui.js" async type="module"></script>
+            <wistia-player media-id="b3q7co67ui" seo="false" aspect="1.7777777777777777"></wistia-player>
+        </div>
+        <div class="testi-content">
+            <div class="testi-badge">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+                上月獲利
+            </div>
+            <span class="testi-amount">$178,013<span style="font-size: 0.4em; margin-left: 15px;">USD</span></span>
             
             <p class="testi-quote">
                 "原本是毫無金融交易經驗的高中老師，透過這個系統，我上個月的被動收入竟然超過了我十年的薪水總和。"
@@ -1940,41 +2047,9 @@
         </div>
     </div>
 
-    <div class="testi-card">
-        <div class="video-wrapper" style="margin-top: 0; box-shadow: none; border: none; padding: 10px;">
-            <script src="https://fast.wistia.com/embed/b3q7co67ui.js" async type="module"></script>
-            <wistia-player media-id="b3q7co67ui" seo="false" aspect="1.7777777777777777"></wistia-player>
-        </div>
-        <div class="testi-content">
-            <span class="testi-amount">$1,463,347</span>
-            
-            <p class="testi-quote">
-                "平凡的退休人士，竟然在 82 歲致富並買下多輛夢幻超跑。現在我能帶全家人住進上億的湖畔豪宅。"
-            </p>
-            
-            <div class="testi-meta">
-                🇺🇸 GARY S.
-            </div>
-        </div>
-    </div>
+    
 
-    <div class="testi-card">
-        <div class="video-wrapper" style="margin-top: 0; box-shadow: none; border: none; padding: 10px;">
-            <script src="https://fast.wistia.com/embed/b3q7co67ui.js" async type="module"></script>
-            <wistia-player media-id="b3q7co67ui" seo="false" aspect="1.7777777777777777"></wistia-player>
-        </div>
-        <div class="testi-content">
-            <span class="testi-amount">$56,290</span>
-            
-            <p class="testi-quote">
-                "系統 2 天之內的獲利已經是我工作 2 個月的薪水！我從來沒想過賺錢可以這麼輕鬆且自動化。"
-            </p>
-            
-            <div class="testi-meta">
-                🇩🇪 HUBERT S.
-            </div>
-        </div>
-    </div>
+    
 
 </div>
             
@@ -1984,14 +2059,19 @@
         </div>
     </section>
 
-    <section class="section-padding" style="background: var(--nk-bg-panel);">
+    
+
+
+    <section class="section-padding" style="background: #000;">
         <div class="container">
-            <div class="text-center">
-                <span class="subtitle-en">WHY WE DO THIS</span>
+            <div class="text-center" style="margin-bottom: 50px;">
+                <span class="subtitle-en">THE TRUTH BEHIND</span>
                 <div class="hero-text-only">
+                    <span class="hero-number-block">NσK® SYSTEM</span>
                 <h1>既然系統這麼好賺,為何你們還要公開?<br>
-                    <span class="hero-number-block">$3,291,684</span>
+                    
                 </h1>
+            </div>
                 
                 <div class="arrow-scroll">
                     <span></span>
@@ -1999,21 +2079,12 @@
                     <span></span>
                 </div>
             </div>
-                
-                
-                
-            </div>
 
-            <div class="video-wrapper" style="max-width: 900px; margin: 0 auto;">
-                <script src="https://fast.wistia.com/embed/b3q7co67ui.js" async="" type="module"></script>
+            <div class="video-wrapper deep-dive-hero-video" style="max-width: 900px; margin: 0 auto 80px;">
+                <script src="https://fast.wistia.com/embed/b3q7co67ui.js" async type="module"></script>
                 <wistia-player media-id="b3q7co67ui" seo="false" aspect="1.7777777777777777"></wistia-player>
             </div>
-        </div>
-    </section>
 
-
-    <section class="section-padding" style="background: #000;">
-        <div class="container">
             <div class="text-center">
                 <span class="subtitle-en">MACHINE LEARNING</span>
                 <h2>若會員加入對我們沒有「極大的好處」, 我們也不可能開放系統</h2>
@@ -2030,7 +2101,7 @@
                     <div class="feature-title-group">
                         <span class="feature-reason-tag">REASON 01</span>
                         <h3 class="feature-heading-styled">
-                            優化系統效能
+                            整合用戶交易數據
                             <div class="feature-heading-line"></div>
                         </h3>
                     </div>
@@ -2048,7 +2119,7 @@
                     <div class="feature-title-group">
                         <span class="feature-reason-tag">REASON 02</span>
                         <h3 class="feature-heading-styled">
-                            測試與優化伺服器
+                            測試與改良系統策略
                             <div class="feature-heading-line"></div>
                         </h3>
                     </div>
@@ -2061,7 +2132,7 @@
     
     <div class="video-wrapper" style="margin-top: 0;">
         <div class="video-block">
-            <video src="https://arftk.com/imgs/arf.mp4" muted loop playsinline></video>
+            <video src="https://arftk.com/imgs1/wdrw.mp4" muted loop playsinline></video>
             <button class="play-pause-btn">
                 <img decoding="async" class="icon" src="https://arftk.com/imgs/play.svg">
             </button>
@@ -2072,7 +2143,7 @@
         <div class="feature-title-group">
             <span class="feature-reason-tag">REASON 03</span>
             <h3 class="feature-heading-styled">
-                全自動化交易執行
+                全面提昇獲利等級
                 <div class="feature-heading-line"></div>
             </h3>
         </div>
@@ -2180,7 +2251,7 @@
             <div class="pricing-unified-card">
 
                 <div class="video-wrapper" style="max-width: 900px; margin: 0 auto;">
-                <script src="https://fast.wistia.com/embed/b3q7co67ui.js" async="" type="module"></script>
+                <script src="https://fast.wistia.com/embed/b3q7co67ui.js" async type="module"></script>
                 <wistia-player media-id="b3q7co67ui" seo="false" aspect="1.7777777777777777"></wistia-player>
             </div>
                 
@@ -2192,21 +2263,26 @@
                 </div>
                 
                 <div class="pricing-body">
-                    <div class="price-row">
+                    
+                    <div class="price-row pricing-anim-row">
                         <span class="row-label">系統使用月費</span>
                         <span class="row-value">$6,500</span>
                     </div>
-                    <div class="price-row">
+                    
+                    <div class="price-row pricing-anim-row">
                         <span class="row-label">伺服器維護費</span>
                         <span class="row-value">$2,500</span>
                     </div>
+
                     <h3>成為 NσK® 亞洲區會員,你只需支付</h3>
+                    
                     <div class="arrow-scroll">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </div>
-                <div class="final-price-box">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                
+                <div class="final-price-box final-price-anim">
                         <span class="deposit-label">一次性會員保證金</span>
                         <div class="final-price">$199<span style="font-size: 0.4em; margin-left: 5px;">USD</span></div>
                         <p style="font-size: 0.9rem; color: #888; margin-bottom: 0;">(Fully Refundable 90-Day Guarantee)</p>
@@ -2303,5 +2379,59 @@
 
         const observer = new IntersectionObserver(observerCallback, observerOptions);
         videoBlocks.forEach(block => observer.observe(block));
+
+        /* --- NEW: PRICING SECTION ANIMATION LOGIC --- */
+        document.addEventListener("DOMContentLoaded", function() {
+            // 監聽整個 pricing-body 區塊，當它進入畫面時觸發
+            const pricingSection = document.querySelector('.pricing-body');
+            // 選取所有帶有動畫 class 的費用行
+            const rows = document.querySelectorAll('.pricing-anim-row');
+            // 選取最後的大價格區塊
+            const finalBox = document.querySelector('.final-price-anim');
+
+            const pricingObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        playPricingAnimation();
+                        // 播放一次後就停止觀察，避免重複播放
+                        pricingObserver.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.2 }); // 當 20% 進入畫面時觸發
+
+            if (pricingSection) {
+                pricingObserver.observe(pricingSection);
+            }
+
+            function playPricingAnimation() {
+                let delay = 0;
+
+                // 針對每一行費用進行迴圈處理
+                rows.forEach((row) => {
+                    // 1. Fade In Up (淡入上浮)
+                    setTimeout(() => {
+                        row.classList.add('visible');
+                    }, delay);
+
+                    // 2. Strike through & Gray out (劃掉 + 反灰)
+                    // 設定在淡入後的 0.8秒 發生，讓使用者有時間看清楚原本價格
+                    setTimeout(() => {
+                        row.classList.add('struck');
+                    }, delay + 800); 
+
+                    // 下一行費用的延遲時間增加 1.2 秒
+                    // 這樣會產生：第一行出現 -> 劃掉 -> 第二行出現 -> 劃掉 的節奏
+                    delay += 1200; 
+                });
+
+                // 最後：大價格淡入
+                setTimeout(() => {
+                    if (finalBox) {
+                        finalBox.classList.add('visible');
+                    }
+                }, delay);
+            }
+        });
     </script>
-</body></html>
+</body>
+</html>
