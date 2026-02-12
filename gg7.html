@@ -437,7 +437,7 @@
         /* --- 7.1 MODIFIED PRICING ROW STYLES (Dynamic Strikethrough) --- */
         .row-value { 
             font-family: var(--nk-font-en); 
-            font-size: 1.3rem; 
+            font-size: 1.6rem; 
             
             /* 【修改】預設改為亮色，不預先劃線 */
             color: var(--nk-text-main); 
@@ -455,7 +455,7 @@
             left: 0;
             width: 0%; /* 初始寬度為 0 */
             height: 2px;
-            background-color: #666; /* 刪除線顏色 */
+            background-color: #ff0000; /* 刪除線顏色 */
             transition: width 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94); /* 畫線動畫 */
         }
 
@@ -1421,7 +1421,7 @@
 .nk-card-content { padding: 0; }
 
 .nk-data-item-box {
-    padding: 20px 30px; 
+    padding: 30px; 
     border-bottom: 1px solid #1a1a1a; 
     display: flex; 
     justify-content: space-between; 
@@ -1574,6 +1574,132 @@
     .nk-input-label-row { flex-direction: column; align-items: flex-start; gap: 10px; }
     .nk-input-value { align-self: flex-end; }
 }
+
+/* --- ZIG-ZAG STAGGERED GALLERY (Animated Version) --- */
+
+.nk-zigzag-gallery {
+    display: flex;
+    flex-direction: column;
+    gap: 60px; /* 拉開間距，讓每一張更有呼吸感 */
+    margin-top: 40px;
+    width: 100%;
+}
+
+.zigzag-item {
+    position: relative;
+    width: 75%; /* 桌面版寬度，製造左右空間 */
+    aspect-ratio: 4 / 3; /* 強制 4:3 比例 */
+    border: 1px solid var(--nk-gold-dark);
+    background: #000;
+    overflow: hidden;
+    cursor: pointer;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.6);
+    
+    /* --- 動畫初始狀態：圖片隱藏 + 下沉 --- */
+    opacity: 0;
+    transform: translateY(60px);
+    transition: opacity 0.8s ease-out, transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), border-color 0.3s;
+}
+
+/* 圖片本體 */
+.zigzag-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    filter: grayscale(20%); /* 預設微灰，更有質感 */
+}
+
+/* --- 動畫觸發狀態 (由 JS 加入 .visible) --- */
+.zigzag-item.visible {
+    opacity: 1;
+    transform: translateY(0); /* 圖片 Fade In Up */
+}
+
+/* Hover 互動 */
+.zigzag-item:hover {
+    border-color: var(--nk-gold-rich);
+    box-shadow: 0 20px 60px rgba(197, 160, 89, 0.2);
+    z-index: 10;
+}
+.zigzag-item:hover img {
+    transform: scale(1.1); /* 圖片放大 */
+    filter: grayscale(0%); /* 恢復全彩 */
+}
+
+/* --- 桌面版 Zig-Zag 左右交錯邏輯 --- */
+.zigzag-item:nth-child(odd) {
+    align-self: flex-start; /* 奇數靠左 */
+}
+.zigzag-item:nth-child(even) {
+    align-self: flex-end; /* 偶數靠右 */
+}
+
+/* --- 黑色漸層遮罩 (Overlay) --- */
+.zigzag-overlay {
+    position: absolute; 
+    bottom: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 60%; /* 遮罩高度 */
+    /* 從透明到半黑到全黑的漸層，確保文字清晰 */
+    background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.6) 50%, transparent 100%);
+    display: flex; 
+    flex-direction: column; 
+    justify-content: flex-end; 
+    padding: 30px;
+    pointer-events: none; /* 讓滑鼠可以穿透遮罩點擊圖片 */
+}
+
+/* --- 文字容器與動畫 (Text Fade In Left-to-Right) --- */
+.zigzag-text {
+    /* 初始狀態：隱藏 + 往左偏移 */
+    opacity: 0; 
+    transform: translateX(-40px);
+    transition: all 0.8s cubic-bezier(0.215, 0.610, 0.355, 1.000);
+}
+
+/* 當圖片浮現 (.visible) 後，文字才開始動作 */
+.zigzag-item.visible .zigzag-text {
+    opacity: 1; 
+    transform: translateX(0);
+    transition-delay: 0.4s; /* ★關鍵：延遲 0.4秒，等圖片定位後文字再滑入 */
+}
+
+/* 文字樣式 */
+.zigzag-title { 
+    font-family: var(--nk-font-tc);
+    font-size: 1.5rem; 
+    font-weight: 700; 
+    margin-bottom: 5px; 
+    display: block; 
+    color: #fff; 
+    text-shadow: 0 2px 10px rgba(0,0,0,0.8);
+}
+.zigzag-desc { 
+    font-family: var(--nk-font-tc);
+    font-size: 1rem; 
+    color: #ccc; 
+    font-weight: 300; 
+    letter-spacing: 1px;
+}
+
+/* --- RWD Mobile --- */
+@media (max-width: 768px) {
+    .nk-zigzag-gallery {
+        gap: 30px;
+    }
+    .zigzag-item {
+        width: 100%; /* 手機版強制滿寬 */
+        align-self: center !important; /* 取消左右交錯 */
+        margin-bottom: 0;
+        /* 手機版取消延遲，讓反應更直接 */
+        transition-delay: 0s !important; 
+    }
+    .zigzag-title { font-size: 1.3rem; }
+}
+
+
     </style>
 </head>
 <body>
@@ -1599,8 +1725,8 @@
             </div>
 
             <div class="video-wrapper">
-                <script src="https://fast.wistia.com/embed/b3q7co67ui.js" async type="module"></script>
-                <wistia-player media-id="b3q7co67ui" seo="false" aspect="1.7777777777777777"></wistia-player>
+                <script src="https://fast.wistia.com/embed/b3q7co67ui.js" async="" type="module"></script>
+                <wistia-player media-id="b3q7co67ui" seo="false" aspect="1.7777777777777777" ></wistia-player>
             </div>
 
             <div class="marquee-wrapper marquee-rect" style="margin-bottom: 80px;">
@@ -1663,7 +1789,7 @@
                 
                 <div class="video-wrapper" style="max-width: 800px; margin: 40px auto;">
                     <div class="video-block">
-                        <video src="https://arftk.com/imgs/arf.mp4" muted loop playsinline></video>
+                        <video src="https://arftk.com/imgs/arf.mp4" muted="" loop="" playsinline=""></video>
                         <button class="play-pause-btn">
                             <img decoding="async" class="icon" src="https://arftk.com/imgs/play.svg">
                         </button>
@@ -1672,7 +1798,7 @@
                 
             
         </div>
-    </section>
+    </div></section>
 
 <section class="nk-tier-section">
     <div class="nk-tier-container-v2">
@@ -1686,28 +1812,28 @@
                 <div class="nk-card-content">
                     <div class="nk-data-item-box">
                         <span class="nk-label-text">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"></path><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"></path><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"></path></svg>
                             存款範圍
                         </span>
                         <div class="nk-value-v2">$5,500 ~ $9,999</div>
                     </div>
                     <div class="nk-data-item-box">
                         <span class="nk-label-text">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline><polyline points="16 7 22 7 22 13"></polyline></svg>
                             每月收益 %
                         </span>
                         <div class="nk-value-v2 nk-highlight">200% ~ 225%</div>
                     </div>
                     <div class="nk-data-item-box">
                         <span class="nk-label-text">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 18V6"/></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"></path><path d="M12 18V6"></path></svg>
                             每月收益 $
                         </span>
                         <div class="nk-value-v2">$11,000+</div>
                     </div>
                     <div class="nk-data-item-box">
                         <span class="nk-label-text">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
                             存款期限
                         </span>
                         <div class="nk-value-v2">12 Months</div>
@@ -1723,28 +1849,28 @@
                 <div class="nk-card-content">
                     <div class="nk-data-item-box">
                         <span class="nk-label-text">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"></path><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"></path><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"></path></svg>
                             存款範圍
                         </span>
                         <div class="nk-value-v2">$10,000 ~ $24,999</div>
                     </div>
                     <div class="nk-data-item-box">
                         <span class="nk-label-text">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline><polyline points="16 7 22 7 22 13"></polyline></svg>
                             每月收益 %
                         </span>
                         <div class="nk-value-v2 nk-highlight">250% ~ 275%</div>
                     </div>
                     <div class="nk-data-item-box">
                         <span class="nk-label-text">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 18V6"/></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"></path><path d="M12 18V6"></path></svg>
                             每月收益 $
                         </span>
                         <div class="nk-value-v2">$25,000+</div>
                     </div>
                     <div class="nk-data-item-box">
                         <span class="nk-label-text">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
                             存款期限
                         </span>
                         <div class="nk-value-v2">12 Months</div>
@@ -1760,28 +1886,28 @@
                 <div class="nk-card-content">
                     <div class="nk-data-item-box">
                         <span class="nk-label-text">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"></path><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"></path><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"></path></svg>
                             存款範圍
                         </span>
                         <div class="nk-value-v2">$25,000 ~ $49,999</div>
                     </div>
                     <div class="nk-data-item-box">
                         <span class="nk-label-text">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline><polyline points="16 7 22 7 22 13"></polyline></svg>
                             每月收益 %
                         </span>
                         <div class="nk-value-v2 nk-highlight">300% ~ 325%</div>
                     </div>
                     <div class="nk-data-item-box">
                         <span class="nk-label-text">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 18V6"/></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"></path><path d="M12 18V6"></path></svg>
                             每月收益 $
                         </span>
                         <div class="nk-value-v2">$75,000+</div>
                     </div>
                     <div class="nk-data-item-box">
                         <span class="nk-label-text">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
                             存款期限
                         </span>
                         <div class="nk-value-v2">6 Months</div>
@@ -1797,28 +1923,28 @@
                 <div class="nk-card-content">
                     <div class="nk-data-item-box">
                         <span class="nk-label-text">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"></path><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"></path><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"></path></svg>
                             存款範圍
                         </span>
                         <div class="nk-value-v2">$50,000+</div>
                     </div>
                     <div class="nk-data-item-box">
                         <span class="nk-label-text">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline><polyline points="16 7 22 7 22 13"></polyline></svg>
                             每月收益 %
                         </span>
                         <div class="nk-value-v2 nk-highlight">350% ~ 375%</div>
                     </div>
                     <div class="nk-data-item-box">
                         <span class="nk-label-text">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 18V6"/></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"></path><path d="M12 18V6"></path></svg>
                             每月收益 $
                         </span>
                         <div class="nk-value-v2">$175,000+</div>
                     </div>
                     <div class="nk-data-item-box">
                         <span class="nk-label-text">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
                             存款期限
                         </span>
                         <div class="nk-value-v2">6 Months</div>
@@ -1841,7 +1967,7 @@
                     </div>
                     <div class="nk-range-wrapper">
                         <input type="range" min="2500" max="50000" step="500" value="25000" class="nk-range-slider" id="nk-profit-slider">
-                        <div class="nk-range-track-fill" id="nk-track-fill"></div>
+                        <div class="nk-range-track-fill" id="nk-track-fill" style="width: 47.3684%;"></div>
                     </div>
                     <div class="nk-range-limits">
                         <span>$2,500</span>
@@ -1852,17 +1978,17 @@
                 <div class="nk-result-grid">
                     <div class="nk-result-box">
                         <span class="nk-label-text" style="display:block; margin-bottom: 10px;">所屬 Tier</span>
-                        <div class="nk-value-v2" id="nk-res-tier">TIER 2</div>
+                        <div class="nk-value-v2" id="nk-res-tier">TIER 3</div>
                     </div>
                     <div class="nk-result-box">
                         <span class="nk-label-text" style="display:block; margin-bottom: 10px;">最低月收益</span>
-                        <div class="nk-value-v2" id="nk-res-min">$62,500</div>
-                        <div class="nk-sub-text" id="nk-sub-min">(250%)</div>
+                        <div class="nk-value-v2" id="nk-res-min">$75,000</div>
+                        <div class="nk-sub-text" id="nk-sub-min">(300%)</div>
                     </div>
                     <div class="nk-result-box highlight-box">
                         <span class="nk-label-text" style="display:block; margin-bottom: 10px;">預估月收益 (總金額)</span>
-                        <div class="nk-value-v2 nk-highlight" id="nk-res-max">$68,750</div>
-                        <div class="nk-sub-text" id="nk-sub-max">(275%)</div>
+                        <div class="nk-value-v2 nk-highlight" id="nk-res-max">$81,250</div>
+                        <div class="nk-sub-text" id="nk-sub-max">(325%)</div>
                     </div>
                 </div>
             </div>
@@ -1871,38 +1997,7 @@
 </section>
 
 
-<section class="nk-gallery-section" style="background: var(--nk-bg-panel);">
-    <div class="container text-center">
-        <span class="subtitle-en">SYSTEM PREVIEW</span>
-        <h2>4x3 寬版視野展示 (3-2 佈局)</h2>
-        <div class="divider"></div>
-    </div>
 
-    <div class="nk-gallery-wrapper ratio-rect">
-        
-        <div class="nk-gallery-item">
-            <img src="https://arftk.com/imgs1/trading11.jpg" alt="System 1">
-            <div class="nk-gallery-overlay"><span class="g-title">DATA CENTER</span></div>
-        </div>
-        <div class="nk-gallery-item">
-            <img src="https://arftk.com/imgs1/sys0001.jpg" alt="System 2">
-            <div class="nk-gallery-overlay"><span class="g-title">AI ANALYSIS</span></div>
-        </div>
-        <div class="nk-gallery-item">
-            <img src="https://arftk.com/imgs/10m3.jpg" alt="System 3">
-            <div class="nk-gallery-overlay"><span class="g-title">RESULTS</span></div>
-        </div>
-        <div class="nk-gallery-item">
-            <img src="https://arftk.com/imgs/10m4.jpg" alt="System 4">
-            <div class="nk-gallery-overlay"><span class="g-title">GLOBAL</span></div>
-        </div>
-        <div class="nk-gallery-item">
-            <img src="https://arftk.com/imgs/10m5.jpg" alt="System 5">
-            <div class="nk-gallery-overlay"><span class="g-title">FREEDOM</span></div>
-        </div>
-
-    </div>
-</section>
 
 <section class="nk-stagger-section">
     <div class="container text-center" style="margin-bottom: 50px;">
@@ -1913,7 +2008,7 @@
 
     <div class="nk-stagger-grid">
         
-        <div class="nk-stagger-item">
+        <div class="nk-stagger-item visible">
             <img src="https://arftk.com/imgs/10m1.jpg" alt="Luxury Car">
             <div class="nk-stagger-overlay">
                 <div class="nk-stagger-text">
@@ -1923,7 +2018,7 @@
             </div>
         </div>
 
-        <div class="nk-stagger-item">
+        <div class="nk-stagger-item visible">
             <img src="https://arftk.com/imgs/10m2.jpg" alt="First Class">
             <div class="nk-stagger-overlay">
                 <div class="nk-stagger-text">
@@ -1933,7 +2028,7 @@
             </div>
         </div>
 
-        <div class="nk-stagger-item">
+        <div class="nk-stagger-item visible">
             <img src="https://arftk.com/imgs/10m3.jpg" alt="Mansion">
             <div class="nk-stagger-overlay">
                 <div class="nk-stagger-text">
@@ -1943,7 +2038,7 @@
             </div>
         </div>
 
-        <div class="nk-stagger-item">
+        <div class="nk-stagger-item visible">
             <img src="https://arftk.com/imgs/10m5.jpg" alt="Freedom">
             <div class="nk-stagger-overlay">
                 <div class="nk-stagger-text">
@@ -1972,7 +2067,13 @@
             staggerObserver.observe(item);
         });
     });
-</script>
+</script><style id="wistia_36_style" type="text/css" class="wistia_injected_style">
+@font-face {
+font-family: 'WistiaPlayerInterNumbersSemiBold';
+font-feature-settings: 'tnum' 1;
+src: url(data:application/x-font-woff;charset=utf-8;base64,d09GMk9UVE8AAAaMAAwAAAAACgAAAAZBAAMD1wAAAAAAAAAAAAAAAAAAAAAAAAAADYpwGhQbIBwqBmAAgTIBNgIkAzAEBgWDGgcgGykJEZWkARP8KHCbm2tEznyIN98tPTUk9Ig3oiVV3pbDIzXa+f/fZgXpALFTZhBoMVFC9cp036dXvRKVmVnsxe+D+1NDQI5lG7ikZWEINIElTeBIdnxlhauQ5GQtoLHA/wN0riVdSx5xgbxF3KTbgnjVQ4B9P7YqCx7FpEZK+6ilx0AoopUh4aExJEKmkU+0ncdr4iFfKhdSFD9y91LCRaxNbVqvi0dND3rxI7ndUDR7EiwT3bhiua9krFA0oepCy2hCjwmjnjDjKjNTDz2ZuHtN8820Wfw/l8u4w4yV/f8/6uscs5rmiN00LcP4hAofyZUSyS3WinX0RGFFtnGrjj36x6dlNa57+PLTlrUisH2n9orfgd+R34XfDd0NsWDXwfwhvKHpbs3UBni37dBlPvO4KYn/PgylilcgSdw6sjsSSxsRGfIJgqhi14bKZCHcQvjUh/+3HMotTYrGLVYCxyMFjEnYC98yTAp6atAKVxaZ9eu2NMji8WTj4w/Y34elD60PPwb5bEywLqAX/amwmUo6TBCy14N/TL44jb3sE5JdUIPXXI0RBSoGt3BUObn4agKGIxxQhlyQacbstK4fS2mZoBtFNQ1bd+4zND2vQu6anl7gWFOj8MV2DVMtU44xMhpwElrrjA7zO5IqWojd/v1Vso6cqp91zC2YrGhDOy07Iqyza2q9smDIwUYek0AWbCt/8x78QmrzayQ6xtpmqfCYsLfgU9HdeP3UqutZTTNd/9Q8k08XzXzIxSdvLPda8YaeeZnkxUwql0nDKyUYdaWZjGAy7UDLHpVqBVHTxSV0wBy21El9u/491ik2J3YkdiP2LPZL41RBeeNUWtp97Bbn0Ee1g9wr9qqV/X+4R9nlPX03743dylnaXZyNp8v58yLOsFYCbUnCVQzjN+5QhlmKccO7aMkueWJggROd4qnw2x5LydUcg/NRamE3XMlkGovpRWPKWEavP74P2O1RANM/3gIIPJj7TX+lqU2geQuaBx4B/7cWAOx0ucTiEHYJU9y5DBuUMYNIHeHZz9tn+Fw2G5EBTqUlHRfRi4eB5wNlJsRsv5k4b6HyFkhIC6BO4LzPbWhW7rbCcxubeKHOc6UaBKZBMMd4j8XuRUynOCCa4EMfF9grkI1NcTaSAVtk1nrIOwFfeEBlQw4f4phb6zHzBOm0ZZ0dBcaZRVdYIo5xYiyOMEWONwQHmjKGE//VuRBgul1QrpyxmMvF4vGj0xfuuQrNt4tVTsRhEnjY9AuKa1FVLSEneQWzFd5WbO7hasX08ONUOVQgwQuVqACFXkSoIoUgK1hJEkAgbkG5CjqBS5wrRFuY2IfVwhRnLsVyZTZpatveGR4yEbYqbE6J80nM4aa+LD7Oqmr8PdSJFUQVynmgN4lerGQV1+uLdYzdOFWHPW/iK2gIQayhizQ0NMwyvBEBlrDczRfmU40CTtAHqLQGnjQG8MYkxm1MwJuTqjHwVCu9iRJ1C8ojWGHxUYowH0c5X57zpXquvlw0wzHHGMTfufxiJ1psFJTzq6nGeDvHF4LgmHHWCUViZBaInRn+cswnBi460RBPRYg9TRUQ0CZUC5LAT0qLLu50FpdTeBhjGf7/h4dg9hE0uqsBx/saOcYRDIfnOhfzGFBHyizcJK3p2edUjWrC0rn1aGjXtfVUCHMAKKhlxV8eTEIcV2jCOdKiqahv/MisrfRQVnxPJoOU62mR6pu2ZllIzo8zOZqQB7kWJXW2/c0aihata5PcIVJKfFRgHAETmEQVTCELptGMGcyigTnMJ1voUVN6uCZS9pV2hrwl7FYMvBwtUSd7L7E5qP9t7BIPRF7EcmA9ct2nIPHrxgWajtDltbXuBLuaY6qRZGa5ZlX5anfR0lYXaHUzVSFjZa8rfdhZ8rKXFZg21LVL5LFjI5TlDIbwnFGHE2dypHs6Q50N015dpOgLONEUlOqoiQgIaeCsjMq9gITDKwRMieQgKUy9UQY1BTFYZU2KpE2SkILMIjW8IdFwIKmMaK8oClJVssAEtFnz5dQ1s+w6EZoNGtPGQfzx+aoE8ikiP8GCYOWtgB+HBdWDaxACAZInVq14dZI85RRDvZGIghyONw59KV/BBEQ02P1ER8hmNGiURT2hQP8WfAY=);
+}
+</style>
 
 
     <section class="section-padding nk-collage-section">
@@ -2040,8 +2141,8 @@
     
     <div class="testi-card">
         <div class="video-wrapper" style="margin-top: 0; box-shadow: none; border: none; padding: 10px;">
-            <script src="https://fast.wistia.com/embed/b3q7co67ui.js" async type="module"></script>
-            <wistia-player media-id="b3q7co67ui" seo="false" aspect="1.7777777777777777"></wistia-player>
+            <script src="https://fast.wistia.com/embed/b3q7co67ui.js" async="" type="module"></script>
+            <wistia-player media-id="b3q7co67ui" seo="false" aspect="1.7777777777777777" ></wistia-player>
         </div>
         <div class="testi-content">
             <div class="testi-badge">
@@ -2060,8 +2161,8 @@
         </div>
     </div><div class="testi-card">
         <div class="video-wrapper" style="margin-top: 0; box-shadow: none; border: none; padding: 10px;">
-            <script src="https://fast.wistia.com/embed/b3q7co67ui.js" async type="module"></script>
-            <wistia-player media-id="b3q7co67ui" seo="false" aspect="1.7777777777777777"></wistia-player>
+            <script src="https://fast.wistia.com/embed/b3q7co67ui.js" async="" type="module"></script>
+            <wistia-player media-id="b3q7co67ui" seo="false" aspect="1.7777777777777777" ></wistia-player>
         </div>
         <div class="testi-content">
             <div class="testi-badge">
@@ -2115,57 +2216,11 @@
                 <div class="marquee-glow-line"></div>
             </div>
 
-            <div class="marquee-wrapper marquee-rect">
-                <div class="text-center" style="margin-bottom: 20px;">
-                    <span class="subtitle-en" style="letter-spacing: 5px; font-size: 0.9rem;">REAL MEMBER RESULTS</span>
-                <h2>從現在起, NσK® 團隊將為你帶來最大的財富</h2></div>
-                
-                <div class="marquee-glow-line"></div>
-                
-                <div class="marquee-viewport">
-                    <div class="marquee-track">
-                        <div class="marquee-item"><img src="https://arftk.com/imgs/10m1.jpg"></div>
-                        <div class="marquee-item"><img src="https://arftk.com/imgs/10m2.jpg"></div>
-                        <div class="marquee-item"><img src="https://arftk.com/imgs/10m3.jpg"></div>
-                        <div class="marquee-item"><img src="https://arftk.com/imgs/10m4.jpg"></div>
-                        <div class="marquee-item"><img src="https://arftk.com/imgs/10m5.jpg"></div>
-                        <div class="marquee-item"><img src="https://arftk.com/imgs/10m1.jpg"></div>
-                        <div class="marquee-item"><img src="https://arftk.com/imgs/10m2.jpg"></div>
-                        <div class="marquee-item"><img src="https://arftk.com/imgs/10m3.jpg"></div>
-                        <div class="marquee-item"><img src="https://arftk.com/imgs/10m4.jpg"></div>
-                        <div class="marquee-item"><img src="https://arftk.com/imgs/10m5.jpg"></div>
-                    </div>
-                </div>
-                
-                <div class="marquee-glow-line"></div>
-            </div>
+            
             
 
 
-            <div class="marquee-wrapper">
-                <div class="text-center" style="margin-bottom: 20px;">
-                    <span class="subtitle-en" style="letter-spacing: 5px; font-size: 0.9rem;">REAL MEMBER RESULTS</span>
-                <h2>從現在起, NσK® 團隊將為你帶來最大的財富</h2></div>
-                
-                <div class="marquee-glow-line"></div>
-                
-                <div class="marquee-viewport">
-                    <div class="marquee-track">
-                        <div class="marquee-item"><img src="https://arftk.com/imgs/10m1.jpg"></div>
-                        <div class="marquee-item"><img src="https://arftk.com/imgs/10m2.jpg"></div>
-                        <div class="marquee-item"><img src="https://arftk.com/imgs/10m3.jpg"></div>
-                        <div class="marquee-item"><img src="https://arftk.com/imgs/10m4.jpg"></div>
-                        <div class="marquee-item"><img src="https://arftk.com/imgs/10m5.jpg"></div>
-                        <div class="marquee-item"><img src="https://arftk.com/imgs/10m1.jpg"></div>
-                        <div class="marquee-item"><img src="https://arftk.com/imgs/10m2.jpg"></div>
-                        <div class="marquee-item"><img src="https://arftk.com/imgs/10m3.jpg"></div>
-                        <div class="marquee-item"><img src="https://arftk.com/imgs/10m4.jpg"></div>
-                        <div class="marquee-item"><img src="https://arftk.com/imgs/10m5.jpg"></div>
-                    </div>
-                </div>
-                
-                <div class="marquee-glow-line"></div>
-            </div>
+            
             </div>
     </section>
 
@@ -2187,8 +2242,8 @@
             </div>
 
             <div class="video-wrapper deep-dive-hero-video" style="max-width: 900px; margin: 0 auto 80px;">
-                <script src="https://fast.wistia.com/embed/b3q7co67ui.js" async type="module"></script>
-                <wistia-player media-id="b3q7co67ui" seo="false" aspect="1.7777777777777777"></wistia-player>
+                <script src="https://fast.wistia.com/embed/b3q7co67ui.js" async="" type="module"></script>
+                <wistia-player media-id="b3q7co67ui" seo="false" aspect="1.7777777777777777" ></wistia-player>
             </div>
 
           
@@ -2205,12 +2260,95 @@
                 </div>
             </div>
 
+
             <div class="feature-row sticky-mode">
     
     <div class="sticky-video-col">
         <div class="video-wrapper">
             <div class="video-block">
-                <video src="https://arftk.com/imgs1/dash.mp4" muted loop playsinline></video>
+                <script src="https://fast.wistia.com/embed/b3q7co67ui.js" async="" type="module"></script>
+                <wistia-player media-id="b3q7co67ui" seo="false" aspect="1.7777777777777777" ></wistia-player>
+            </div>
+        </div>
+        <p style="margin-top: 20px; font-size: 0.9rem; text-align: center; color: #666;">
+            ▲ 系統實戰操作演示
+        </p>
+    </div>
+
+    <div class="feature-content scrollable-content-col">
+
+        <div class="content-block">
+            <div class="feature-title-group">
+                <span class="feature-reason-tag">LIVE PROOF</span>
+                <h3 class="feature-heading-styled">
+                    真實交易紀錄與獲利展示
+                    <div class="feature-heading-line"></div>
+                </h3>
+            </div>
+            
+            <p>這不僅僅是理論，我們將毫無保留地展示 NσK® 系統在不同市場行情下的真實表現。</p>
+            <p>下方圖片展示了系統在劇烈波動的「非農數據夜」以及平穩震盪盤整期的操作細節。您可以清楚看到 AI 如何精準捕捉每一個微小的獲利空間。</p>
+        </div>
+
+        <div class="nk-zigzag-gallery">
+            
+            <div class="zigzag-item visible">
+                <img src="https://arftk.com/imgs1/trading11.jpg" alt="Entry Point">
+                <div class="zigzag-overlay">
+                    <div class="zigzag-text">
+                        <span class="zigzag-title">精準進場點</span>
+                        <span class="zigzag-desc">AI 於回調低點精準佈局</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="zigzag-item visible">
+                <img src="https://arftk.com/imgs/10m3.jpg" alt="Profit Secured">
+                <div class="zigzag-overlay">
+                    <div class="zigzag-text">
+                        <span class="zigzag-title">獲利鎖定</span>
+                        <span class="zigzag-desc">自動移動止損，確保利潤入袋</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="zigzag-item visible">
+                <img src="https://arftk.com/imgs1/sys0001.jpg" alt="Risk Control">
+                <div class="zigzag-overlay">
+                    <div class="zigzag-text">
+                        <span class="zigzag-title">風險控管</span>
+                        <span class="zigzag-desc">波動過大時自動暫停交易</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="zigzag-item visible">
+                <img src="https://arftk.com/imgs/10m5.jpg" alt="Final Result">
+                <div class="zigzag-overlay">
+                    <div class="zigzag-text">
+                        <span class="zigzag-title">最終獲利結算</span>
+                        <span class="zigzag-desc">單日累積收益達 12.5%</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="content-block" style="margin-top: 40px; border-top: 1px solid #222; padding-top: 30px;">
+            <p style="font-size: 0.9rem; color: #888;">
+                * 所有交易紀錄皆已經過第三方審計機構認證，確保數據真實不可篡改。
+            </p>
+        </div>
+
+    </div>
+</div>
+
+
+            <div class="feature-row sticky-mode">
+    
+    <div class="sticky-video-col">
+        <div class="video-wrapper">
+            <div class="video-block">
+                <video src="https://arftk.com/imgs1/dash.mp4" muted="" loop="" playsinline=""></video>
                 <button class="play-pause-btn">
                     <img decoding="async" class="icon" src="https://arftk.com/imgs/play.svg">
                 </button>
@@ -2232,7 +2370,7 @@
             </h3>
         </div>
 
-        <ul class="feature-list" id="animated-feature-list" style="margin: 0; width: 100%;">
+        <ul class="feature-list visible" id="animated-feature-list" style="margin: 0; width: 100%;">
             <li style="padding: 15px; font-size: 1.1rem;">
                 直接連接至多個大型資料庫，毫秒抓取千萬筆數據
             </li>
@@ -2258,7 +2396,7 @@
             </p>
             <div class="video-wrapper" style="margin-top: 20px;">
                 <div class="video-block">
-                    <video src="https://arftk.com/imgs1/abm.mp4" muted loop playsinline></video>
+                    <video src="https://arftk.com/imgs1/abm.mp4" muted="" loop="" playsinline=""></video>
                     <button class="play-pause-btn"><img class="icon" src="https://arftk.com/imgs/play.svg"></button>
                 </div>
             </div>
@@ -2272,7 +2410,7 @@
             </p>
             <div class="video-wrapper" style="margin-top: 20px;">
                 <div class="video-block">
-                    <video src="https://arftk.com/imgs1/rrm.mp4" muted loop playsinline></video>
+                    <video src="https://arftk.com/imgs1/rrm.mp4" muted="" loop="" playsinline=""></video>
                     <button class="play-pause-btn"><img class="icon" src="https://arftk.com/imgs/play.svg"></button>
                 </div>
             </div>
@@ -2286,7 +2424,7 @@
             </p>
             <div class="video-wrapper" style="margin-top: 20px;">
                 <div class="video-block">
-                    <video src="https://arftk.com/imgs1/axis.mp4" muted loop playsinline></video>
+                    <video src="https://arftk.com/imgs1/axis.mp4" muted="" loop="" playsinline=""></video>
                     <button class="play-pause-btn"><img class="icon" src="https://arftk.com/imgs/play.svg"></button>
                 </div>
             </div>
@@ -2296,44 +2434,7 @@
 </div>
 
 
-            <div class="feature-row">
-    
-    <div class="video-wrapper">
-        <div class="video-block">
-            <video src="https://arftk.com/imgs/arf.mp4" muted loop playsinline></video>
-            <button class="play-pause-btn">
-                <img decoding="async" class="icon" src="https://arftk.com/imgs/play.svg">
-            </button>
-        </div>
-    </div>
-
-    <div class="feature-content">
-        
-        <div class="feature-title-group">
-            <span class="feature-reason-tag">ABSOLUTE ADVANTAGE</span>
-            <h3 class="feature-heading-styled">
-                AI 在金融交易的絕對優勢
-                <div class="feature-heading-line"></div>
-            </h3>
-        </div>
-
-        <ul class="feature-list" id="animated-feature-list" style="margin: 0; width: 100%;">
-            <li style="padding: 15px; font-size: 0.95rem;">
-                直接連接至多個大型資料庫，毫秒抓取千萬筆數據
-            </li>
-            <li style="padding: 15px; font-size: 0.95rem;">
-                在數秒之內，完成人類需要數日才能完成的分析與計算
-            </li>
-            <li style="padding: 15px; font-size: 0.95rem;">
-                沒有任何情緒與體力因素，100% 按照交易策略執行
-            </li>
-            <li style="padding: 15px; font-size: 0.95rem;">
-                計算與執行不但快速，並且比人類更精準，無誤差
-            </li>
-        </ul>
-
-    </div>
-</div>
+            
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
@@ -2356,58 +2457,11 @@
     });
 </script>
 
-            <div class="feature-row">
-                <div class="video-wrapper">
-                    <script src="https://fast.wistia.com/embed/b3q7co67ui.js" async type="module"></script>
-                    <wistia-player media-id="b3q7co67ui" seo="false" aspect="1.7777777777777777"></wistia-player>
-                </div>
-                <div class="feature-content">
-                    
-                    <div class="feature-title-group">
-                        <span class="feature-reason-tag">CORE LOGIC 01</span>
-                        <h3 class="feature-heading-styled">
-                            毫秒級數據運算與分析
-                            <div class="feature-heading-line"></div>
-                        </h3>
-                    </div>
+            
 
-                    <p>NσK® 系統核心連接全球 12 大交易所數據中心當人類交易員還在閱讀新聞標題時, 系統已經完成了 3,000 次以上的數據比對與風險計算</p>
-                    <p style="margin-bottom: 0;">這種速度上的絕對優勢, 讓我們能在市場趨勢形成前的 0.5 秒內完成佈局, 賺取最豐厚的一段利潤</p>
-                </div>
-            </div>
+            
 
-            <div class="text-center" style="margin-bottom: 50px;">
-                <span class="subtitle-en">SYSTEM REVEALED</span>
-                <h2>獨家揭密：系統實戰運作邏輯</h2>
-                <div class="divider"></div>
-                <p>為何系統能做到精準的自動化獲利？</p>
-                
-                <div class="arrow-scroll">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </div>
-            </div>
-
-            <div class="feature-row">
-                <div class="video-wrapper">
-                    <script src="https://fast.wistia.com/embed/b3q7co67ui.js" async type="module"></script>
-                    <wistia-player media-id="b3q7co67ui" seo="false" aspect="1.7777777777777777"></wistia-player>
-                </div>
-                <div class="feature-content">
-                    
-                    <div class="feature-title-group">
-                        <span class="feature-reason-tag">CORE LOGIC 02</span>
-                        <h3 class="feature-heading-styled">
-                            AI 風險趨避與資金控管
-                            <div class="feature-heading-line"></div>
-                        </h3>
-                    </div>
-
-                    <p>獲利的關鍵不在於「賺多少」, 而在於「留多少」系統內建的 AI 風險控管模組, 能即時監控市場波動率</p>
-                    <p style="margin-bottom: 0;">一旦偵測到非理性的市場崩跌訊號, 系統會自動鎖定獲利並暫停交易, 確保本金與獲利的絕對安全, 這也是我們敢做出獲利保證的原因</p>
-                </div>
-            </div>
+            
             
         </div>
     </section>
@@ -2430,8 +2484,8 @@
             </div>
 
             <div class="video-wrapper deep-dive-hero-video" style="max-width: 900px; margin: 0 auto 80px;">
-                <script src="https://fast.wistia.com/embed/b3q7co67ui.js" async type="module"></script>
-                <wistia-player media-id="b3q7co67ui" seo="false" aspect="1.7777777777777777"></wistia-player>
+                <script src="https://fast.wistia.com/embed/b3q7co67ui.js" async="" type="module"></script>
+                <wistia-player media-id="b3q7co67ui" seo="false" aspect="1.7777777777777777" ></wistia-player>
             </div>
 
 
@@ -2445,8 +2499,8 @@
     
     <div class="testi-card">
         <div class="video-wrapper" style="margin-top: 0; box-shadow: none; border: none; padding: 10px;">
-            <script src="https://fast.wistia.com/embed/b3q7co67ui.js" async type="module"></script>
-            <wistia-player media-id="b3q7co67ui" seo="false" aspect="1.7777777777777777"></wistia-player>
+            <script src="https://fast.wistia.com/embed/b3q7co67ui.js" async="" type="module"></script>
+            <wistia-player media-id="b3q7co67ui" seo="false" aspect="1.7777777777777777" ></wistia-player>
         </div>
         <div class="testi-content">
             <div class="testi-badge">
@@ -2465,8 +2519,8 @@
         </div>
     </div><div class="testi-card">
         <div class="video-wrapper" style="margin-top: 0; box-shadow: none; border: none; padding: 10px;">
-            <script src="https://fast.wistia.com/embed/b3q7co67ui.js" async type="module"></script>
-            <wistia-player media-id="b3q7co67ui" seo="false" aspect="1.7777777777777777"></wistia-player>
+            <script src="https://fast.wistia.com/embed/b3q7co67ui.js" async="" type="module"></script>
+            <wistia-player media-id="b3q7co67ui" seo="false" aspect="1.7777777777777777" ></wistia-player>
         </div>
         <div class="testi-content">
             <div class="testi-badge">
@@ -2519,8 +2573,8 @@
             </div>
 
             <div class="video-wrapper deep-dive-hero-video" style="max-width: 900px; margin: 0 auto 80px;">
-                <script src="https://fast.wistia.com/embed/b3q7co67ui.js" async type="module"></script>
-                <wistia-player media-id="b3q7co67ui" seo="false" aspect="1.7777777777777777"></wistia-player>
+                <script src="https://fast.wistia.com/embed/b3q7co67ui.js" async="" type="module"></script>
+                <wistia-player media-id="b3q7co67ui" seo="false" aspect="1.7777777777777777" ></wistia-player>
             </div>
 
             <div class="text-center">
@@ -2570,7 +2624,7 @@
     
     <div class="video-wrapper" style="margin-top: 0;">
         <div class="video-block">
-            <video src="https://arftk.com/imgs1/wdrw.mp4" muted loop playsinline></video>
+            <video src="https://arftk.com/imgs1/wdrw.mp4" muted="" loop="" playsinline=""></video>
             <button class="play-pause-btn">
                 <img decoding="async" class="icon" src="https://arftk.com/imgs/play.svg">
             </button>
@@ -2630,7 +2684,7 @@
     
     <div class="video-wrapper" style="margin-top: 0; border: none; border-bottom: 1px solid var(--nk-gold-dark);">
         <div class="video-block">
-            <video src="https://arftk.com/imgs/arf.mp4" muted loop playsinline></video>
+            <video src="https://arftk.com/imgs/arf.mp4" muted="" loop="" playsinline=""></video>
             <button class="play-pause-btn">
                 <img decoding="async" class="icon" src="https://arftk.com/imgs/play.svg">
             </button>
@@ -2656,22 +2710,22 @@
                 
                 <div class="nk-input-group">
     <label for="full_name" class="nk-input-label">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"></path></svg>
         FULL NAME
     </label>
-    <input type="text" id="full_name" name="full_name" class="nk-input-field" placeholder="請輸入您的真實姓名" required>
+    <input type="text" id="full_name" name="full_name" class="nk-input-field" placeholder="請輸入您的真實姓名" required="">
 </div>
 
 <div class="nk-input-group">
     <label for="email" class="nk-input-label">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"></path></svg>
         EMAIL ADDRESS
     </label>
-    <input type="email" id="email" name="email" class="nk-input-field" placeholder="請輸入您最常用的 Email 信箱" required>
+    <input type="email" id="email" name="email" class="nk-input-field" placeholder="請輸入您最常用的 Email 信箱" required="">
 </div>
 
                 <button type="submit" class="nk-btn" style="width: 100%; margin-top: 15px;">
-                    GET INSTANT ACCESS
+                    立刻取得正式邀請
                     <span style="font-size: 0.8rem; display: block; font-weight: 300; margin-top: 5px; opacity: 0.7;">Secure 256-bit SSL Payment</span>
                 </button>
                 
@@ -2689,8 +2743,8 @@
             <div class="pricing-unified-card">
 
                 <div class="video-wrapper" style="max-width: 900px; margin: 0 auto;">
-                <script src="https://fast.wistia.com/embed/b3q7co67ui.js" async type="module"></script>
-                <wistia-player media-id="b3q7co67ui" seo="false" aspect="1.7777777777777777"></wistia-player>
+                <script src="https://fast.wistia.com/embed/b3q7co67ui.js" async="" type="module"></script>
+                <wistia-player media-id="b3q7co67ui" seo="false" aspect="1.7777777777777777" ></wistia-player>
             </div>
                 
 
@@ -2702,14 +2756,14 @@
                 
                 <div class="pricing-body">
                     
-                    <div class="price-row pricing-anim-row">
+                    <div class="price-row pricing-anim-row visible struck">
                         <span class="row-label">系統使用月費</span>
-                        <span class="row-value">$6,500</span>
+                        <span class="row-value">$6,500 USD</span>
                     </div>
                     
-                    <div class="price-row pricing-anim-row">
+                    <div class="price-row pricing-anim-row visible struck">
                         <span class="row-label">伺服器維護費</span>
-                        <span class="row-value">$2,500</span>
+                        <span class="row-value">$2,500 USD</span>
                     </div>
 
                     <h3>成為 NσK® 亞洲區會員,你只需支付</h3>
@@ -2720,7 +2774,7 @@
                         <span></span>
                     </div>
                 
-                <div class="final-price-box final-price-anim">
+                <div class="final-price-box final-price-anim visible">
                         <span class="deposit-label">一次性會員保證金</span>
                         <div class="final-price">$199<span style="font-size: 0.4em; margin-left: 5px;">USD</span></div>
                         <p style="font-size: 0.9rem; color: #888; margin-bottom: 0;">(Fully Refundable 90-Day Guarantee)</p>
@@ -2744,15 +2798,19 @@
 
     <footer>
         <div class="container">
-            <img src="https://arftk.com/imgs1/logo1.png" alt="Logo" style="width: 100px; margin: 0 auto 20px; filter: grayscale(1);">
-            <p style="font-size: 0.75rem;">© 2026 NσK® INVESTMENT GROUP. All rights reserved.</p>
+            <img src="https://arftk.com/imgs1/logo1.png" alt="Logo" style="width: 50px; margin: 0 auto 20px; filter: grayscale(1);">
+            <p style="font-size: 0.75rem;">© 2026 NσK® INVESTMENT GROUP.</p>
         </div>
     </footer>
 
     <script>
-        // Simple scroll detection
+    document.addEventListener("DOMContentLoaded", function() {
+        
+        /* =========================================
+           1. NAVBAR SCROLL EFFECT (導航欄捲動變色)
+           ========================================= */
+        const navbar = document.getElementById('navbar');
         window.addEventListener('scroll', function() {
-            const navbar = document.getElementById('navbar');
             if (window.scrollY > 50) {
                 navbar.classList.add('scrolled');
             } else {
@@ -2760,186 +2818,181 @@
             }
         });
 
-        // --- CUSTOM VIDEO AUTOPLAY LOGIC ---
-        const videoBlocks = document.querySelectorAll('.video-block');
-
-        videoBlocks.forEach(block => {
-            const video = block.querySelector('video');
-            const button = block.querySelector('.play-pause-btn');
-            const icon = button.querySelector('.icon');
-            
-            button.addEventListener('click', () => {
-                if (video.paused) {
-                    video.play().catch(error => {
-                        console.error('播放失敗:', error);
-                    });
-                } else {
-                    video.pause();
-                }
-                updateButtonIcon();
-            });
-
-            function updateButtonIcon() {
-                if (video.paused) {
-                    icon.src = "https://arftk.com/imgs/play.svg"; 
-                } else {
-                    icon.src = "https://arftk.com/imgs/pause.svg"; 
-                }
-            }
-
-            video.addEventListener('play', updateButtonIcon);
-            video.addEventListener('pause', updateButtonIcon);
-        });
-
-        const observerOptions = {
-            root: null, 
-            threshold: 0.5 
-        };
-
-        const observerCallback = (entries) => {
+        /* =========================================
+           2. VIDEO AUTOPLAY (影片進入畫面自動播放)
+           ========================================= */
+        const videoObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
+                // 找出該 entry 內的所有 video 標籤
                 const videos = entry.target.querySelectorAll('video');
                 videos.forEach(video => {
                     if (entry.isIntersecting) {
                         if (video.paused) {
-                            video.play().catch(error => {
-                                console.error('播放失敗:', error);
-                            });
+                            video.play().catch(e => console.error("Autoplay prevented", e));
                         }
                     } else {
-                        if (!video.paused) {
-                            video.pause();
-                        }
+                        if (!video.paused) video.pause();
                     }
                 });
+                
+                // 同步更新按鈕狀態
+                const btn = entry.target.querySelector('.play-pause-btn');
+                const icon = entry.target.querySelector('.icon');
+                if(btn && icon) {
+                    const mainVideo = entry.target.querySelector('video');
+                    if(mainVideo) {
+                        mainVideo.addEventListener('play', () => icon.src = "https://arftk.com/imgs/pause.svg");
+                        mainVideo.addEventListener('pause', () => icon.src = "https://arftk.com/imgs/play.svg");
+                    }
+                }
             });
-        };
+        }, { threshold: 0.5 });
 
-        const observer = new IntersectionObserver(observerCallback, observerOptions);
-        videoBlocks.forEach(block => observer.observe(block));
+        document.querySelectorAll('.video-block').forEach(block => {
+            videoObserver.observe(block);
+            
+            // 手動點擊播放按鈕邏輯
+            const video = block.querySelector('video');
+            const btn = block.querySelector('.play-pause-btn');
+            if(btn && video) {
+                btn.addEventListener('click', () => {
+                    video.paused ? video.play() : video.pause();
+                });
+            }
+        });
 
-        /* --- NEW: PRICING SECTION ANIMATION LOGIC --- */
-        document.addEventListener("DOMContentLoaded", function() {
-            // 監聽整個 pricing-body 區塊，當它進入畫面時觸發
-            const pricingSection = document.querySelector('.pricing-body');
-            // 選取所有帶有動畫 class 的費用行
-            const rows = document.querySelectorAll('.pricing-anim-row');
-            // 選取最後的大價格區塊
-            const finalBox = document.querySelector('.final-price-anim');
+        /* =========================================
+           3. PRICING ANIMATION (費用劃掉 + 淡入)
+           ========================================= */
+        const pricingSection = document.querySelector('.pricing-body');
+        const pricingRows = document.querySelectorAll('.pricing-anim-row');
+        const finalBox = document.querySelector('.final-price-anim');
 
+        if (pricingSection && pricingRows.length > 0) {
             const pricingObserver = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
-                        playPricingAnimation();
-                        // 播放一次後就停止觀察，避免重複播放
+                        // 開始執行動畫函數
+                        runPricingSequence();
+                        // 執行一次後取消觀察
                         pricingObserver.unobserve(entry.target);
                     }
                 });
-            }, { threshold: 0.2 }); // 當 20% 進入畫面時觸發
+            }, { threshold: 0.2 });
 
-            if (pricingSection) {
-                pricingObserver.observe(pricingSection);
-            }
+            pricingObserver.observe(pricingSection);
 
-            function playPricingAnimation() {
+            function runPricingSequence() {
                 let delay = 0;
-
-                // 針對每一行費用進行迴圈處理
-                rows.forEach((row) => {
-                    // 1. Fade In Up (淡入上浮)
+                pricingRows.forEach((row) => {
+                    // 1. Fade In Up
                     setTimeout(() => {
                         row.classList.add('visible');
                     }, delay);
 
-                    // 2. Strike through & Gray out (劃掉 + 反灰)
-                    // 設定在淡入後的 0.8秒 發生，讓使用者有時間看清楚原本價格
+                    // 2. Strikethrough (0.8s 後劃掉)
                     setTimeout(() => {
                         row.classList.add('struck');
-                    }, delay + 800); 
+                    }, delay + 800);
 
-                    // 下一行費用的延遲時間增加 1.2 秒
-                    // 這樣會產生：第一行出現 -> 劃掉 -> 第二行出現 -> 劃掉 的節奏
-                    delay += 1200; 
+                    // 下一個項目延遲 1.2s
+                    delay += 1200;
                 });
 
-                // 最後：大價格淡入
+                // 最後顯示大價格
                 setTimeout(() => {
-                    if (finalBox) {
-                        finalBox.classList.add('visible');
-                    }
+                    if (finalBox) finalBox.classList.add('visible');
                 }, delay);
             }
-        });
-    </script>
-
-    <script>
-    (function(){
-        // 獲取 DOM 元素
-        const slider = document.getElementById('nk-profit-slider');
-        const displayVal = document.getElementById('nk-slider-val');
-        const trackFill = document.getElementById('nk-track-fill');
-        const resTier = document.getElementById('nk-res-tier');
-        const resMin = document.getElementById('nk-res-min');
-        const resMax = document.getElementById('nk-res-max');
-        const subMin = document.getElementById('nk-sub-min');
-        const subMax = document.getElementById('nk-sub-max');
-
-        // 定義 Tier 規則
-        const tiers = [
-            { min: 50000, name: 'TIER 4', pMin: 3.50, pMax: 3.75 },
-            { min: 25000, name: 'TIER 3', pMin: 3.00, pMax: 3.25 },
-            { min: 10000, name: 'TIER 2', pMin: 2.50, pMax: 2.75 },
-            { min: 5500,  name: 'TIER 1', pMin: 2.00, pMax: 2.25 },
-            { min: 0,     name: '未達標',  pMin: 0,    pMax: 0 }
-        ];
-
-        // 格式化金額函數 (加逗號)
-        function formatMoney(num) {
-            return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         }
 
-        // 更新計算函數
-        function updateCalc() {
-            const val = parseInt(slider.value);
-            displayVal.innerText = formatMoney(val);
-            
-            // 計算滑桿填充條寬度
-            const percent = ((val - slider.min) / (slider.max - slider.min)) * 100;
-            trackFill.style.width = percent + '%';
+        /* =========================================
+           4. UNIVERSAL SCROLL REVEAL (通用卷軸動畫)
+           包含: Zig-Zag Gallery, Staggered Gallery, Feature List
+           ========================================= */
+        
+        // 觀察器設定：進入畫面 20% 時觸發，下方預留 -50px 緩衝
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    revealObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.2, rootMargin: "0px 0px -50px 0px" });
 
-            // 判斷目前 Tier
-            let currentTier = tiers[tiers.length - 1]; 
-            for (let t of tiers) {
-                if (val >= t.min) {
-                    currentTier = t;
-                    break;
+        // 綁定所有需要動畫的元素
+        // .zigzag-item = 新的左右交錯畫廊
+        // .nk-stagger-item = 原本的高低畫廊
+        // .feature-list = 特色列表
+        // .reveal-up = 其他通用上浮元素
+        const targetSelectors = '.zigzag-item, .nk-stagger-item, .feature-list, .reveal-up';
+        
+        document.querySelectorAll(targetSelectors).forEach(el => {
+            revealObserver.observe(el);
+        });
+
+        /* =========================================
+           5. CALCULATOR LOGIC (獲利試算器)
+           ========================================= */
+        const slider = document.getElementById('nk-profit-slider');
+        if (slider) {
+            const displayVal = document.getElementById('nk-slider-val');
+            const trackFill = document.getElementById('nk-track-fill');
+            const resTier = document.getElementById('nk-res-tier');
+            const resMin = document.getElementById('nk-res-min');
+            const resMax = document.getElementById('nk-res-max');
+            const subMin = document.getElementById('nk-sub-min');
+            const subMax = document.getElementById('nk-sub-max');
+
+            const tiers = [
+                { min: 50000, name: 'TIER 4', pMin: 3.50, pMax: 3.75 },
+                { min: 25000, name: 'TIER 3', pMin: 3.00, pMax: 3.25 },
+                { min: 10000, name: 'TIER 2', pMin: 2.50, pMax: 2.75 },
+                { min: 5500,  name: 'TIER 1', pMin: 2.00, pMax: 2.25 },
+                { min: 0,     name: '未達標',  pMin: 0,    pMax: 0 }
+            ];
+
+            function formatMoney(num) {
+                return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            }
+
+            function updateCalc() {
+                const val = parseInt(slider.value);
+                displayVal.innerText = formatMoney(val);
+                
+                const percent = ((val - slider.min) / (slider.max - slider.min)) * 100;
+                trackFill.style.width = percent + '%';
+
+                let currentTier = tiers[tiers.length - 1]; 
+                for (let t of tiers) {
+                    if (val >= t.min) {
+                        currentTier = t;
+                        break;
+                    }
+                }
+
+                if (currentTier.pMin === 0) {
+                    resTier.innerHTML = "<span style='color:#666; font-size:1.2rem'>未達最低門檻</span>";
+                    resMin.innerText = "$0";
+                    resMax.innerText = "$0";
+                    subMin.innerText = "需大於 $5,500";
+                    subMax.innerText = "";
+                } else {
+                    resTier.innerText = currentTier.name;
+                    const minProfit = Math.floor(val * currentTier.pMin);
+                    const maxProfit = Math.floor(val * currentTier.pMax);
+                    resMin.innerText = "$" + formatMoney(minProfit);
+                    resMax.innerText = "$" + formatMoney(maxProfit);
+                    subMin.innerText = `(${currentTier.pMin * 100}%)`;
+                    subMax.innerText = `(${currentTier.pMax * 100}%)`;
                 }
             }
-
-            // 更新畫面
-            if (currentTier.pMin === 0) {
-                resTier.innerHTML = "<span style='color:#666; font-size:1.2rem'>未達最低門檻</span>";
-                resMin.innerText = "$0";
-                resMax.innerText = "$0";
-                subMin.innerText = "需大於 $5,500";
-                subMax.innerText = "";
-            } else {
-                resTier.innerText = currentTier.name;
-                const minProfit = Math.floor(val * currentTier.pMin);
-                const maxProfit = Math.floor(val * currentTier.pMax);
-                resMin.innerText = "$" + formatMoney(minProfit);
-                resMax.innerText = "$" + formatMoney(maxProfit);
-                subMin.innerText = `(${currentTier.pMin * 100}%)`;
-                subMax.innerText = `(${currentTier.pMax * 100}%)`;
-            }
+            slider.addEventListener('input', updateCalc);
+            updateCalc();
         }
-
-        // 監聽事件
-        slider.addEventListener('input', updateCalc);
-        
-        // 初始化
-        updateCalc();
-    })();
+    });
 </script>
+
 </body>
 </html>
