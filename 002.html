@@ -1,0 +1,3914 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NσK® INVESTMENT GROUP & SYSTEM</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Infant:wght@400;500;600;700&family=Noto+Serif+TC:wght@300;400;500;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+
+    <script src="https://fast.wistia.com/player.js" async></script>
+
+   <style>
+        /* --- CORE: Black Gold Luxury Variables --- */
+        :root {
+            --nk-bg-darkest: #050505;
+            --nk-bg-panel: #0f0f0f;
+            --nk-bg-card: #141414;
+            
+            --nk-gold-rich: #C5A059;      
+            --nk-gold-dark: #8a6d3b;      
+            --nk-gold-light: #e6d8be;     
+            
+            --nk-text-main: #e0e0e0;
+            --nk-text-muted: #ddd;
+            
+            --nk-font-en: 'Cormorant Infant', serif;
+            --nk-font-tc: 'Noto Serif TC', serif;
+            --nk-font-sans: 'Inter', sans-serif;
+            
+            --header-h-pc: 70px;
+            --header-h-mb: 55px; /* 手機版 Header 高度鎖死 */
+        }
+
+        /* --- RESET & BASE --- */
+        * { box-sizing: border-box; margin: 0; padding: 0; outline: none; }
+        
+        body {
+            background-color: var(--nk-bg-darkest);
+            color: var(--nk-text-main);
+            font-family: var(--nk-font-tc);
+            font-weight: 300;
+            line-height: 1.8;
+            overflow-x: hidden;
+            padding-top: var(--header-h-pc); /* 避免內容被 Header 遮擋 */
+        }
+
+        /* --- TYPOGRAPHY --- */
+        h1, h2, h3, h4, h5 { margin-bottom: 25px; color: #fff; line-height: 1.3; }
+        
+        h1, h2 { 
+            font-family: var(--nk-font-tc); 
+            font-weight: 700; 
+            letter-spacing: 1px; 
+        }
+
+        /* 【修改】桌機版 H2 調整為 2rem */
+        h2 {
+            font-size: 2rem; 
+        }
+
+        .subtitle-en {
+            font-family: var(--nk-font-en); color: var(--nk-gold-rich); font-size: 1.1rem;
+            letter-spacing: 3px; text-transform: uppercase; display: block; margin-bottom: 15px; font-weight: 600;
+        }
+        p { margin-bottom: 20px; color: var(--nk-text-muted); font-size: 1.1rem; }
+        
+        /* GLOBAL IMG RESET */
+        img { max-width: 100%; height: auto; display: block; }
+        a { text-decoration: none; color: inherit; transition: 0.3s; }
+        strong { color: #fff; font-weight: 600; }
+        .highlight { color: var(--nk-gold-rich); }
+
+        /* --- UTILITIES --- */
+        .container { width: 100%; max-width: 1000px; margin: 0 auto; padding: 0 10px; position: relative; z-index: 2; }
+        .container-wide { max-width: 1500px; } 
+        .text-center { text-align: center; }
+        .text-right { text-align: right; }
+        .section-padding { padding: 100px 0; }
+        .divider { width: 60px; height: 1px; background: var(--nk-gold-rich); margin: 40px auto; }
+        
+        /* --- COMPONENTS --- */
+        .nk-btn {
+            display: inline-block; padding: 20px 50px;
+            background: linear-gradient(135deg, var(--nk-gold-dark) 0%, var(--nk-gold-rich) 100%);
+            color: #000; font-family: var(--nk-font-tc); font-size: 1.3rem; font-weight: 700;
+            border: none; cursor: pointer; transition: all 0.4s ease;
+            box-shadow: 0 5px 20px rgba(197, 160, 89, 0.3); letter-spacing: 1px;
+            margin-top: 20px; width: 100%; max-width: 100%;
+            position: relative; overflow: hidden;
+        }
+        .nk-btn::after {
+            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: 0.5s;
+        }
+        .nk-btn:hover::after { left: 100%; }
+        .nk-btn:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(197, 160, 89, 0.5); filter: brightness(1.1); }
+
+       /* --- FIXED HEADER (強制置中版) --- */
+        .main-header {
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%;
+            height: var(--header-h-pc);
+            z-index: 9999;
+            display: flex;
+            justify-content: center; 
+            align-items: center;    
+            background: linear-gradient(180deg, #1f1f1f 0%, #0a0a0a 100%);
+            border-bottom: 1px solid var(--nk-gold-dark);
+            transition: all 0.4s ease;
+            overflow: hidden; 
+        }
+
+        .main-header .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .main-header.scrolled {
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(8px);
+            border-bottom: 1px solid rgba(197, 160, 89, 0.5);
+        }
+
+        /* LOGO 樣式 */
+        .header-logo {
+            height: 45px !important;
+            width: auto !important;
+            max-width: none;
+            object-fit: contain;
+            filter: brightness(0.8) contrast(1.2) sepia(1) hue-rotate(5deg) saturate(1.5) drop-shadow(0 0 10px rgba(212, 175, 55, 0.4));
+            transition: all 0.3s ease;
+        }
+
+        /* --- SPLIT SECTIONS (Images + Text) --- */
+        .split-section { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; margin-top: 80px; align-items: center; }
+        .split-section.reverse { direction: rtl; }
+        .split-section.reverse > div { direction: ltr; text-align: left; }
+
+        /* --- VIDEO PLAYER --- */
+        .video-wrapper {
+            position: relative; margin-top: 20px; padding: 5px; 
+            background: linear-gradient(135deg, #333 0%, #000 100%);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8); border: 1px solid #333;
+        }
+        .video-wrapper::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            border: 1px solid var(--nk-gold-dark); box-shadow: 0 0 15px rgba(197, 160, 89, 0.1);
+            pointer-events: none; z-index: 1;
+        }
+
+        /* --- CUSTOM AUTO PLAY VIDEO STYLES --- */
+        .video-block {
+            min-width: 100%;
+            margin: 0px 0;
+            position: relative;
+            /* 配合外層金框, 這裡不需要額外的 border-radius, 除非你想要圓角 */
+            overflow: hidden;
+            line-height: 0; /* 消除影片下方白邊 */
+        }
+        .video-block video {
+            width: 100%;
+            display: block;
+        }
+        .play-pause-btn {
+            position: absolute;
+            bottom: 15px;
+            left: 15px;
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid var(--nk-gold-dark); /* 整合主題金邊 */
+            border-radius: 5px;
+            cursor: pointer;
+            z-index: 10;
+            padding: 8px;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .play-pause-btn:hover {
+            background: var(--nk-gold-rich); /* Hover 變金色 */
+        }
+        .play-pause-btn .icon {
+            width: 20px;
+            height: 20px;
+            display: block;
+        }
+        
+        /* --- ARROW ANIMATION --- */
+        .arrow-scroll { margin: 30px auto 10px; width: 40px; height: 60px; position: relative; }
+        .arrow-scroll span {
+            display: block; width: 20px; height: 20px;
+            border-bottom: 2px solid var(--nk-gold-rich); border-right: 2px solid var(--nk-gold-rich);
+            transform: rotate(45deg); margin: -10px auto 0;
+            animation: arrow-glow 2s infinite; opacity: 0;
+        }
+        .arrow-scroll span:nth-child(2) { animation-delay: 0.2s; }
+        .arrow-scroll span:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes arrow-glow {
+            0% { opacity: 0; transform: rotate(45deg) translate(-5px, -5px); }
+            50% { opacity: 1; }
+            100% { opacity: 0; transform: rotate(45deg) translate(5px, 5px); }
+        }
+
+        /* --- 1. HERO SECTION (Original) --- */
+        .hero {
+            min-height: 85vh; display: flex; align-items: center; justify-content: center;
+            background: radial-gradient(circle at center, #1b1b1b 0%, #000000 100%);
+            position: relative; padding: 40px 0 20px; 
+        }
+        /* 【修改】Hero H1 font-weight 700 */
+        .hero h1 { 
+            font-size: 2.5rem; 
+            line-height: 1.5; 
+            max-width: 900px; 
+            margin: 0 auto 30px; 
+            font-weight: 700; 
+        }
+        
+        /* --- 【NEW】Hero Text Only Class (Reusable) --- */
+        /* 這是你要的新 Class, 可以任意複製貼上而不影響排版 */
+        .hero-text-only {
+            text-align: center;
+            margin-bottom: 50px; /* 預設下方留白 */
+        }
+        .hero-text-only h1 {
+            font-size: 2.5rem; 
+            line-height: 1.5; 
+            max-width: 900px; 
+            margin: 0 auto 30px; 
+            font-weight: 700; 
+            color: #fff;
+        }
+        /* ------------------------------------------- */
+
+        .hero-number-block {
+            display: block; margin-top: 20px; margin-bottom: 10px;
+            font-family: var(--nk-font-en); font-size: 5rem; line-height: 1.1; font-weight: 700;
+            background: linear-gradient(to bottom, #fff 10%, var(--nk-gold-rich) 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            text-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .hero .warning { color: var(--nk-gold-rich); font-size: 1rem; letter-spacing: 2px; text-transform: uppercase; margin-top: 30px; display: block; }
+
+        /* --- 2. SOCIAL PROOF --- */
+        .logos-section { background: var(--nk-bg-panel); padding: 50px 0; border-top: 1px solid #222; border-bottom: 1px solid #222; }
+        .logos-grid { display: flex; justify-content: center; gap: 50px; flex-wrap: wrap; opacity: 0.5; filter: grayscale(100%); }
+        .logos-grid img { height: 35px; width: auto; }
+
+        /* --- 3. PROMISE --- */
+        .promise-section { background: var(--nk-bg-darkest); }
+        .promise-box {
+            border: 1px solid var(--nk-gold-dark); padding: 60px 40px; text-align: center;
+            background: linear-gradient(180deg, rgba(197,160,89,0.05) 0%, rgba(0,0,0,0) 100%);
+            position: relative; max-width: 800px; margin: 0 auto;
+        }
+        .promise-box::before { content: 'PROMISE'; position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--nk-bg-darkest); padding: 0 20px; color: var(--nk-gold-rich); font-family: var(--nk-font-en); letter-spacing: 3px; }
+        
+        /* --- 4. TESTIMONIALS --- */
+        .testimonials { display: grid; grid-template-columns: repeat(auto-fit, minmax(480px, 1fr)); gap: 40px; margin-top: 60px; /* --- 容器置中與限制 --- */
+    width: 100%;
+    max-width: 1200px; /* 鎖死最大寬度 */
+    margin-left: auto; /* 左邊自動推 */
+    margin-right: auto; /* 右邊自動推 (達成置中) */justify-content: center; }
+        .testi-card { background: var(--nk-bg-card); border: 1px solid #222; padding: 0; overflow: hidden; transition: transform 0.3s; }
+        .testi-card:hover { transform: translateY(-5px); border-color: var(--nk-gold-dark); }
+        /* --- UPDATED TESTIMONIAL STYLES (Profit First Layout) --- */
+
+.testi-content {
+    padding: 30px;
+    text-align: center; /* 預設置中 */
+    position: relative;
+}
+
+/* 1. 巨大的獲利數字 (最上面) */
+.testi-amount {
+    font-family: var(--nk-font-en);
+    font-size: 2.8rem; /* 字體超大 */
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: 15px;
+    display: block;
+    
+    /* 繼承你的黑金漸層文字效果 */
+    background: linear-gradient(to bottom, #fff 10%, var(--nk-gold-rich) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 2px 10px rgba(197, 160, 89, 0.2));
+}
+
+/* 2. 引言內容 (中間) */
+.testi-quote {
+    font-style: italic;
+    color: #ccc; /* 稍微亮一點的灰 */
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: 25px;
+    text-align: justify; /* 左右對齊看起來比較整齊 */
+}
+
+/* 3. 名字與國籍 (右下角) */
+.testi-meta {
+    display: block;
+    text-align: right; /* 靠右對齊 */
+    font-family: var(--nk-font-en); /* 用無襯線字體比較像簽名檔 */
+    color: var(--nk-gold-rich);
+    font-size: 1.1rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    border-top: 1px solid #333; /* 加一條淡淡的分隔線 */
+    padding-top: 15px;
+}
+
+/* 手機版微調 */
+@media (max-width: 768px) {
+    .testi-amount { font-size: 2.2rem; }
+    .testi-content { padding: 20px; }
+}
+
+/* --- NEW: Profit Badge Pill (獲利膠囊標籤) --- */
+.testi-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px 18px; /* 膠囊的厚度與寬度 */
+    border-radius: 50px; /* 極致圓角創造膠囊感 */
+    
+    /* 奢華黑金漸層背景 (稍微透一點，製造層次感) */
+    background: linear-gradient(135deg, rgba(197, 160, 89, 0.15) 0%, rgba(5, 5, 5, 0.8) 100%);
+    border: 1px solid rgba(197, 160, 89, 0.4); /* 微亮的金邊 */
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3), inset 0 0 10px rgba(197, 160, 89, 0.1); /* 外部陰影 + 內部微光 */
+    
+    color: var(--nk-gold-rich); /* 文字金色 */
+    font-size: 0.9rem;
+    font-weight: 500;
+    letter-spacing: 1px;
+    margin-bottom: 0px; /* 與下方大數字拉開距離 */
+    backdrop-filter: blur(5px); /* 稍微模糊背景，增加高級感 (支援的瀏覽器) */
+}
+
+/* SVG Icon 樣式 */
+.testi-badge svg {
+    width: 16px;
+    height: 16px;
+    margin-right: 8px; /* Icon 與文字的間距 */
+    stroke: var(--nk-gold-rich); /* 確保 icon 顏色跟文字一樣金 */
+    filter: drop-shadow(0 0 5px rgba(197, 160, 89, 0.5)); /* 讓 Icon 自己發光 */
+}
+
+        /* --- MARQUEE --- */
+        .marquee-wrapper { width: 100vw; position: relative; left: 50%; margin-left: -50vw; margin-top: 80px; margin-bottom: 20px; overflow: hidden; }
+        .marquee-glow-line { height: 1px; width: 100%; background: radial-gradient(circle, var(--nk-gold-rich) 0%, transparent 80%); box-shadow: 0 0 10px var(--nk-gold-dark); opacity: 0.7; }
+        .marquee-viewport { padding: 20px 0; overflow: hidden; -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent); mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent); }
+        .marquee-track { display: flex; width: max-content; animation: scroll-marquee 20s linear infinite; }
+        .marquee-track:hover { animation-play-state: paused; }
+        .marquee-item { flex-shrink: 0; padding: 0 10px; }
+        .marquee-item img { width: 280px; height: 280px; object-fit: cover; border: 1px solid var(--nk-gold-dark); box-shadow: 0 10px 30px rgba(0,0,0,0.8); filter: grayscale(0.5) contrast(1.1); transition: 0.3s; }
+        .marquee-item img:hover { filter: grayscale(0) contrast(1.2) brightness(1.1); border-color: var(--nk-gold-rich); }
+        @keyframes scroll-marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+        /* --- 5. FEATURES --- */
+        .feature-list { list-style: none; margin-top: 40px; max-width: 800px; margin-left: auto; margin-right: auto; }
+        .feature-list li { background: var(--nk-bg-panel); padding: 25px; margin-bottom: 15px; border-left: 3px solid var(--nk-gold-rich); display: flex; align-items: center; }
+        .feature-list li::before { content: '✓'; color: var(--nk-gold-rich); font-size: 1.5rem; margin-right: 20px; font-weight: bold; }
+
+        /* --- 6. GUARANTEE --- */
+        .guarantee-section { background: var(--nk-bg-panel); border-top: 1px solid #222; text-align: center; }
+        .money-back { font-size: 4rem; font-family: var(--nk-font-en); color: var(--nk-gold-rich); line-height: 1; margin: 20px 0; text-shadow: 0 5px 15px rgba(0,0,0,0.5); }
+
+        /* --- 7. PRICING --- */
+        .pricing-section { text-align: center; background: radial-gradient(circle at center, #1a1a1a 0%, #050505 100%); position: relative; }
+        
+        /* 【修改】Pricing Unified Card (New Wrapper) */
+        .pricing-unified-card {
+            max-width: 900px;
+            margin: 0 auto;
+            border: 0px solid var(--nk-gold-dark); /* 金匡包覆整體 */
+            background: #141414;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.6);
+            padding: 0; /* 圖片與框不要 padding */
+            overflow: hidden; /* 防止內容溢出 */
+            transition: 0.3s;
+            position: relative;
+        }
+        .pricing-unified-card:hover {
+            border-color: var(--nk-gold-rich);
+            box-shadow: 0 0 30px rgba(197, 160, 89, 0.3); /* 懸浮發光 */
+        }
+
+        /* 【修改】Pricing Top Image (With Zoom) */
+        .pricing-hero-img-box {
+            width: 100%;
+            overflow: hidden; /* Zoom container */
+            margin: 0;
+            padding: 0;
+            line-height: 0; /* 消除圖片底部空隙 */
+        }
+        .pricing-hero-img-box img {
+            width: 100%;
+            display: block;
+            transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94); /* 平滑放大 */
+        }
+        .pricing-hero-img-box:hover img {
+            transform: scale(1.1); /* 圖片 Hover Zoom */
+        }
+
+        .pricing-header { padding: 40px; border-bottom: 1px solid #222; background: linear-gradient(180deg, #1a1a1a 0%, #141414 100%); }
+        .pricing-body { padding: 90px; }
+        
+        .price-row {
+    max-width: 550px;        /* 強制限制最大寬度為 550px */
+    margin-left: auto;       /* 讓區塊水平置中 */
+    margin-right: auto;      /* 讓區塊水平置中 */
+    
+    /* 確保原本的 Flex 排版與底部間距不變 */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px dashed #333;
+}
+        .price-row:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+        
+        .row-label { font-size: 1.1rem; color: #888; text-align: left; }
+        
+        /* --- 7.1 MODIFIED PRICING ROW STYLES (Dynamic Strikethrough) --- */
+        .row-value { 
+            font-family: var(--nk-font-en); 
+            font-size: 1.6rem; 
+            
+            /* 【修改】預設改為亮色，不預先劃線 */
+            color: var(--nk-text-main); 
+            text-decoration: none !important; /* 確保沒有預設刪除線 */
+            position: relative; /* 為了讓偽元素定位 */
+            display: inline-block;
+            transition: color 0.5s ease 0.3s; /* 延遲文字變灰，配合畫線動畫 */
+        }
+
+        /* 偽元素：動態畫線 */
+        .row-value::after {
+            content: '';
+            position: absolute;
+            top: 55%; /* 線的位置 */
+            left: 0;
+            width: 0%; /* 初始寬度為 0 */
+            height: 2px;
+            background-color: #ff0000; /* 刪除線顏色 */
+            transition: width 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94); /* 畫線動畫 */
+        }
+
+        /* --- 7.2 PRICING ANIMATION CLASSES --- */
+        /* 每一行的初始狀態：隱藏 + 下沉 */
+        .pricing-anim-row {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+
+        /* 狀態 1: Fade In Up (只顯示，還沒劃掉) */
+        .pricing-anim-row.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* 狀態 2: Struck (劃掉 + 反灰) */
+        .pricing-anim-row.struck .row-value {
+            color: #444; /* 文字變深灰 */
+        }
+        .pricing-anim-row.struck .row-value::after {
+            width: 100%; /* 線條寬度變 100%，產生畫線效果 */
+        }
+
+        /* --- 7.3 FINAL PRICE BOX ANIMATION --- */
+        .final-price-box { 
+            background: linear-gradient(135deg, rgba(197, 160, 89, 0.1) 0%, rgba(0,0,0,0) 100%); 
+            border: 1px solid rgba(197, 160, 89, 0.3); 
+            border-radius: 8px; 
+            padding: 30px; 
+            margin-top: 20px; 
+            overflow: hidden; /* 確保動畫不溢出 */
+        }
+
+        .final-price-anim {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .final-price-anim.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .deposit-label { display: block; color: var(--nk-gold-rich); font-size: 1rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 5px; }
+        .final-price { font-family: var(--nk-font-en); font-size: 5rem; line-height: 1; font-weight: 700; color: #fff; background: linear-gradient(to bottom, #fff 0%, var(--nk-gold-light) 50%, var(--nk-gold-rich) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 10px; filter: drop-shadow(0 5px 15px rgba(197, 160, 89, 0.2)); }
+        .pricing-footer { background: #0a0a0a; padding: 20px 40px; border-top: 1px solid #222; font-size: 0.9rem; color: #666; display: flex; align-items: center; justify-content: center; gap: 10px; }
+
+        /* --- DEEP DIVE --- */
+        .feature-row { background: #0f0f0f; border: 1px solid var(--nk-gold-rich); box-shadow: 0 0 25px rgba(197, 160, 89, 0.15); display: grid; grid-template-columns: 55% 40%; gap: 5%; margin-bottom: 60px; padding: 40px; align-items: center; }
+        .feature-row .video-wrapper { margin-top: 0; }
+        .feature-divider { width: 40px; height: 2px; background: var(--nk-gold-rich); margin: 20px 0; }
+        footer { background: #000; padding: 60px 0; text-align: center; border-top: 1px solid #222; font-size: 0.9rem; color: #666; }
+
+        /* --- NEW STYLES: 系統優化區塊美化 --- */
+        .img-zoom-container {
+            border: 1px solid var(--nk-gold-dark);
+            padding: 8px;
+            overflow: hidden;
+            position: relative;
+            transition: 0.3s;
+            background: #000;
+        }
+        .img-zoom-container:hover {
+            border-color: var(--nk-gold-rich);
+            box-shadow: 0 0 20px rgba(197, 160, 89, 0.2);
+        }
+        .img-zoom-container img {
+            width: 100%;
+            display: block;
+            transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        .img-zoom-container:hover img {
+            transform: scale(1.1);
+        }
+
+        .feature-title-group {
+            margin-bottom: 25px;
+        }
+        .feature-reason-tag {
+            font-family: var(--nk-font-en);
+            color: var(--nk-gold-rich);
+            font-size: 0.85rem;
+            border: 1px solid var(--nk-gold-dark);
+            padding: 4px 10px;
+            display: inline-block;
+            margin-bottom: 12px;
+            letter-spacing: 1px;
+        }
+        
+        /* 修改這塊讓標題更大更有衝擊力 */
+        .feature-heading-styled {
+            font-size: 1.8rem; /* 配合變大的H2, 這裡也微調 */
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            white-space: nowrap;
+        }
+        .feature-heading-line {
+            height: 1px;
+            width: 100%;
+            background: linear-gradient(90deg, var(--nk-gold-dark), transparent);
+            margin-top: 5px;
+            flex-grow: 1;
+        }
+
+
+        /* --- RWD (Mobile Optimizations) --- */
+        @media (max-width: 768px) {
+            
+            /* --- CRITICAL LOGO FIX --- */
+            body { padding-top: var(--header-h-mb); }
+            .main-header { height: var(--header-h-mb); }
+            
+            .header-logo { 
+                height: 70px !important; 
+                width: 70px !important;
+                max-width: none !important; 
+            }
+            
+            /* 【修改】手機版 H2 回歸 1.5rem */
+            h2 { font-size: 1.5rem; }
+            
+            /* Hero Mobile Fixes */
+            .hero { padding: 30px 0 20px; min-height: auto; }
+            .hero .container { padding-left: 10px; padding-right: 10px; }
+            
+            /* 【修改】Hero H1 Mobile 1.5rem */
+            .hero h1 { 
+                font-size: 1.5rem; 
+                line-height: 1.6; 
+                margin-bottom: 20px; 
+            }
+            
+            /* 【New】Hero Text Only Mobile Fix */
+            .hero-text-only h1 {
+                font-size: 1.5rem; 
+                line-height: 1.6; 
+                margin-bottom: 20px; 
+            }
+            
+            .hero-number-block { font-size: 3rem; margin-top: 15px; }
+
+            .section-padding { padding: 60px 0; }
+            .money-back { font-size: 3rem; }
+            
+            /* Pricing Mobile */
+            .pricing-body { padding: 25px; }
+            .final-price { font-size: 3.5rem; }
+            .nk-btn { font-size: 1.1rem; padding: 18px 20px; }
+            
+            /* Layout Mobile */
+            .testimonials { grid-template-columns: 1fr; }
+            .split-section { grid-template-columns: 1fr; gap: 40px; text-align: center; }
+            .text-right { text-align: center; } 
+            .split-section.reverse { direction: ltr; }
+            .split-section.reverse > div { text-align: center; }
+            .split-section img, .text-center img { 
+                margin-left: auto !important; margin-right: auto !important;
+                max-width: 100% !important; height: auto !important;
+            }
+            
+            /* Deep Dive Mobile */
+            .feature-row { grid-template-columns: 1fr; gap: 0; padding: 0; border-radius: 0; }
+            .feature-row .video-wrapper { padding: 0; border: 1px solid var(--nk-gold-dark); width: 100%; border-bottom: 1px solid var(--nk-gold-dark); border-top: 1px solid var(--nk-gold-dark); }
+            .feature-row .video-wrapper::before { display: none; }
+            .feature-content { padding: 30px 20px; }
+
+            /* Marquee Mobile */
+            .marquee-item img { width: 160px; height: 160px; }
+            @keyframes scroll-marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+            /* New Feature Section Mobile */
+            .feature-heading-styled {
+                font-size: 1.4rem;
+                flex-direction: column;
+                align-items: center;
+                gap: 10px;
+            }
+            .feature-heading-line {
+                width: 60px;
+                flex-grow: 0;
+            }
+        }
+       /* --- UNIVERSAL PARALLAX FIX (Mobile + Desktop) --- */
+    .parallax-section {
+        position: relative;
+        width: 100%;
+        
+        /* 設定高度：手機版可以設高一點, 讓滑動感更明顯 */
+        min-height: 60vh; 
+        
+        /* 【關鍵魔法】這行會創造一個「視窗」, 只有在這個範圍內才看得到 fixed 的子元素 */
+        clip-path: inset(0); 
+        
+        /* 確保背景色與你的網站一致 */
+        background-color: var(--nk-bg-darkest, #050505); 
+        margin: 40px 0; /* 上下留白, 可自行調整 */
+    }
+
+    /* 這是真正的那張圖 */
+    .parallax-bg {
+        position: fixed; /* 強制固定在螢幕上, 不隨卷軸移動 */
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        
+        background-image: url('https://arftk.com/imgs1/box.jpg');
+        background-position: center center;
+        background-size: cover;
+        background-repeat: no-repeat;
+        
+        z-index: -1; /* 藏在內容後面 */
+        will-change: transform; /* 告訴手機瀏覽器要啟用硬體加速, 滑動才順 */
+    }
+
+    /* --- DESKTOP 專用設定 (大於 768px) --- */
+    @media (min-width: 769px) {
+        .parallax-section {
+            /* Desktop 限制寬度與比例 */
+            max-width: 1080px;
+            aspect-ratio: 16 / 9;
+            margin: 60px auto; /* 置中 */
+            min-height: auto; /* Desktop 用比例控制高度 */
+        }
+
+        /* 限制背景圖只在 Desktop 的 1080px 範圍內顯示正確位置 */
+        .parallax-bg {
+            width: 100%;
+            max-width: 1080px;
+            left: 50%;
+            transform: translateX(-50%); /* 讓 fixed 的背景圖也保持置中 */
+        }
+
+        /* Desktop 漸層遮罩 (加在 Section 上) */
+        .parallax-section::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            /* 左右漸層融入黑色背景 */
+            background: linear-gradient(90deg, 
+                var(--nk-bg-darkest, #050505) 0%, 
+                transparent 15%, 
+                transparent 85%, 
+                var(--nk-bg-darkest, #050505) 100%
+            );
+            pointer-events: none;
+            z-index: 2;
+        }
+    }
+
+    /* --- MOBILE 專用設定 (小於 768px) --- */
+    @media (max-width: 768px) {
+        .parallax-section {
+            margin: 0; /* 手機滿版無縫 */
+            clip-path: inset(0); /* 手機一定要有這行才有效果 */
+            aspect-ratio: auto; /* 手機不強制比例, 由 min-height 控制 */
+        }
+        
+        .parallax-bg {
+            /* 手機版背景圖稍微放大一點, 避免 iOS 網址列伸縮時露出白邊 */
+            height: 80vh; 
+            top: -5vh;
+        }
+    }
+    /* --- NEW MARQUEE VARIATIONS --- */
+
+/* 1. 巨型正方形 (Large 1x1) - 用於展示高清細節或震撼數據圖 */
+.marquee-wrapper.marquee-lg .marquee-item img {
+    width: 450px;  /* 桌機版加大 */
+    height: 450px;
+    object-fit: cover;
+}
+
+/* 2. 矩形風景 (4x3) - 用於展示螢幕截圖、風景、或是橫向圖表 */
+.marquee-wrapper.marquee-rect .marquee-item img {
+    width: 400px;  /* 寬 */
+    height: 300px; /* 高 (4:3 比例) */
+    object-fit: cover;
+}
+
+/* --- RWD 手機版自動調整 --- */
+@media (max-width: 768px) {
+    /* 手機版巨型正方形 */
+    .marquee-wrapper.marquee-lg .marquee-item img {
+        width: 300px;
+        height: 300px;
+    }
+
+    /* 手機版矩形 */
+    .marquee-wrapper.marquee-rect .marquee-item img {
+        width: 280px;
+        height: 210px;
+    }
+}
+
+/* --- UPWARD ARROW ANIMATION (往上指的箭頭) --- */
+.arrow-scroll-up {
+    margin: 30px auto 10px;
+    width: 40px;
+    height: 60px;
+    position: relative;
+    cursor: pointer; /* 加了手指游標, 因為通常向上的箭頭會讓人想點 */
+}
+
+.arrow-scroll-up span {
+    display: block;
+    width: 20px;
+    height: 20px;
+    /* 改成上方與左方邊框, 構成向上箭頭 */
+    border-top: 2px solid var(--nk-gold-rich);
+    border-left: 2px solid var(--nk-gold-rich);
+    
+    transform: rotate(45deg);
+    margin: -10px auto 0;
+    animation: arrow-glow-up 2s infinite;
+    opacity: 0;
+}
+
+/* 延遲時間反轉：最下面的先亮, 往上傳遞能量 */
+.arrow-scroll-up span:nth-child(3) { animation-delay: 0s; }
+.arrow-scroll-up span:nth-child(2) { animation-delay: 0.2s; }
+.arrow-scroll-up span:nth-child(1) { animation-delay: 0.4s; }
+
+@keyframes arrow-glow-up {
+    /* 從下方 (5px, 5px) 開始, 往上方 (-5px, -5px) 移動並消失 */
+    0% { 
+        opacity: 0; 
+        transform: rotate(45deg) translate(5px, 5px); 
+    }
+    50% { 
+        opacity: 1; 
+    }
+    100% { 
+        opacity: 0; 
+        transform: rotate(45deg) translate(-5px, -5px); 
+    }
+}
+
+/* --- NK LUXURY COLLAGE GALLERY (4x3 Landscape Version) --- */
+.nk-collage-section {
+    position: relative;
+    overflow: hidden; /* 防止旋轉的角跑出畫面 */
+    padding: 80px 0;
+}
+
+.nk-collage-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    max-width: 1200px; /* 因為變寬了，容器也稍微加寬 */
+    margin: 40px auto 0;
+    padding: 20px;
+}
+
+.nk-collage-item {
+    position: relative;
+    /* --- 這裡設定 4:3 比例 (Landscape) --- */
+    width: 360px; 
+    height: 270px; 
+    
+    background: #000;
+    border: 1px solid var(--nk-gold-dark);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.8);
+    transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    cursor: pointer;
+    overflow: hidden;
+    
+    /* --- 調整灰階亮度的地方 (這裡是關鍵) --- */
+    /* grayscale(30%) = 只有 30% 是灰的，70% 是原色 (比原本亮很多) */
+    /* contrast(1.1) = 增加一點對比度，讓黑色更黑 */
+    filter: grayscale(30%) contrast(1.1); 
+}
+
+.nk-collage-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.8s ease;
+}
+
+/* --- 重疊與旋轉邏輯 (4x3 專用版) --- */
+/* 因為變成橫向，重疊幅度(margin-right)稍微調整 */
+.nk-collage-item:nth-child(1) {
+    transform: rotate(-3deg) translateY(10px);
+    z-index: 1;
+    margin-right: -50px; /* 橫向圖可以疊多一點 */
+}
+
+.nk-collage-item:nth-child(2) {
+    transform: rotate(2deg) translateY(-10px);
+    z-index: 2;
+    margin-right: -50px;
+    margin-top: 20px; 
+}
+
+.nk-collage-item:nth-child(3) {
+    transform: rotate(-2deg) translateY(15px);
+    z-index: 3;
+    margin-right: -50px;
+}
+
+.nk-collage-item:nth-child(4) {
+    transform: rotate(3deg) translateY(-5px);
+    z-index: 2;
+}
+
+/* --- HOVER EFFECTS (互動特效) --- */
+.nk-collage-item:hover {
+    /* 浮起、轉正、放大 */
+    transform: scale(1.15) rotate(0deg) translateY(-10px);
+    z-index: 50 !important; /* 強制置頂 */
+    border-color: var(--nk-gold-rich);
+    box-shadow: 0 20px 60px rgba(197, 160, 89, 0.3); /* 金色光暈 */
+    
+    /* Hover 時完全恢復色彩 */
+    filter: grayscale(0%) contrast(1.2); 
+}
+
+.nk-collage-item:hover img {
+    transform: scale(1.05); /* 內部圖片微動 */
+}
+
+/* 圖片上的文字標籤 (Overlay Text) */
+.nk-collage-caption {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 20px;
+    background: linear-gradient(to top, #000 0%, transparent 100%);
+    opacity: 0;
+    transform: translateY(20px);
+    transition: 0.4s;
+}
+
+.nk-collage-item:hover .nk-collage-caption {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.nk-caption-title {
+    color: var(--nk-gold-rich);
+    font-family: var(--nk-font-en);
+    font-size: 1.2rem;
+    letter-spacing: 1px;
+    display: block;
+}
+.nk-caption-desc {
+    color: #ddd;
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+/* --- RWD MOBILE (手機版) --- */
+@media (max-width: 900px) {
+    .nk-collage-wrapper {
+        flex-direction: column; /* 直向堆疊 */
+        height: auto;
+        padding-top: 40px; /* 留點頭部空間 */
+    }
+    
+    .nk-collage-item {
+        width: 100%;
+        max-width: 360px; /* 限制最大寬度 */
+        
+        /* 手機版強制維持 4:3 比例 (360 * 0.75 = 270) */
+        height: 270px; 
+        
+        margin-right: 0 !important;
+        margin-left: 0 !important;
+        margin-bottom: -60px; /* 直向重疊深度 */
+    }
+    
+    /* 手機版角度設定 */
+    .nk-collage-item:nth-child(1) { transform: rotate(-2deg); margin-top: 0; }
+    .nk-collage-item:nth-child(2) { transform: rotate(2deg); margin-top: 0; }
+    .nk-collage-item:nth-child(3) { transform: rotate(-1deg); }
+    .nk-collage-item:nth-child(4) { transform: rotate(1deg); margin-bottom: 0; }
+    
+    /* 手機版 Hover */
+    .nk-collage-item:hover {
+        transform: scale(1.05) rotate(0deg); /* 手機放大一點點就好 */
+        margin-bottom: 0; /* 展開看清楚 */
+    }
+}
+
+/* --- NK WIDE LUXURY GALLERY (3-2 Layout) --- */
+
+.nk-gallery-section {
+    padding: 60px 0;
+    overflow: hidden; /* 避免陰影被切掉 */
+}
+
+.nk-gallery-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center; /* 關鍵：讓第二排的 2 張圖置中 */
+    align-items: center;
+    max-width: 1300px; /* 整體加寬 */
+    margin: 0 auto;
+    gap: 15px; /* 預設間距 */
+}
+
+.nk-gallery-item {
+    position: relative;
+    background: #000;
+    border: 1px solid var(--nk-gold-dark);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    cursor: pointer;
+    overflow: hidden;
+    filter: grayscale(100%) contrast(1.1); /* 預設全黑白，更冷酷 */
+    
+    /* 這裡設定稍微的重疊 (減少重疊量) */
+    margin: 0 -10px; 
+}
+
+.nk-gallery-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s ease;
+}
+
+/* --- 比例控制 Class --- */
+/* 1x1 正方形 */
+.ratio-sq .nk-gallery-item {
+    width: 320px;
+    height: 320px;
+}
+
+/* 4x3 矩形 */
+.ratio-rect .nk-gallery-item {
+    width: 360px;
+    height: 270px;
+}
+
+/* --- 微微的角度 (讓它不要太死板) --- */
+.nk-gallery-item:nth-child(odd) { transform: rotate(-1deg); }
+.nk-gallery-item:nth-child(even) { transform: rotate(1deg); }
+.nk-gallery-item:nth-child(3) { transform: rotate(0deg) translateY(-10px); z-index: 5; } /* 中間那張稍微浮起 */
+
+/* --- HOVER 互動 --- */
+.nk-gallery-item:hover {
+    z-index: 100; /* 絕對置頂 */
+    transform: scale(1.1) rotate(0deg) !important; /* 轉正並放大 */
+    border-color: var(--nk-gold-rich);
+    box-shadow: 0 0 25px rgba(197, 160, 89, 0.4);
+    filter: grayscale(0%) contrast(1.2); /* 恢復色彩 */
+    margin: 0 10px; /* 把旁邊的人推開一點點 */
+}
+
+/* 文字遮罩效果 */
+.nk-gallery-overlay {
+    position: absolute;
+    bottom: 0; left: 0; width: 100%; height: 100%;
+    background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, transparent 60%);
+    opacity: 0;
+    transition: 0.3s;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 20px;
+}
+.nk-gallery-item:hover .nk-gallery-overlay { opacity: 1; }
+
+.g-title { color: var(--nk-gold-rich); font-family: var(--nk-font-en); font-size: 1.2rem; letter-spacing: 1px; }
+.g-desc { color: #fff; font-size: 0.9rem; }
+
+
+/* --- RWD MOBILE (1-1-1-1-1) --- */
+@media (max-width: 900px) {
+    .nk-gallery-wrapper {
+        flex-direction: column;
+        gap: 0px; /* 手機版拉開間距 */
+    }
+    .nk-gallery-item {
+        width: 100% !important; /* 強制滿版 */
+        max-width: 400px;
+        height: 300px !important; /* 手機統一高度 */
+        margin: 0 !important; /* 取消重疊 */
+        transform: rotate(0deg) !important; /* 取消旋轉 */
+    }
+    .nk-gallery-item:hover {
+        transform: scale(1.02) !important; /* 手機輕微放大就好 */
+        margin: 0 !important;
+    }
+}
+
+/* --- FEATURE LIST SEQUENTIAL ANIMATION --- */
+
+/* 1. 初始狀態：透明 + 往左偏移 30px */
+.feature-list li {
+    opacity: 0;
+    transform: translateX(-30px);
+    /* 使用貝茲曲線讓移動更有質感，不是死板的直線 */
+    transition: all 0.6s cubic-bezier(0.215, 0.610, 0.355, 1.000); 
+}
+
+/* 2. 觸發狀態 (由 JS 加入 .visible)：完全顯現 */
+.feature-list.visible li {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* 3. 設定延遲時間：讓它們一個接一個進場 (Staggered Animation) */
+.feature-list.visible li:nth-child(1) { transition-delay: 0.1s; }
+.feature-list.visible li:nth-child(2) { transition-delay: 0.3s; }
+.feature-list.visible li:nth-child(3) { transition-delay: 0.5s; }
+.feature-list.visible li:nth-child(4) { transition-delay: 0.7s; }
+.feature-list.visible li:nth-child(5) { transition-delay: 0.9s; }
+
+/* --- STICKY FEATURE ROW (左側影片固定，右側長內容捲動) --- */
+
+/* 僅在桌面版生效 (大於 768px) */
+@media (min-width: 769px) {
+    .feature-row.sticky-mode {
+        /* 關鍵 1: 改為靠上對齊，不然 sticky 會失效 (預設是 center) */
+        align-items: start; 
+    }
+
+    .feature-row.sticky-mode .sticky-video-col {
+        /* 關鍵 2: 設定黏性定位 */
+        position: sticky;
+        top: 100px; /* 距離頂部 100px (避開 Header) */
+        
+        /* 稍微調整一下左邊寬度，讓右邊多一點空間放長內容 */
+        width: 100%; 
+    }
+}
+
+/* 右側內容區塊的優化 */
+.scrollable-content-col {
+    display: flex;
+    flex-direction: column;
+    gap: 60px; /* 每個段落之間的間距 */
+}
+
+.content-block {
+    border-bottom: 1px solid #222; /* 段落分隔線 */
+    padding-bottom: 40px;
+}
+.content-block:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+/* 右側內部的小標題 */
+.sticky-content-title {
+    color: var(--nk-gold-rich);
+    font-size: 1.3rem;
+    margin-bottom: 15px;
+    display: block;
+    font-weight: 700;
+}
+
+/* --- NK WIDE LUXURY OPTIN FORM --- */
+.optin-gold-card {
+    /* 外層卡片最大寬度改為 900px */
+    max-width: 900px;
+    width: 100%;
+    margin: 0 auto;
+    background: #141414;
+    border: 1px solid var(--nk-gold-dark);
+    box-shadow: 0 30px 60px rgba(0,0,0,0.7);
+    overflow: hidden;
+    position: relative;
+    transition: 0.3s;
+}
+
+.optin-gold-card:hover {
+    border-color: var(--nk-gold-rich);
+    box-shadow: 0 0 40px rgba(197, 160, 89, 0.15);
+}
+
+.optin-header {
+    background: linear-gradient(180deg, #1a1a1a 0%, #141414 100%);
+    padding: 40px 20px 20px;
+    border-bottom: 0px solid #222;
+    text-align: center;
+}
+
+.optin-body {
+    padding: 40px;
+    padding-top: 0px;
+    background: #141414;
+    /* 讓內部的 highlight box 置中 */
+    display: flex;
+    justify-content: center;
+}
+
+/* --- 重點：這是你要的 Highlight 區塊 (仿照 Final Price Box) --- */
+.optin-highlight-box {
+    width: 100%;
+    /* 桌面版限制表單最大寬度 650px */
+    max-width: 650px;
+    
+    /* 繼承 Final Price Box 的奢華樣式 */
+    background: linear-gradient(135deg, rgba(197, 160, 89, 0.1) 0%, rgba(0,0,0,0) 100%);
+    border: 1px solid rgba(197, 160, 89, 0.3);
+    border-radius: 8px;
+    padding: 40px;
+    
+    position: relative;
+}
+
+/* 輸入框樣式微調 */
+.nk-input-group {
+    margin-bottom: 25px;
+    text-align: left;
+}
+
+.nk-input-label {
+    display: block;
+    color: var(--nk-gold-rich);
+    font-family: var(--nk-font-en);
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+    letter-spacing: 1px;
+    font-weight: 600;
+}
+
+/* 針對所有 input 的 placeholder 進行設定 */
+.nk-input-field::placeholder {
+    color: #ccc !important;           /* 強制設定顏色為 #ccc */
+    font-family: var(--nk-font-tc);   /* 使用 Noto Serif TC (襯線體) */
+    font-weight: 300;                 /* 字體細一點，比較優雅 */
+    font-style: italic;               /* 斜體，增加質感 (選用) */
+    opacity: 0.7;                     /* 稍微透一點，不要搶走輸入框的風采 */
+    letter-spacing: 1px;
+}
+
+.nk-input-field {
+    width: 100%;
+    padding: 18px;
+    /* 讓輸入框深一點，對比 highlight box */
+    background-color: rgba(0, 0, 0, 0.6);
+    border: 1px solid #444;
+    color: #fff;
+    font-size: 1.1rem;
+    font-family: var(--nk-font-sans);
+    transition: 0.3s;
+}
+
+.nk-input-field:focus {
+    border-color: var(--nk-gold-rich);
+    background-color: #000;
+    box-shadow: 0 0 15px rgba(197, 160, 89, 0.2);
+}
+
+/* --- FORM LABEL ICONS --- */
+.nk-input-label {
+    display: flex;          /* 讓 Icon 跟文字並排 */
+    align-items: center;    /* 垂直置中對齊 */
+    gap: 8px;              /* Icon 與文字的間距 */
+}
+
+.nk-input-label svg {
+    width: 16px;            /* 設定 Icon 大小 */
+    height: 16px;
+    fill: var(--nk-gold-rich); /* 強制設定為金色 */
+    opacity: 0.9;
+}
+
+/* --- RWD MOBILE --- */
+@media (max-width: 768px) {
+    .optin-body { padding: 10px; }
+    .optin-highlight-box {
+        padding: 25px 10px; /* 手機版內距縮小 */
+        width: 100%; /* 手機版填滿 */
+    }
+}
+
+/* --- STAGGERED HIGH-LOW GALLERY (With Fade In Up Animation) --- */
+.nk-stagger-section {
+    padding: 80px 0;
+    overflow: hidden;
+}
+
+.nk-stagger-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.nk-stagger-item {
+    position: relative;
+    height: 400px;
+    border: 1px solid var(--nk-gold-dark);
+    overflow: hidden;
+    cursor: pointer;
+    background: #000;
+    
+    /* --- ★ 動畫初始狀態 (隱藏 + 下沉 60px) ★ --- */
+    opacity: 0;
+    transform: translateY(60px); 
+    
+    /* 設定過渡動畫：0.8秒，使用優雅的貝茲曲線 */
+    transition: opacity 0.8s ease-out, transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), border-color 0.3s, box-shadow 0.3s;
+}
+
+/* --- 高低差設定 --- */
+.nk-stagger-item:nth-child(even) {
+    margin-top: 60px; /* 偶數項往下推 */
+    
+    /* --- ★ 關鍵：偶數項 (右邊) 延遲 0.2 秒進場 ★ --- */
+    /* 這會創造出 左(1) -> 右(2) -> 左(3) -> 右(4) 的節奏 */
+    transition-delay: 0.2s; 
+}
+
+/* --- ★ 觸發狀態 (由 JS 加入 .visible) ★ --- */
+.nk-stagger-item.visible {
+    opacity: 1;
+    transform: translateY(0); /* 回到正常位置 (這就是 Fade In Up) */
+}
+
+/* Hover 特效 (保留原本的) */
+.nk-stagger-item:hover {
+    border-color: var(--nk-gold-rich);
+    box-shadow: 0 10px 40px rgba(197, 160, 89, 0.2);
+    /* Hover 時不改變 transform 位置，只改變 scale (在 img 上做) */
+}
+
+/* 圖片本體 */
+.nk-stagger-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    filter: grayscale(20%);
+}
+
+.nk-stagger-item:hover img {
+    transform: scale(1.1);
+    filter: grayscale(0%);
+}
+
+/* --- 黑色漸層遮罩 & 文字動畫 (保留原本設定) --- */
+.nk-stagger-overlay {
+    position: absolute; bottom: 0; left: 0; width: 100%; height: 60%;
+    background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.6) 50%, transparent 100%);
+    display: flex; flex-direction: column; justify-content: flex-end; padding: 30px;
+    pointer-events: none;
+}
+
+.nk-stagger-text {
+    color: #fff; font-family: var(--nk-font-tc);
+    opacity: 0; transform: translateX(-40px);
+    transition: all 0.8s cubic-bezier(0.215, 0.610, 0.355, 1.000);
+}
+
+/* 當卡片浮現後，文字也跟著浮現 (但在圖片動畫之後) */
+.nk-stagger-item.visible .nk-stagger-text {
+    opacity: 1; transform: translateX(0);
+    transition-delay: 0.4s; /* 等圖片浮上來之後，文字再滑進來 */
+}
+
+.nk-stagger-title { font-size: 1.5rem; font-weight: 700; margin-bottom: 8px; display: block; color: #fff; }
+.nk-stagger-desc { font-size: 1rem; color: #ccc; font-weight: 300; }
+
+/* RWD Mobile */
+@media (max-width: 768px) {
+    .nk-stagger-grid { grid-template-columns: 1fr; gap: 20px; }
+    .nk-stagger-item { height: 300px; margin-top: 0 !important; }
+    /* 手機版取消延遲，讓使用者滑到就直接顯示，反應比較快 */
+    .nk-stagger-item:nth-child(even) { transition-delay: 0s; }
+}
+
+/* --- TIER & CALCULATOR STYLES (Optimized) --- */
+
+/* 容器設定 */
+.nk-tier-section {
+    position: relative;
+    width: 100%;
+}
+
+.nk-tier-container-v2 { 
+    width: 100%; 
+    max-width: 1000px; 
+    margin: 0 auto; 
+    box-sizing: border-box; 
+    padding: 0 10px; 
+}
+
+/* Grid 佈局 */
+.nk-tier-grid-v2 { 
+    display: grid; 
+    grid-template-columns: repeat(2, 1fr); 
+    gap: 30px; 
+}
+
+/* 卡片樣式 */
+.nk-tier-card-v2 {
+    background: #0a0a0a;
+    border: 1px solid #222; 
+    border-top: 1px solid #333;
+    position: relative; 
+    overflow: hidden;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    transition: all 0.5s ease;
+}
+
+.nk-tier-card-v2:hover { 
+    transform: translateY(-5px); 
+    border-color: var(--nk-gold-dark); 
+    box-shadow: 0 30px 60px rgba(197, 160, 89, 0.15); 
+}
+
+/* 標頭區塊 */
+.nk-header-box {
+    padding: 30px 0 20px; 
+    text-align: center; 
+    position: relative;
+    background: linear-gradient(180deg, #141414 0%, #0a0a0a 100%);
+    border-bottom: 1px solid rgba(197, 160, 89, 0.2);
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    gap: 15px;
+}
+
+.nk-header-logo { 
+    height: 35px; 
+    width: auto; 
+    transition: all 0.5s;
+}
+
+/* --- 恢復：為不同 Tier 的 Logo 提供專屬金屬質感濾鏡 --- */
+.tier-1 .nk-header-logo { filter: grayscale(1) brightness(2) drop-shadow(0 0 5px rgba(255,255,255,0.3)); } /* 銀色 Silver */
+.tier-2 .nk-header-logo { filter: grayscale(1) sepia(1) hue-rotate(90deg) saturate(3) brightness(0.8); } /* 銅綠 Green/Bronze */
+.tier-3 .nk-header-logo { filter: grayscale(1) sepia(1) hue-rotate(320deg) saturate(4) brightness(0.7); } /* 紅金 Red/Copper */
+.tier-4 .nk-header-logo { filter: brightness(0.8) contrast(1.2) sepia(1) hue-rotate(5deg) saturate(1.5) drop-shadow(0 0 10px rgba(212, 175, 55, 0.6)); } /* 純金 Gold */
+/* 計算機 Logo 也使用純金 */
+.nk-calc-card .nk-header-logo { filter: brightness(0.8) contrast(1.2) sepia(1) hue-rotate(5deg) saturate(1.5) drop-shadow(0 0 10px rgba(212, 175, 55, 0.6)); }
+
+/* 標題樣式 */
+.nk-tier-title {
+    font-family: var(--nk-font-en); 
+    font-size: 2.2rem; 
+    font-weight: 600; 
+    letter-spacing: 2px;
+    color: var(--nk-gold-rich); 
+}
+
+.nk-calc-title {
+    font-family: var(--nk-font-tc); 
+    font-size: 1.8rem;
+    font-weight: 500;
+    letter-spacing: 2px;
+    color: #fff;
+}
+
+.nk-card-content { padding: 0; }
+
+.nk-data-item-box {
+    padding: 30px; 
+    border-bottom: 1px solid #1a1a1a; 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center;
+}
+.nk-data-item-box:last-child { border-bottom: none; }
+
+/* --- 新增：文字標籤與 SVG Icon 對齊 --- */
+.nk-label-text { 
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Icon 與文字的間距 */
+    font-size: 0.95rem; 
+    color: #888; 
+    letter-spacing: 1px; 
+}
+
+.nk-label-text svg {
+    width: 16px;
+    height: 16px;
+    stroke: var(--nk-gold-dark); /* 讓 Icon 帶有低調的黑金色 */
+    opacity: 0.9;
+}
+
+/* 數值字體大小與顏色調整 */
+.nk-value-v2 {
+    font-family: var(--nk-font-en); 
+    font-size: 1.6rem; 
+    color: #eee; 
+    line-height: 1; 
+    font-weight: 500;
+}
+.nk-highlight { color: var(--nk-gold-rich); }
+
+/* --- Calculator Specific --- */
+.nk-calc-card { 
+    margin-top: 60px;
+    border: 1px solid rgba(197, 160, 89, 0.3); 
+}
+
+.nk-input-section { 
+    padding: 40px; 
+    border-bottom: 1px solid #222; 
+}
+
+.nk-input-label-row { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: flex-end; 
+    margin-bottom: 25px; 
+}
+
+.nk-input-value { 
+    font-family: var(--nk-font-en); 
+    font-size: 3rem; 
+    color: var(--nk-gold-rich); 
+    line-height: 1; 
+    font-weight: 700;
+}
+
+.nk-range-wrapper { 
+    height: 4px; 
+    background: #333; 
+    width: 100%; 
+    position: relative; 
+    border-radius: 2px; 
+    margin-bottom: 15px;
+}
+
+.nk-range-limits {
+    display: flex;
+    justify-content: space-between; 
+    color: #666;
+    font-family: var(--nk-font-en);
+    font-size: 1rem;
+    margin-top: 10px;
+}
+
+.nk-range-slider { 
+    -webkit-appearance: none; 
+    width: 100%; 
+    height: 100%; 
+    background: transparent; 
+    outline: none; 
+    position: absolute; 
+    top: 0; 
+    z-index: 2; 
+    cursor: pointer; 
+}
+.nk-range-track-fill { 
+    position: absolute; 
+    top: 0; 
+    left: 0; 
+    height: 100%; 
+    background: var(--nk-gold-rich); 
+    width: 50%; 
+    box-shadow: 0 0 10px rgba(197, 160, 89, 0.5); 
+}
+.nk-range-slider::-webkit-slider-thumb {
+    -webkit-appearance: none; 
+    width: 24px; 
+    height: 24px; 
+    background: #000; 
+    border: 2px solid var(--nk-gold-rich); 
+    border-radius: 50%; 
+    cursor: grab; 
+    margin-top: -10px;
+    box-shadow: 0 0 15px rgba(197, 160, 89, 0.5);
+    transition: transform 0.2s;
+}
+.nk-range-slider::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+    background: var(--nk-gold-rich);
+}
+
+.nk-result-grid { display: grid; grid-template-columns: repeat(3, 1fr); }
+.nk-result-box {
+    padding: 30px 20px; 
+    text-align: center; 
+    border-right: 1px solid #222;
+}
+.nk-result-box:last-child { 
+    border-right: none; 
+    background: linear-gradient(180deg, rgba(197, 160, 89, 0.05) 0%, rgba(0,0,0,0) 100%); 
+}
+.nk-sub-text { font-size: 0.9rem; color: #555; margin-top: 5px; }
+
+
+/* --- RWD: Mobile Specific --- */
+@media (max-width: 768px) {
+    .nk-tier-grid-v2 { grid-template-columns: 1fr; gap: 30px; }
+    .nk-tier-container-v2 { padding: 0 20px !important; }
+
+    .nk-tier-title { font-size: 2rem; }
+    .nk-calc-title { font-size: 1.5rem; }
+    .nk-input-value { font-size: 2.5rem; }
+    
+    .nk-result-grid { grid-template-columns: 1fr; }
+    .nk-result-box { 
+        border-right: none; 
+        border-bottom: 1px solid #222; 
+        padding: 25px; 
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .nk-result-box .nk-label-text { margin-bottom: 0 !important; }
+    .nk-result-box > div { text-align: right; }
+    
+    .nk-input-label-row { flex-direction: column; align-items: flex-start; gap: 10px; }
+    .nk-input-value { align-self: flex-end; }
+}
+
+/* --- ZIG-ZAG STAGGERED GALLERY (Animated Version) --- */
+
+.nk-zigzag-gallery {
+    display: flex;
+    flex-direction: column;
+    gap: 60px; /* 拉開間距，讓每一張更有呼吸感 */
+    margin-top: 40px;
+    width: 100%;
+}
+
+.zigzag-item {
+    position: relative;
+    width: 75%; /* 桌面版寬度，製造左右空間 */
+    aspect-ratio: 4 / 3; /* 強制 4:3 比例 */
+    border: 1px solid var(--nk-gold-dark);
+    background: #000;
+    overflow: hidden;
+    cursor: pointer;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.6);
+    
+    /* --- 動畫初始狀態：圖片隱藏 + 下沉 --- */
+    opacity: 0;
+    transform: translateY(60px);
+    transition: opacity 0.8s ease-out, transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), border-color 0.3s;
+}
+
+/* 圖片本體 */
+.zigzag-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    filter: grayscale(20%); /* 預設微灰，更有質感 */
+}
+
+/* --- 動畫觸發狀態 (由 JS 加入 .visible) --- */
+.zigzag-item.visible {
+    opacity: 1;
+    transform: translateY(0); /* 圖片 Fade In Up */
+}
+
+/* Hover 互動 */
+.zigzag-item:hover {
+    border-color: var(--nk-gold-rich);
+    box-shadow: 0 20px 60px rgba(197, 160, 89, 0.2);
+    z-index: 10;
+}
+.zigzag-item:hover img {
+    transform: scale(1.1); /* 圖片放大 */
+    filter: grayscale(0%); /* 恢復全彩 */
+}
+
+/* --- 桌面版 Zig-Zag 左右交錯邏輯 --- */
+.zigzag-item:nth-child(odd) {
+    align-self: flex-start; /* 奇數靠左 */
+}
+.zigzag-item:nth-child(even) {
+    align-self: flex-end; /* 偶數靠右 */
+}
+
+/* --- 黑色漸層遮罩 (Overlay) --- */
+.zigzag-overlay {
+    position: absolute; 
+    bottom: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 60%; /* 遮罩高度 */
+    /* 從透明到半黑到全黑的漸層，確保文字清晰 */
+    background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.6) 50%, transparent 100%);
+    display: flex; 
+    flex-direction: column; 
+    justify-content: flex-end; 
+    padding: 30px;
+    pointer-events: none; /* 讓滑鼠可以穿透遮罩點擊圖片 */
+}
+
+/* --- 文字容器與動畫 (Text Fade In Left-to-Right) --- */
+.zigzag-text {
+    /* 初始狀態：隱藏 + 往左偏移 */
+    opacity: 0; 
+    transform: translateX(-40px);
+    transition: all 0.8s cubic-bezier(0.215, 0.610, 0.355, 1.000);
+}
+
+/* 當圖片浮現 (.visible) 後，文字才開始動作 */
+.zigzag-item.visible .zigzag-text {
+    opacity: 1; 
+    transform: translateX(0);
+    transition-delay: 0.4s; /* ★關鍵：延遲 0.4秒，等圖片定位後文字再滑入 */
+}
+
+/* 文字樣式 */
+.zigzag-title { 
+    font-family: var(--nk-font-tc);
+    font-size: 1.5rem; 
+    font-weight: 700; 
+    margin-bottom: 5px; 
+    display: block; 
+    color: #fff; 
+    text-shadow: 0 2px 10px rgba(0,0,0,0.8);
+}
+.zigzag-desc { 
+    font-family: var(--nk-font-tc);
+    font-size: 1rem; 
+    color: #ccc; 
+    font-weight: 300; 
+    letter-spacing: 1px;
+}
+
+/* --- RWD Mobile --- */
+@media (max-width: 768px) {
+    .nk-zigzag-gallery {
+        gap: 30px;
+    }
+    .zigzag-item {
+        width: 100%; /* 手機版強制滿寬 */
+        align-self: center !important; /* 取消左右交錯 */
+        margin-bottom: 0;
+        /* 手機版取消延遲，讓反應更直接 */
+        transition-delay: 0s !important; 
+    }
+    .zigzag-title { font-size: 1.3rem; }
+}
+
+/* --- NσK INFINITE AMPLIFIER (MOBILE FIXED) --- */
+
+.nk-infinite-amp-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 900px;
+    margin: 60px auto 100px;
+    padding: 60px 20px;
+    background: #000;
+    border: 1px solid #1a1a1a;
+    border-top: 1px solid var(--nk-gold-dark);
+    box-shadow: 0 50px 100px rgba(0,0,0,0.9);
+    overflow: hidden;
+    text-align: center;
+}
+
+.nk-amp-overlay-gradient {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background: radial-gradient(circle at center, rgba(197, 160, 89, 0.08) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+.nk-amp-header-minimal h3 {
+    font-family: var(--font-tc);
+    font-size: 1.8rem;
+    margin-bottom: 40px;
+    color: #fff;
+}
+
+/* --- 動畫舞台 Layout --- */
+.nk-infinite-stage {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    height: 250px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+/* 連接管線 (Desktop 橫向) */
+.amp-pipeline {
+    position: absolute; top: 50%; left: 0; width: 100%; height: 2px;
+    background: #222;
+    z-index: 0;
+    transform: translateY(-50%);
+}
+.amp-flow-line {
+    position: absolute; top: 0; left: 0; height: 100%; width: 100%;
+    background: linear-gradient(90deg, transparent 0%, var(--nk-gold-rich) 50%, transparent 100%);
+    background-size: 50% 100%;
+    background-repeat: no-repeat;
+    opacity: 0;
+    animation: flowPulse 2s infinite linear;
+}
+
+/* --- 站點 (Stations) --- */
+.amp-station {
+    position: relative; z-index: 2;
+    background: #0a0a0a;
+    border: 1px solid #333;
+    padding: 20px;
+    width: 180px; /* 稍微加寬 */
+    height: 160px;
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    justify-content: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.amp-station-icon {
+    width: 50px; height: 50px;
+    /* 關鍵修正：防止被擠壓 */
+    flex-shrink: 0; 
+    border-radius: 50%;
+    background: #151515;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 15px;
+    border: 1px solid #333;
+}
+.amp-station-icon svg { width: 24px; fill: #666; }
+
+.station-right { border-color: var(--nk-gold-dark); }
+.station-right .icon-gold { border-color: var(--nk-gold-rich); background: rgba(197, 160, 89, 0.1); box-shadow: 0 0 20px rgba(197, 160, 89, 0.2); }
+.station-right svg { fill: var(--nk-gold-rich); }
+
+.amp-station-label { font-size: 0.75rem; letter-spacing: 2px; color: #666; margin-bottom: 5px; font-family: var(--nk-font-en); }
+.text-gold { color: var(--nk-gold-rich); }
+
+.amp-station-value { font-family: var(--nk-font-en); font-size: 1.5rem; color: #fff; line-height: 1.1; font-weight: 700; }
+.highlight-text { 
+    background: var(--nk-gold-rich); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    font-size: 1.6rem; /* 加大字體 */
+    text-shadow: 0 0 30px rgba(197, 160, 89, 0.3);
+}
+
+/* --- 核心反應堆 --- */
+.amp-core-reactor {
+    position: relative; z-index: 5;
+    width: 140px; height: 140px;
+    display: flex; align-items: center; justify-content: center;
+    /* 確保手機版核心不會被壓縮 */
+    flex-shrink: 0; 
+}
+
+.amp-core-logo-box {
+    width: 80px; height: 80px;
+    background: #000;
+    border-radius: 50%;
+    border: 1px solid var(--nk-gold-rich);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 10;
+    box-shadow: 0 0 50px rgba(197, 160, 89, 0.2);
+    animation: coreBreath 3s infinite ease-in-out;
+}
+.amp-core-logo-box img { width: 45px; filter: brightness(1.2); }
+
+.amp-core-glow {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    width: 140px; height: 140px;
+    border: 1px dashed rgba(197, 160, 89, 0.3);
+    border-radius: 50%;
+    animation: coreSpin 10s linear infinite;
+}
+
+/* --- 注入流 --- */
+.amp-injector {
+    position: absolute; left: 50%; transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center;
+    width: 2px;
+}
+.injector-top { top: -80px; height: 80px; }
+.injector-bottom { bottom: -80px; height: 80px;}
+
+.injector-label {
+    white-space: nowrap; font-size: 0.65rem; color: var(--nk-gold-rich); letter-spacing: 1px;
+    opacity: 0; animation: labelFadeIn 3s infinite;
+}
+
+.injector-stream {
+    width: 2px; flex-grow: 1;
+    background: linear-gradient(to bottom, transparent, var(--nk-gold-rich), transparent);
+    position: relative; overflow: hidden;
+}
+.injector-stream::after {
+    content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 20px;
+    background: #fff; filter: blur(2px);
+    animation: injectDrop 1.5s infinite ease-in;
+}
+.injector-bottom .injector-stream::after { animation-direction: reverse; }
+
+/* --- Keyframes --- */
+@keyframes flowPulse {
+    0% { left: 0%; width: 0%; opacity: 0; }
+    20% { left: 0%; width: 50%; opacity: 1; }
+    50% { left: 50%; width: 50%; opacity: 1; }
+    80% { left: 100%; width: 0%; opacity: 0; }
+    100% { left: 100%; opacity: 0; }
+}
+@keyframes flowPulseVert { /* 手機版垂直流動動畫 */
+    0% { top: 0%; height: 0%; opacity: 0; }
+    20% { top: 0%; height: 50%; opacity: 1; }
+    50% { top: 50%; height: 50%; opacity: 1; }
+    80% { top: 100%; height: 0%; opacity: 0; }
+    100% { top: 100%; opacity: 0; }
+}
+@keyframes injectDrop { 0% { top: -20px; opacity: 0; } 50% { opacity: 1; } 100% { top: 100%; opacity: 0; } }
+@keyframes labelFadeIn { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; text-shadow: 0 0 10px var(--nk-gold-rich); } }
+@keyframes coreBreath { 0%, 100% { box-shadow: 0 0 30px rgba(197, 160, 89, 0.2); transform: scale(1); border-color: #555; } 50% { box-shadow: 0 0 60px rgba(197, 160, 89, 0.6); transform: scale(1.05); border-color: var(--nk-gold-rich); } }
+@keyframes coreSpin { 100% { transform: translate(-50%, -50%) rotate(360deg); } }
+
+/* --- RWD Mobile Fix (關鍵修正) --- */
+@media (max-width: 768px) {
+    .nk-infinite-stage {
+        flex-direction: column; /* 改為垂直排列 */
+        height: auto;
+        gap: 60px;
+        padding: 40px 0;
+    }
+    
+    /* 修正連接管道為垂直 */
+    .amp-pipeline {
+        width: 2px; 
+        height: 100%; 
+        top: 0; 
+        left: 50%; 
+        transform: translateX(-50%);
+    }
+    .amp-flow-line {
+        /* 改為垂直漸層 */
+        background: linear-gradient(180deg, transparent 0%, var(--nk-gold-rich) 50%, transparent 100%);
+        background-size: 100% 50%;
+        animation: flowPulseVert 2s infinite linear;
+    }
+    
+    .injector-top { top: -50px; height: 50px; }
+    .injector-bottom { bottom: -50px; height: 50px; }
+    
+    .nk-infinite-amp-wrapper { padding: 40px 10px; }
+    
+    /* 站點改為橫向排列 (Icon 左, 文字右) */
+    .amp-station { 
+        width: 100%; 
+        max-width: 280px; 
+        height: auto; 
+        flex-direction: row; 
+        justify-content: flex-start; 
+        gap: 20px; 
+        text-align: left;
+        padding: 15px 20px;
+    }
+    
+    .amp-station-icon { margin-bottom: 0; }
+    
+    /* 右側獲利區塊文字靠右對齊 (更有輸出感) */
+    .station-right { 
+        flex-direction: row-reverse; 
+        text-align: right; 
+        justify-content: flex-start;
+    }
+}
+
+/* --- NσK CONTINUOUS PROFIT STREAM (LUXURY CSS) --- */
+
+/* 容器外觀 */
+.nk-stream-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 1000px;
+    margin: 60px auto;
+    padding: 50px 30px;
+    background: linear-gradient(145deg, #080808 0%, #121212 100%);
+    border: 1px solid #222;
+    border-top: 2px solid var(--nk-gold-dark);
+    box-shadow: 0 30px 60px rgba(0,0,0,0.8), inset 0 0 30px rgba(197, 160, 89, 0.05);
+    border-radius: 4px;
+    overflow: hidden;
+    text-align: center;
+}
+
+.nk-stream-header h3 {
+    font-family: var(--font-tc);
+    font-size: 1.8rem;
+    margin-bottom: 40px;
+    color: #fff;
+}
+
+/* --- 舞台佈局 --- */
+.nk-stream-stage {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 30px;
+    height: 220px; /* 固定高度 */
+    position: relative;
+}
+
+/* 左右節點 (User & System) */
+.stream-node {
+    display: flex; flex-direction: column; align-items: center;
+    position: relative; z-index: 10;
+    flex-shrink: 0; /* 防止變形 */
+}
+
+.node-icon-box {
+    width: 80px; height: 80px;
+    border-radius: 50%;
+    background: #1a1a1a;
+    border: 2px solid #333;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 15px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+    transition: all 0.3s;
+}
+
+/* 用戶端樣式 */
+.icon-user svg { width: 40px; fill: #666; }
+.node-user:hover .icon-user { border-color: #555; box-shadow: 0 0 20px rgba(255,255,255,0.1); }
+
+/* 系統端樣式 */
+.icon-system { border-color: var(--nk-gold-dark); background: linear-gradient(45deg, #1a1a1a, #2a2210); }
+.icon-system img { width: 45px; filter: brightness(1.2); animation: subtlePulse 3s infinite ease-in-out; }
+.node-system:hover .icon-system { box-shadow: 0 0 30px rgba(197, 160, 89, 0.3); }
+
+.node-label { font-family: var(--font-en); font-size: 0.8rem; letter-spacing: 2px; color: #888; }
+.text-gold { color: var(--nk-gold-rich); }
+
+/* --- 中間流線區域 --- */
+.stream-flows-container {
+    flex-grow: 1;
+    height: 100%;
+    display: flex; flex-direction: column; justify-content: center;
+    gap: 50px; /* 上下兩條線的間距 */
+    position: relative;
+}
+
+.flow-line {
+    position: relative;
+    width: 100%;
+    height: 50px; /* 流線感應區高度 */
+    display: flex; align-items: center;
+}
+
+/* 背景軌道線 */
+.flow-track {
+    position: absolute; top: 50%; left: 0; width: 100%; height: 2px;
+    transform: translateY(-50%);
+    z-index: 0;
+}
+.track-gold { background: linear-gradient(90deg, rgba(197, 160, 89, 0.2), var(--nk-gold-rich), rgba(197, 160, 89, 0.2)); box-shadow: 0 0 15px rgba(197, 160, 89, 0.2); }
+.track-stable { background: linear-gradient(90deg, #333, #666, #333); }
+
+/* 流線文字標籤 */
+.flow-label {
+    position: absolute; width: 100%; text-align: center;
+    font-size: 0.75rem; color: var(--nk-gold-rich); letter-spacing: 2px; opacity: 0.8;
+}
+.label-top { top: -15px; }
+
+/* --- 下方流線：固定 USDT (存款) --- */
+.static-usdt-box {
+    position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+    display: flex; flex-direction: column; align-items: center;
+    z-index: 5;
+    background: #080808; /* 遮擋背景線 */
+    padding: 0 15px;
+}
+.static-label { margin-top: 5px; font-size: 0.8rem; color: #888; letter-spacing: 1px; }
+
+/* --- 外部 USDT SVG 轉金色的濾鏡 --- */
+.gold-usdt-svg {
+    width: 28px; height: 28px;
+    filter: brightness(0) saturate(100%) invert(78%) sepia(23%) saturate(1119%) hue-rotate(359deg) brightness(88%) contrast(86%);
+}
+
+/* --- 上方流線：動態粒子容器 (獲利) --- */
+#nk-profit-particles-container {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    overflow: hidden; 
+    pointer-events: none;
+    z-index: 5;
+}
+
+/* JS 動態產生的獲利粒子樣式 (Desktop預設) */
+.profit-particle {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex; align-items: center; gap: 8px;
+    background: rgba(10, 10, 10, 0.8);
+    border: 1px solid var(--nk-gold-dark);
+    padding: 8px 25px;
+    border-radius: 25px;
+    box-shadow: 0 0 15px rgba(197, 160, 89, 0.3);
+    white-space: nowrap;
+    animation: flowRightToLeft 6s linear forwards;
+}
+
+.profit-particle .particle-val {
+    font-family: var(--font-en); font-weight: 700; color: #fff; font-size: 0.9rem;
+    text-shadow: 0 0 5px var(--nk-gold-rich);
+}
+
+/* --- Keyframes 動畫 --- */
+@keyframes flowRightToLeft {
+    0% { left: 105%; opacity: 0; transform: translateY(-50%) scale(0.8); }
+    10% { opacity: 1; transform: translateY(-50%) scale(1); }
+    90% { opacity: 1; transform: translateY(-50%) scale(1); }
+    100% { left: -25%; opacity: 0; transform: translateY(-50%) scale(0.8); }
+}
+
+@keyframes subtlePulse {
+    0%, 100% { transform: scale(1); filter: brightness(1.2); }
+    50% { transform: scale(1.05); filter: brightness(1.4) drop-shadow(0 0 10px var(--nk-gold-rich)); }
+}
+
+/* ==================================================
+   --- RWD Mobile 專屬佈局 (左邊存款，右邊提款) --- 
+   ================================================== */
+@media (max-width: 768px) {
+    .nk-stream-wrapper { padding: 40px 20px; }
+    
+    .nk-stream-stage {
+        flex-direction: column; /* User上, System下 */
+        height: 480px; /* 給予充足的垂直空間 */
+        gap: 20px;
+    }
+    
+    .node-user { order: 1; }
+    
+    /* 中間流線區塊改為左右並排 */
+    .stream-flows-container { 
+        order: 2; 
+        flex-direction: row; 
+        width: 100%; 
+        height: 100%; 
+        gap: 0; 
+    }
+    .node-system { order: 3; }
+    
+    .flow-line { 
+        width: 50%; /* 各佔一半寬度 */
+        height: 100%; 
+        flex-direction: column; 
+        justify-content: center;
+    }
+    
+    /* 順序對調：存款在左(1)，提款在右(2) */
+    .flow-bottom { order: 1; } 
+    .flow-top { order: 2; }
+    
+    /* 軌道轉為垂直 */
+    .flow-track { 
+        width: 2px; height: 100%; 
+        top: 0; left: 50%; 
+        transform: translateX(-50%); 
+    }
+    .track-gold { background: linear-gradient(180deg, rgba(197, 160, 89, 0.2), var(--nk-gold-rich), rgba(197, 160, 89, 0.2)); }
+    .track-stable { background: linear-gradient(180deg, #333, #666, #333); }
+    
+    /* 左側存款標籤設定 (加上深色背景斷開軌道) */
+    .static-usdt-box { 
+        background: #080808; 
+        padding: 15px 5px; 
+        width: 90%; 
+    }
+    .static-label { margin-top: 8px; line-height: 1.3; }
+
+    /* 右側提款標籤設定 */
+    .flow-label { 
+        top: 50%; left: 50%; 
+        transform: translate(-50%, -50%); 
+        background: #080808; 
+        padding: 15px 5px; 
+        width: 90%;
+        z-index: 2;
+        line-height: 1.3;
+    }
+
+    /* 獲利粒子動畫覆蓋：從底端 System 飛往頂端 User */
+    .profit-particle {
+        top: auto; 
+        left: 50%;
+        transform: translateX(-50%);
+        animation: flowBottomToTop 3s linear forwards;
+    }
+}
+
+@keyframes flowBottomToTop {
+    0% { top: 105%; opacity: 0; transform: translateX(-50%) scale(0.8); }
+    10% { opacity: 1; transform: translateX(-50%) scale(1); }
+    90% { opacity: 1; transform: translateX(-50%) scale(1); }
+    100% { top: -25%; opacity: 0; transform: translateX(-50%) scale(0.8); }
+}
+
+/* --- NEW: Step Process Styles (Optin Gold v2) --- */
+
+/* 外層容器 */
+.optin-steps-container {
+    display: flex;
+    flex-direction: column;
+    gap: 50px; /* 拉大兩個大步驟之間的距離 */
+    width: 100%;
+    align-items: center;
+}
+
+/* --- 標題區塊：置中、變寬 --- */
+.step-header {
+    display: flex;
+    align-items: center; /* 垂直置中 */
+    justify-content: center; /* ★ 關鍵：讓整個標題組在盒子內水平置中 */
+    gap: 30px; /* ★ 數字跟文字的距離拉寬 */
+    margin-bottom: 35px;
+    border-bottom: 1px solid rgba(197, 160, 89, 0.2);
+    padding-bottom: 25px;
+    width: 100%; /* 確保佔滿寬度 */
+}
+
+/* 數字樣式 */
+.step-num {
+    font-family: var(--nk-font-en);
+    font-size: 4rem; /* 數字再大一點 */
+    line-height: 1;
+    color: var(--nk-gold-rich);
+    font-weight: 700;
+    letter-spacing: -2px;
+    position: relative;
+    padding-right: 30px; /* 給分隔線留更多空間 */
+}
+
+/* ★ 金色分隔線 (改為實心 Solid) */
+.step-num::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%); /* 線條垂直置中 */
+    height: 80%; /* 線條高度 */
+    width: 2px; /* 線條厚度 */
+    background: var(--nk-gold-rich); /* ★ 改為純色，不要漸層 */
+    opacity: 0.8;
+}
+
+/* 文字標題樣式 */
+.step-title-text {
+    font-family: var(--nk-font-tc);
+    font-size: 1.6rem; /* 字體加大 */
+    color: #fff;
+    font-weight: 600;
+    line-height: 1.4;
+    text-align: left; /* 文字本身靠左對齊 (但整個區塊是置中的) */
+    margin: 0;
+}
+
+/* --- 內容列表樣式 (Step 01 & 02 共用) --- */
+.process-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+}
+
+.process-item {
+    display: flex;
+    align-items: flex-start; /* 讓 Icon 對齊第一行文字 */
+    gap: 20px;
+    background: rgba(255, 255, 255, 0.02); /* 極淡背景 */
+    border: 1px solid #333; /* 預設深灰框 */
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    text-align: left; /* ★ 強制內容靠左 */
+}
+
+/* Step 01 專用：預設顯示 (不需要動畫等待) */
+.process-item.static {
+    opacity: 1;
+    transform: none;
+    border-color: rgba(197, 160, 89, 0.2); /* Step 01 預設帶一點點金框 */
+}
+
+/* Step 02 專用：動畫初始狀態 */
+.process-item.anim-wait {
+    opacity: 0;
+    transform: translateX(30px);
+}
+
+/* Step 02 激活狀態 */
+.process-item.active {
+    opacity: 1;
+    transform: translateX(0);
+    border-color: var(--nk-gold-dark);
+    background: linear-gradient(90deg, rgba(197, 160, 89, 0.05) 0%, transparent 100%);
+}
+
+.process-item:hover {
+    border-color: var(--nk-gold-rich);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.process-icon-box {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #0a0a0a;
+    border: 1px solid var(--nk-gold-dark);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0; /* 防止 Icon 被壓縮 */
+    margin-top: 2px; /* 微調垂直位置 */
+}
+
+.process-icon-box svg {
+    width: 20px;
+    height: 20px;
+    fill: var(--nk-gold-rich);
+}
+
+.process-text {
+    color: #ddd;
+    font-size: 1.1rem;
+    line-height: 1.6;
+}
+
+/* 手機版 RWD */
+@media (max-width: 768px) {
+    .step-header {
+        flex-direction: column; /* 手機版改為上下排列 */
+        gap: 10px;
+        text-align: center;
+    }
+    .step-num {
+        padding-right: 0;
+        margin-bottom: 10px;
+    }
+    /* 手機版分隔線改為橫向 */
+    .step-num::after {
+        width: 60px;
+        height: 2px;
+        top: auto;
+        bottom: -5px;
+        left: 50%;
+        transform: translateX(-50%);
+        right: auto;
+    }
+    .step-title-text {
+        text-align: center; /* 手機版標題置中 */
+        font-size: 1.4rem;
+    }
+}
+
+/* --- NEW: Feature Row Step Layout (Updated v2) --- */
+
+.step-layout-block {
+    display: flex;
+    gap: 40px; /* 左右欄間距 */
+    margin-bottom: 40px; /* ★ 縮小上下區塊間距 (原 60px) */
+    padding-bottom: 40px; /* 內部底部留白 */
+    border-bottom: 1px solid #222; /* 分隔線 */
+}
+
+.step-layout-block:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+/* 左側巨大數字容器 */
+.step-num-col {
+    position: relative;
+    padding-right: 30px; /* 右邊留白給分隔線 */
+    flex-shrink: 0;
+}
+
+/* 金色垂直分隔線 (桌面版顯示) */
+.step-num-col::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 5px;
+    height: 100%;
+    width: 2px;
+    background: var(--nk-gold-rich);
+}
+
+.step-big-num {
+    font-family: var(--nk-font-en);
+    font-size: 5rem;
+    line-height: 0.8;
+    font-weight: 700;
+    color: var(--nk-gold-rich);
+    display: block;
+    margin-top: -5px; /* 對齊右邊小標 */
+}
+
+/* 右側內容容器 */
+.step-info-col {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.step-sub-en {
+    font-family: var(--nk-font-en);
+    color: var(--nk-gold-rich);
+    font-size: 1rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.step-title-cn {
+    font-family: var(--nk-font-tc);
+    font-size: 1.8rem;
+    color: #fff;
+    font-weight: 600;
+    line-height: 1.3;
+    margin-bottom: 20px;
+}
+
+.step-body-text p {
+    color: #ccc;
+    font-size: 1.05rem;
+    line-height: 1.7;
+    margin-bottom: 15px;
+    text-align: justify;
+}
+
+/* --- ★ 新增：金框圖片樣式 (Step 01 & 02) --- */
+.step-img-box {
+    margin-top: 20px;
+    border: 1px solid var(--nk-gold-dark); /* 預設暗金框 */
+    overflow: hidden;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.step-img-box img {
+    width: 100%;
+    height: auto;
+    display: block;
+    transition: transform 0.5s ease;
+}
+
+/* Hover 特效 */
+.step-img-box:hover {
+    border-color: var(--nk-gold-rich); /* 變亮金框 */
+    box-shadow: 0 0 20px rgba(197, 160, 89, 0.3); /* 發光 */
+}
+
+.step-img-box:hover img {
+    transform: scale(1.05); /* 圖片微放大 */
+}
+
+/* --- ★ 新增：Step 03 影片樣式 --- */
+.step-video-box {
+    margin-top: 20px;
+    border: 1px solid var(--nk-gold-dark);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    overflow: hidden;
+    position: relative;
+}
+
+.step-video-box video {
+    width: 100%;
+    display: block;
+}
+
+/* 手機版 RWD */
+@media (max-width: 768px) {
+    .step-layout-block {
+        flex-direction: column;
+        gap: 15px;
+        margin-bottom: 30px; /* 手機版間距更小 */
+        padding-bottom: 30px;
+    }
+    
+    .step-num-col {
+        padding-right: 0;
+        border-bottom: 1px solid rgba(197, 160, 89, 0.3);
+        padding-bottom: 10px;
+        width: fit-content;
+    }
+
+    .step-num-col::after {
+        display: none; /* 手機版隱藏垂直線 */
+    }
+    
+    .step-big-num {
+        font-size: 3.5rem;
+        margin-top: 0;
+    }
+}
+</style>
+</head>
+<body>
+
+    <nav class="main-header scrolled" id="navbar">
+        <div class="container text-center">
+            <img src="https://arftk.com/imgs1/logo1.png" alt="NσK Logo" class="header-logo">
+        </div>
+    </nav>
+
+<section class="section-padding" style="background: #080808;">
+        <div class="container container-wide">
+            <div class="text-center" style="margin-bottom: 50px;">
+                <span class="subtitle-en">SYSTEM REVEALED</span>
+                <div class="hero-text-only">
+                <h1>在這部影片中我們將深入介紹<br>
+                    <span class="hero-number-block">NσK® SYSTEM</span>
+                </h1>
+            </div>
+                
+                <div class="arrow-scroll">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+
+            <div class="video-wrapper deep-dive-hero-video" style="max-width: 900px; margin: 0 auto 80px;">
+                <script src="https://fast.wistia.com/embed/b3q7co67ui.js" async type="module"></script>
+                <wistia-player media-id="b3q7co67ui" seo="false" aspect="1.7777777777777777"></wistia-player>
+            </div>
+
+          
+            <div class="text-center" style="margin-bottom: 50px;">
+                <span class="subtitle-en">SYSTEM REVEALED</span>
+                <h2>獨家揭密：系統實戰運作邏輯</h2>
+                <div class="divider"></div>
+                <p>為何系統能做到精準的自動化獲利？</p>
+                
+                <div class="arrow-scroll">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+
+
+            <div class="feature-row sticky-mode">
+    
+    <div class="sticky-video-col">
+        <div class="video-wrapper">
+            <div class="video-block">
+                <script src="https://fast.wistia.com/embed/b3q7co67ui.js" async type="module"></script>
+                <wistia-player media-id="b3q7co67ui" seo="false" aspect="1.7777777777777777"></wistia-player>
+            </div>
+        </div>
+        <p style="margin-top: 20px; font-size: 0.9rem; text-align: center; color: #666;">
+            ▲ 開戶流程與資金說明
+        </p>
+    </div>
+
+    <div class="feature-content scrollable-content-col">
+
+    <div class="step-layout-block">
+        <div class="step-num-col">
+            <span class="step-big-num">01</span>
+        </div>
+        
+        <div class="step-info-col">
+            <span class="step-sub-en">DEPOSIT TRADING CAPITAL</span>
+            <h3 class="step-title-cn">依個人狀況存款至系統帳號</h3>
+            
+            <div class="step-body-text">
+                <p>跟任何投資一樣，系統必須要有能夠操作的資金，才能替你進行自動交易與獲利，因此第一個步驟就是先完成存款。</p>
+                <p>存款金額大小則依照你個人狀況決定，未來的獲利標準則會根據你的存款金額分成 Tier 1~4，請詳見下方 Tier 1~4 的存款要求與獲利標準。</p>
+            </div>
+
+            <div class="step-img-box">
+                <img src="https://arftk.com/imgs1/clients03.jpg" alt="Deposit Step">
+            </div>
+        </div>
+    </div>
+
+    <div class="step-layout-block">
+        <div class="step-num-col">
+            <span class="step-big-num">02</span>
+        </div>
+        
+        <div class="step-info-col">
+            <span class="step-sub-en">ONLINE MEETING</span>
+            <h3 class="step-title-cn">線上會議，開通系統與操作教學</h3>
+            
+            <div class="step-body-text">
+                <p>處理完你的交易資金之後，我們會安排一次線上視訊會議，替你開通系統帳戶 & 示範基本系統操作，並綁定你指定的收款銀行帳戶。</p>
+                <p>同時為了符合歐洲證交法的規定，我們必須確認客戶身分，才能為其進行資金管理。</p>
+            </div>
+
+            <div class="step-img-box">
+                <img src="https://arftk.com/imgs1/trading11.jpg" alt="Meeting Step">
+            </div>
+        </div>
+    </div>
+
+    <div class="step-layout-block">
+        <div class="step-num-col">
+            <span class="step-big-num">03</span>
+        </div>
+        
+        <div class="step-info-col">
+            <span class="step-sub-en">SYSTEM ACTIVATION</span>
+            <h3 class="step-title-cn">系統正式啟動與獲利監控</h3>
+            
+            <div class="step-body-text">
+                <p>完成上述步驟後，你的專屬 AI 交易系統將正式上線運作。你可以透過手機或電腦，隨時隨地登入後台查看即時交易狀況與每日獲利報表。</p>
+                <p>系統將會 24 小時不間斷地為你監控市場，並自動執行所有買賣操作，你無需進行任何手動干預。</p>
+            </div>
+
+            <div class="video-wrapper">
+                <div class="video-block">
+                    <video src="https://arftk.com/imgs1/dash.mp4" muted loop playsinline></video>
+                    
+                    <button class="play-pause-btn">
+                        <img decoding="async" class="icon" src="https://arftk.com/imgs/play.svg">
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+</div>
+
+
+ <div class="text-center" style="margin-bottom: 50px;">
+                <span class="subtitle-en">FUNDING METHOD</span>
+                <h2>會員能使用USDT快速從系統出入金</h2>
+                <div class="divider"></div>
+                <p>為何我們選擇以USDT作為出入金方式</p>
+                
+                <div class="arrow-scroll">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+
+
+
+            <div class="feature-row sticky-mode">
+    
+    <div class="sticky-video-col">
+        <div class="video-wrapper">
+            <div class="video-block">
+                <script src="https://fast.wistia.com/embed/b3q7co67ui.js" async type="module"></script>
+                <wistia-player media-id="b3q7co67ui" seo="false" aspect="1.7777777777777777"></wistia-player>
+            </div>
+        </div>
+        <p style="margin-top: 20px; font-size: 0.9rem; text-align: center; color: #666;">
+            ▲ 系統實戰操作演示
+        </p>
+    </div>
+
+    <div class="feature-content scrollable-content-col">
+
+        <div class="content-block">
+            <div class="feature-title-group">
+                <span class="feature-reason-tag">LIVE PROOF</span>
+                <h3 class="feature-heading-styled">
+                    真實交易紀錄與獲利展示
+                    <div class="feature-heading-line"></div>
+                </h3>
+            </div>
+            
+            <p>這不僅僅是理論，我們將毫無保留地展示 NσK® 系統在不同市場行情下的真實表現。</p>
+            <p>下方圖片展示了系統在劇烈波動的「非農數據夜」以及平穩震盪盤整期的操作細節。您可以清楚看到 AI 如何精準捕捉每一個微小的獲利空間。</p>
+        </div>
+
+        <div class="nk-zigzag-gallery">
+            
+            <div class="zigzag-item">
+                <img src="https://arftk.com/imgs1/trading11.jpg" alt="Entry Point">
+                <div class="zigzag-overlay">
+                    <div class="zigzag-text">
+                        <span class="zigzag-title">精準進場點</span>
+                        <span class="zigzag-desc">AI 於回調低點精準佈局</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="zigzag-item">
+                <img src="https://arftk.com/imgs/10m3.jpg" alt="Profit Secured">
+                <div class="zigzag-overlay">
+                    <div class="zigzag-text">
+                        <span class="zigzag-title">獲利鎖定</span>
+                        <span class="zigzag-desc">自動移動止損，確保利潤入袋</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="zigzag-item">
+                <img src="https://arftk.com/imgs1/sys0001.jpg" alt="Risk Control">
+                <div class="zigzag-overlay">
+                    <div class="zigzag-text">
+                        <span class="zigzag-title">風險控管</span>
+                        <span class="zigzag-desc">波動過大時自動暫停交易</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="zigzag-item">
+                <img src="https://arftk.com/imgs/10m5.jpg" alt="Final Result">
+                <div class="zigzag-overlay">
+                    <div class="zigzag-text">
+                        <span class="zigzag-title">最終獲利結算</span>
+                        <span class="zigzag-desc">單日累積收益達 12.5%</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="nk-zigzag-gallery">
+            
+            <div class="zigzag-item">
+                <img src="https://arftk.com/imgs1/trading11.jpg" alt="Entry Point">
+                <div class="zigzag-overlay">
+                    <div class="zigzag-text">
+                        <span class="zigzag-title">精準進場點</span>
+                        <span class="zigzag-desc">AI 於回調低點精準佈局</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="zigzag-item">
+                <img src="https://arftk.com/imgs/10m3.jpg" alt="Profit Secured">
+                <div class="zigzag-overlay">
+                    <div class="zigzag-text">
+                        <span class="zigzag-title">獲利鎖定</span>
+                        <span class="zigzag-desc">自動移動止損，確保利潤入袋</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="zigzag-item">
+                <img src="https://arftk.com/imgs1/sys0001.jpg" alt="Risk Control">
+                <div class="zigzag-overlay">
+                    <div class="zigzag-text">
+                        <span class="zigzag-title">風險控管</span>
+                        <span class="zigzag-desc">波動過大時自動暫停交易</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="zigzag-item">
+                <img src="https://arftk.com/imgs/10m5.jpg" alt="Final Result">
+                <div class="zigzag-overlay">
+                    <div class="zigzag-text">
+                        <span class="zigzag-title">最終獲利結算</span>
+                        <span class="zigzag-desc">單日累積收益達 12.5%</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="content-block" style="margin-top: 40px; border-top: 1px solid #222; padding-top: 30px;">
+            <p style="font-size: 0.9rem; color: #888;">
+                * 所有交易紀錄皆已經過第三方審計機構認證，確保數據真實不可篡改。
+            </p>
+        </div>
+
+    </div>
+</div>
+
+
+            <div class="feature-row sticky-mode">
+    
+    <div class="sticky-video-col">
+        <div class="video-wrapper">
+            <div class="video-block">
+                <video src="https://arftk.com/imgs1/dash.mp4" muted loop playsinline></video>
+                <button class="play-pause-btn">
+                    <img decoding="async" class="icon" src="https://arftk.com/imgs/play.svg">
+                </button>
+            </div>
+        </div>
+        <p style="margin-top: 20px; font-size: 0.9rem; text-align: center; color: #666;">
+            ▲ 系統實時運作監控畫面
+        </p>
+    </div>
+
+    <div class="feature-content scrollable-content-col">
+
+        <div class="content-block">
+            <div class="feature-title-group">
+            <span class="feature-reason-tag">ABSOLUTE ADVANTAGE</span>
+            <h3 class="feature-heading-styled">
+                AI 在金融交易的絕對優勢
+                <div class="feature-heading-line"></div>
+            </h3>
+        </div>
+
+        <ul class="feature-list" id="animated-feature-list" style="margin: 0; width: 100%;">
+            <li style="padding: 15px; font-size: 1.1rem;">
+                直接連接至多個大型資料庫，毫秒抓取千萬筆數據
+            </li>
+            <li style="padding: 15px; font-size: 1.1rem;">
+                在數秒之內，完成人類需要數日才能完成的分析與計算
+            </li>
+            <li style="padding: 15px; font-size: 1.1rem;">
+                沒有任何情緒與體力因素，100% 按照交易策略執行
+            </li>
+            <li style="padding: 15px; font-size: 1.1rem;">
+                計算與執行不但快速，並且比人類更精準，無誤差
+            </li>
+        </ul>
+
+
+        </div>
+
+
+        
+        <div class="content-block">
+            <span class="feature-reason-tag">STEP 01</span>
+            <h3 class="sticky-content-title">訊號偵測與過濾</h3>
+            <p>
+                系統首先會掃描全球 12 大交易所的即時報價，過濾掉 99% 的無效雜訊。只有當價格波動符合「高機率獲利模型」時，AI 才會將其標記為潛在機會。
+            </p>
+            <div class="video-wrapper" style="margin-top: 20px;">
+                <div class="video-block">
+                    <video src="https://arftk.com/imgs1/abm.mp4" muted loop playsinline></video>
+                    <button class="play-pause-btn"><img class="icon" src="https://arftk.com/imgs/play.svg"></button>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-block">
+            <span class="feature-reason-tag">STEP 02</span>
+            <h3 class="sticky-content-title">資金部位計算</h3>
+            <p>
+                確認訊號後，第二步是風險控管。系統會根據您帳戶目前的總資金，自動計算出最安全的進場手數，確保單筆交易風險不超過總資產的 2%。
+            </p>
+            <div class="video-wrapper" style="margin-top: 20px;">
+                <div class="video-block">
+                    <video src="https://arftk.com/imgs1/rrm.mp4" muted loop playsinline></video>
+                    <button class="play-pause-btn"><img class="icon" src="https://arftk.com/imgs/play.svg"></button>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-block">
+            <span class="feature-reason-tag">STEP 03</span>
+            <h3 class="sticky-content-title">自動出場獲利</h3>
+            <p>
+                進場的瞬間，止損點 (Stop Loss) 與獲利點 (Take Profit) 便已同時設定完成。一旦達到預設獲利目標，系統毫秒級自動平倉，將利潤鎖入您的帳戶。
+            </p>
+            <div class="video-wrapper" style="margin-top: 20px;">
+                <div class="video-block">
+                    <video src="https://arftk.com/imgs1/axis.mp4" muted loop playsinline></video>
+                    <button class="play-pause-btn"><img class="icon" src="https://arftk.com/imgs/play.svg"></button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // 設定偵測器：當列表進入畫面 30% 時觸發
+        const listObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    // 加上 .visible class，CSS 就會開始跑動畫
+                    entry.target.classList.add('visible');
+                    // 動畫跑一次就好，跑完就取消偵測，避免來回滑動一直閃
+                    listObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.3 });
+
+        // 開始偵測所有 feature-list
+        document.querySelectorAll('.feature-list').forEach(list => {
+            listObserver.observe(list);
+        });
+    });
+</script>
+
+
+<div class="nk-stream-wrapper">
+    <div class="nk-stream-header">
+        <span class="subtitle-en">CASH FLOW MECHANISM</span>
+        <h3>一次性存款，不間斷獲利流</h3>
+    </div>
+
+    <div class="nk-stream-stage">
+        
+        <div class="stream-node node-user">
+            <div class="node-icon-box icon-user">
+                <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+            </div>
+            <div class="node-label">INVESTOR</div>
+        </div>
+
+        <div class="stream-flows-container">
+            
+            <div class="flow-line flow-top">
+                <div class="flow-track track-gold"></div>
+                <div class="flow-label label-top">不間斷的獲利</div>
+                <div id="nk-profit-particles-container"></div>
+            </div>
+
+            <div class="flow-line flow-bottom">
+                <div class="flow-track track-stable"></div>
+                <div class="static-usdt-box">
+                    <img src="https://arftk.com/imgs/usdt.svg" class="gold-usdt-svg" alt="USDT">
+                    <span class="static-label">一次性投資</span>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="stream-node node-system">
+            <div class="node-icon-box icon-system">
+                <img src="https://arftk.com/imgs1/logo1.png" alt="NσK System">
+            </div>
+            <div class="node-label text-gold">NσK® SYSTEM</div>
+        </div>
+
+    </div>
+</div>
+
+            
+        </div>
+    </section>
+
+
+<section class="nk-stagger-section">
+    <div class="container text-center" style="margin-bottom: 50px;">
+        <span class="subtitle-en">LIFESTYLE GALLERY</span>
+        <h2>加入會員後的真實生活改變</h2>
+        <div class="divider"></div>
+    </div>
+
+    <div class="nk-stagger-grid">
+        
+        <div class="nk-stagger-item">
+            <img src="https://arftk.com/imgs/10m1.jpg" alt="Luxury Car">
+            <div class="nk-stagger-overlay">
+                <div class="nk-stagger-text">
+                    <span class="nk-stagger-title">頂級超跑</span>
+                    <span class="nk-stagger-desc">從負債累累到擁有夢想車庫</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="nk-stagger-item">
+            <img src="https://arftk.com/imgs/10m2.jpg" alt="First Class">
+            <div class="nk-stagger-overlay">
+                <div class="nk-stagger-text">
+                    <span class="nk-stagger-title">環球旅行</span>
+                    <span class="nk-stagger-desc">隨時出發，體驗頭等艙的奢華</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="nk-stagger-item">
+            <img src="https://arftk.com/imgs/10m3.jpg" alt="Mansion">
+            <div class="nk-stagger-overlay">
+                <div class="nk-stagger-text">
+                    <span class="nk-stagger-title">湖畔豪宅</span>
+                    <span class="nk-stagger-desc">給家人最安全舒適的居住環境</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="nk-stagger-item">
+            <img src="https://arftk.com/imgs/10m5.jpg" alt="Freedom">
+            <div class="nk-stagger-overlay">
+                <div class="nk-stagger-text">
+                    <span class="nk-stagger-title">時間自由</span>
+                    <span class="nk-stagger-desc">不再被工作綁架，享受陪伴的時光</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const staggerObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    // 動畫跑一次後取消偵測
+                    staggerObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.3 }); // 進入畫面 30% 時觸發
+
+        document.querySelectorAll('.nk-stagger-item').forEach(item => {
+            staggerObserver.observe(item);
+        });
+    });
+</script>
+
+
+<section class="nk-tier-section">
+    <div class="nk-tier-container-v2">
+
+        <div class="nk-infinite-amp-wrapper">
+    <div class="nk-amp-overlay-gradient"></div>
+    
+    <div class="nk-amp-header-minimal">
+        <span class="subtitle-en">SYSTEM MECHANISM</span>
+        <h3>資金池放大效應示意</h3>
+    </div>
+
+    <div class="nk-infinite-stage">
+        <div class="amp-pipeline">
+            <div class="amp-flow-line"></div>
+        </div>
+
+        <div class="amp-station station-left">
+            <div class="amp-station-icon">
+                <svg viewBox="0 0 24 24"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg>
+            </div>
+            <div class="amp-station-info">
+                <div class="amp-station-label">INITIAL CAPITAL</div>
+                <div class="amp-station-value">$10,000</div>
+            </div>
+        </div>
+
+        <div class="amp-core-reactor">
+            <div class="amp-injector injector-top">
+                <span class="injector-label">FRACTIONAL SHARES</span>
+                <div class="injector-stream"></div>
+            </div>
+            <div class="amp-injector injector-bottom">
+                <div class="injector-stream"></div>
+                <span class="injector-label">SYSTEM FUND POOL</span>
+            </div>
+
+            <div class="amp-core-glow"></div>
+            <div class="amp-core-logo-box">
+                <img src="https://arftk.com/imgs1/logo1.png" alt="Core">
+            </div>
+        </div>
+
+        <div class="amp-station station-right">
+            <div class="amp-station-icon icon-gold">
+                <svg viewBox="0 0 24 24"><path d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6z"/></svg>
+            </div>
+            <div class="amp-station-info">
+                <div class="amp-station-label text-gold">ACTUAL CAPITAL</div>
+                <div class="amp-station-value highlight-text" id="nk-counter-target">$0</div>
+            </div>
+        </div>
+    </div>
+</div>
+        <div class="nk-tier-grid-v2">
+            <div class="nk-tier-card-v2 tier-1">
+                <div class="nk-header-box">
+                    <img src="https://arftk.com/imgs1/logo1.png" class="nk-header-logo" alt="Logo">
+                    <span class="nk-tier-title">TIER 1</span>
+                </div>
+                <div class="nk-card-content">
+                    <div class="nk-data-item-box">
+                        <span class="nk-label-text">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/></svg>
+                            存款範圍
+                        </span>
+                        <div class="nk-value-v2">$5,500 ~ $9,999</div>
+                    </div>
+                    <div class="nk-data-item-box">
+                        <span class="nk-label-text">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+                            每月收益 %
+                        </span>
+                        <div class="nk-value-v2 nk-highlight">200% ~ 225%</div>
+                    </div>
+                    <div class="nk-data-item-box">
+                        <span class="nk-label-text">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 18V6"/></svg>
+                            每月收益 $
+                        </span>
+                        <div class="nk-value-v2">$11,000+</div>
+                    </div>
+                    <div class="nk-data-item-box">
+                        <span class="nk-label-text">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                            存款期限
+                        </span>
+                        <div class="nk-value-v2">12 Months</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="nk-tier-card-v2 tier-2">
+                <div class="nk-header-box">
+                    <img src="https://arftk.com/imgs1/logo1.png" class="nk-header-logo" alt="Logo">
+                    <span class="nk-tier-title">TIER 2</span>
+                </div>
+                <div class="nk-card-content">
+                    <div class="nk-data-item-box">
+                        <span class="nk-label-text">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/></svg>
+                            存款範圍
+                        </span>
+                        <div class="nk-value-v2">$10,000 ~ $24,999</div>
+                    </div>
+                    <div class="nk-data-item-box">
+                        <span class="nk-label-text">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+                            每月收益 %
+                        </span>
+                        <div class="nk-value-v2 nk-highlight">250% ~ 275%</div>
+                    </div>
+                    <div class="nk-data-item-box">
+                        <span class="nk-label-text">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 18V6"/></svg>
+                            每月收益 $
+                        </span>
+                        <div class="nk-value-v2">$25,000+</div>
+                    </div>
+                    <div class="nk-data-item-box">
+                        <span class="nk-label-text">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                            存款期限
+                        </span>
+                        <div class="nk-value-v2">12 Months</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="nk-tier-card-v2 tier-3">
+                 <div class="nk-header-box">
+                    <img src="https://arftk.com/imgs1/logo1.png" class="nk-header-logo" alt="Logo">
+                    <span class="nk-tier-title">TIER 3</span>
+                </div>
+                <div class="nk-card-content">
+                    <div class="nk-data-item-box">
+                        <span class="nk-label-text">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/></svg>
+                            存款範圍
+                        </span>
+                        <div class="nk-value-v2">$25,000 ~ $49,999</div>
+                    </div>
+                    <div class="nk-data-item-box">
+                        <span class="nk-label-text">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+                            每月收益 %
+                        </span>
+                        <div class="nk-value-v2 nk-highlight">300% ~ 325%</div>
+                    </div>
+                    <div class="nk-data-item-box">
+                        <span class="nk-label-text">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 18V6"/></svg>
+                            每月收益 $
+                        </span>
+                        <div class="nk-value-v2">$75,000+</div>
+                    </div>
+                    <div class="nk-data-item-box">
+                        <span class="nk-label-text">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                            存款期限
+                        </span>
+                        <div class="nk-value-v2">6 Months</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="nk-tier-card-v2 tier-4">
+                 <div class="nk-header-box">
+                    <img src="https://arftk.com/imgs1/logo1.png" class="nk-header-logo" alt="Logo">
+                    <span class="nk-tier-title">TIER 4</span>
+                </div>
+                <div class="nk-card-content">
+                    <div class="nk-data-item-box">
+                        <span class="nk-label-text">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/></svg>
+                            存款範圍
+                        </span>
+                        <div class="nk-value-v2">$50,000+</div>
+                    </div>
+                    <div class="nk-data-item-box">
+                        <span class="nk-label-text">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+                            每月收益 %
+                        </span>
+                        <div class="nk-value-v2 nk-highlight">350% ~ 375%</div>
+                    </div>
+                    <div class="nk-data-item-box">
+                        <span class="nk-label-text">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 18V6"/></svg>
+                            每月收益 $
+                        </span>
+                        <div class="nk-value-v2">$175,000+</div>
+                    </div>
+                    <div class="nk-data-item-box">
+                        <span class="nk-label-text">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                            存款期限
+                        </span>
+                        <div class="nk-value-v2">6 Months</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="nk-tier-card-v2 nk-calc-card">
+            <div class="nk-header-box">
+                <img src="https://arftk.com/imgs1/logo1.png" class="nk-header-logo" alt="Logo">
+                <span class="nk-calc-title">獲利試算器</span>
+            </div>
+
+            <div class="nk-card-content">
+                <div class="nk-input-section">
+                    <div class="nk-input-label-row">
+                        <span class="nk-label-text" style="font-size: 1.1rem;">調整預計投入金額 (USDT)</span>
+                        <span class="nk-input-value">$<span id="nk-slider-val">25,000</span></span>
+                    </div>
+                    <div class="nk-range-wrapper">
+                        <input type="range" min="2500" max="50000" step="500" value="25000" class="nk-range-slider" id="nk-profit-slider">
+                        <div class="nk-range-track-fill" id="nk-track-fill"></div>
+                    </div>
+                    <div class="nk-range-limits">
+                        <span>$2,500</span>
+                        <span>$50,000</span>
+                    </div>
+                </div>
+
+                <div class="nk-result-grid">
+                    <div class="nk-result-box">
+                        <span class="nk-label-text" style="display:block; margin-bottom: 10px;">所屬 Tier</span>
+                        <div class="nk-value-v2" id="nk-res-tier">TIER 2</div>
+                    </div>
+                    <div class="nk-result-box">
+                        <span class="nk-label-text" style="display:block; margin-bottom: 10px;">最低月收益</span>
+                        <div class="nk-value-v2" id="nk-res-min">$62,500</div>
+                        <div class="nk-sub-text" id="nk-sub-min">(250%)</div>
+                    </div>
+                    <div class="nk-result-box highlight-box">
+                        <span class="nk-label-text" style="display:block; margin-bottom: 10px;">預估月收益 (總金額)</span>
+                        <div class="nk-value-v2 nk-highlight" id="nk-res-max">$68,750</div>
+                        <div class="nk-sub-text" id="nk-sub-max">(275%)</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+    <section class="section-padding nk-collage-section">
+    <div class="container text-center">
+        <span class="subtitle-en">LIFESTYLE UPGRADE</span>
+        <h2>加入會員後的真實生活樣貌</h2>
+        <div class="divider"></div>
+    </div>
+
+    <div class="nk-collage-wrapper">
+        
+        <div class="nk-collage-item">
+            <img src="https://arftk.com/imgs/10m1.jpg" alt="Luxury Car">
+            <div class="nk-collage-caption">
+                <span class="nk-caption-title">THE ASSETS</span>
+                <p class="nk-caption-desc">超跑與資產配置</p>
+            </div>
+        </div>
+
+        <div class="nk-collage-item">
+            <img src="https://arftk.com/imgs/10m3.jpg" alt="Mansion">
+            <div class="nk-collage-caption">
+                <span class="nk-caption-title">THE MANSION</span>
+                <p class="nk-caption-desc">頂級居住環境</p>
+            </div>
+        </div>
+
+        <div class="nk-collage-item">
+            <img src="https://arftk.com/imgs1/trading11.jpg" alt="Trading">
+            <div class="nk-collage-caption">
+                <span class="nk-caption-title">THE SYSTEM</span>
+                <p class="nk-caption-desc">全自動獲利監控</p>
+            </div>
+        </div>
+
+        <div class="nk-collage-item">
+            <img src="https://arftk.com/imgs/10m5.jpg" alt="Travel">
+            <div class="nk-collage-caption">
+                <span class="nk-caption-title">THE FREEDOM</span>
+                <p class="nk-caption-desc">全球自由通行</p>
+            </div>
+        </div>
+        
+        <div class="nk-collage-item">
+            <img src="https://arftk.com/imgs/10m5.jpg" alt="Travel">
+            <div class="nk-collage-caption">
+                <span class="nk-caption-title">THE FREEDOM</span>
+                <p class="nk-caption-desc">全球自由通行</p>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+
+    <section class="section-padding">
+        <div class="container container-wide">
+            <div class="text-center">
+                <span class="subtitle-en">SUCCESS STORIES</span>
+                <h2>從現在起, NσK® 團隊將為你帶來最大的財富</h2>
+                <div class="divider"></div>
+            </div>
+
+            <div class="testimonials">
+    
+    <div class="testi-card">
+        <div class="video-wrapper" style="margin-top: 0; box-shadow: none; border: none; padding: 10px;">
+            <script src="https://fast.wistia.com/embed/b3q7co67ui.js" async type="module"></script>
+            <wistia-player media-id="b3q7co67ui" seo="false" aspect="1.7777777777777777"></wistia-player>
+        </div>
+        <div class="testi-content">
+            <div class="testi-badge">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+                上月獲利
+            </div>
+            <span class="testi-amount">$178,013<span style="font-size: 0.4em; margin-left: 15px;">USD</span></span>
+            
+            <p class="testi-quote">
+                "原本是毫無金融交易經驗的高中老師，透過這個系統，我上個月的被動收入竟然超過了我十年的薪水總和。"
+            </p>
+            
+            <div class="testi-meta">
+                🇬🇧 SARA W.
+            </div>
+        </div>
+    </div><div class="testi-card">
+        <div class="video-wrapper" style="margin-top: 0; box-shadow: none; border: none; padding: 10px;">
+            <script src="https://fast.wistia.com/embed/b3q7co67ui.js" async type="module"></script>
+            <wistia-player media-id="b3q7co67ui" seo="false" aspect="1.7777777777777777"></wistia-player>
+        </div>
+        <div class="testi-content">
+            <div class="testi-badge">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+                上月獲利
+            </div>
+            <span class="testi-amount">$178,013<span style="font-size: 0.4em; margin-left: 15px;">USD</span></span>
+            
+            <p class="testi-quote">
+                "原本是毫無金融交易經驗的高中老師，透過這個系統，我上個月的被動收入竟然超過了我十年的薪水總和。"
+            </p>
+            
+            <div class="testi-meta">
+                🇬🇧 SARA W.
+            </div>
+        </div>
+    </div>
+
+    
+
+    
+
+</div>
+            
+            <div class="text-center" style="margin-top: 50px;">
+                 <p style="color: #fff;">不論你是真的有財務困難, 或者只是單純不滿意自己目前的薪水待遇, 都能夠使用系統後每月賺進 $100,000 美金以上</p>
+            </div>
+
+            <div class="marquee-wrapper marquee-lg">
+                <div class="text-center" style="margin-bottom: 20px;">
+                    <span class="subtitle-en" style="letter-spacing: 5px; font-size: 0.9rem;">REAL MEMBER RESULTS</span>
+                <h2>從現在起, NσK® 團隊將為你帶來最大的財富</h2></div>
+                
+                <div class="marquee-glow-line"></div>
+                
+                <div class="marquee-viewport">
+                    <div class="marquee-track">
+                        <div class="marquee-item"><img src="https://arftk.com/imgs/10m1.jpg"></div>
+                        <div class="marquee-item"><img src="https://arftk.com/imgs/10m2.jpg"></div>
+                        <div class="marquee-item"><img src="https://arftk.com/imgs/10m3.jpg"></div>
+                        <div class="marquee-item"><img src="https://arftk.com/imgs/10m4.jpg"></div>
+                        <div class="marquee-item"><img src="https://arftk.com/imgs/10m5.jpg"></div>
+                        <div class="marquee-item"><img src="https://arftk.com/imgs/10m1.jpg"></div>
+                        <div class="marquee-item"><img src="https://arftk.com/imgs/10m2.jpg"></div>
+                        <div class="marquee-item"><img src="https://arftk.com/imgs/10m3.jpg"></div>
+                        <div class="marquee-item"><img src="https://arftk.com/imgs/10m4.jpg"></div>
+                        <div class="marquee-item"><img src="https://arftk.com/imgs/10m5.jpg"></div>
+                    </div>
+                </div>
+                
+                <div class="marquee-glow-line"></div>
+            </div>
+
+            <div class="marquee-wrapper marquee-rect">
+                <div class="text-center" style="margin-bottom: 20px;">
+                    <span class="subtitle-en" style="letter-spacing: 5px; font-size: 0.9rem;">REAL MEMBER RESULTS</span>
+                <h2>從現在起, NσK® 團隊將為你帶來最大的財富</h2></div>
+                
+                <div class="marquee-glow-line"></div>
+                
+                <div class="marquee-viewport">
+                    <div class="marquee-track">
+                        <div class="marquee-item"><img src="https://arftk.com/imgs/10m1.jpg"></div>
+                        <div class="marquee-item"><img src="https://arftk.com/imgs/10m2.jpg"></div>
+                        <div class="marquee-item"><img src="https://arftk.com/imgs/10m3.jpg"></div>
+                        <div class="marquee-item"><img src="https://arftk.com/imgs/10m4.jpg"></div>
+                        <div class="marquee-item"><img src="https://arftk.com/imgs/10m5.jpg"></div>
+                        <div class="marquee-item"><img src="https://arftk.com/imgs/10m1.jpg"></div>
+                        <div class="marquee-item"><img src="https://arftk.com/imgs/10m2.jpg"></div>
+                        <div class="marquee-item"><img src="https://arftk.com/imgs/10m3.jpg"></div>
+                        <div class="marquee-item"><img src="https://arftk.com/imgs/10m4.jpg"></div>
+                        <div class="marquee-item"><img src="https://arftk.com/imgs/10m5.jpg"></div>
+                    </div>
+                </div>
+                
+                <div class="marquee-glow-line"></div>
+            </div>
+            
+
+            </div>
+    </section>
+
+    
+
+<section class="section-padding">
+        <div class="container container-wide">
+            <div class="text-center" style="margin-bottom: 50px;">
+                <span class="subtitle-en">SYSTEM REVEALED</span>
+                <div class="hero-text-only">
+                <h1>不論你的年齡與職業, 必定能在未來30天內賺進至少<br>
+                    <span class="hero-number-block">$3,291,684</span>
+                </h1>
+            </div>
+                
+                <div class="arrow-scroll">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+
+            <div class="video-wrapper deep-dive-hero-video" style="max-width: 900px; margin: 0 auto 80px;">
+                <script src="https://fast.wistia.com/embed/b3q7co67ui.js" async type="module"></script>
+                <wistia-player media-id="b3q7co67ui" seo="false" aspect="1.7777777777777777"></wistia-player>
+            </div>
+
+
+            <div class="text-center">
+                <span class="subtitle-en">REAL STORIES</span>
+                <h2>以下所有影片當中的人/事/言論皆為真實, 絕非特殊個案</h2>
+                <div class="divider"></div>
+            </div>
+            
+            <div class="testimonials">
+    
+    <div class="testi-card">
+        <div class="video-wrapper" style="margin-top: 0; box-shadow: none; border: none; padding: 10px;">
+            <script src="https://fast.wistia.com/embed/b3q7co67ui.js" async type="module"></script>
+            <wistia-player media-id="b3q7co67ui" seo="false" aspect="1.7777777777777777"></wistia-player>
+        </div>
+        <div class="testi-content">
+            <div class="testi-badge">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+                上月獲利
+            </div>
+            <span class="testi-amount">$178,013<span style="font-size: 0.4em; margin-left: 15px;">USD</span></span>
+            
+            <p class="testi-quote">
+                "原本是毫無金融交易經驗的高中老師，透過這個系統，我上個月的被動收入竟然超過了我十年的薪水總和。"
+            </p>
+            
+            <div class="testi-meta">
+                🇬🇧 SARA W.
+            </div>
+        </div>
+    </div><div class="testi-card">
+        <div class="video-wrapper" style="margin-top: 0; box-shadow: none; border: none; padding: 10px;">
+            <script src="https://fast.wistia.com/embed/b3q7co67ui.js" async type="module"></script>
+            <wistia-player media-id="b3q7co67ui" seo="false" aspect="1.7777777777777777"></wistia-player>
+        </div>
+        <div class="testi-content">
+            <div class="testi-badge">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+                上月獲利
+            </div>
+            <span class="testi-amount">$178,013<span style="font-size: 0.4em; margin-left: 15px;">USD</span></span>
+            
+            <p class="testi-quote">
+                "原本是毫無金融交易經驗的高中老師，透過這個系統，我上個月的被動收入竟然超過了我十年的薪水總和。"
+            </p>
+            
+            <div class="testi-meta">
+                🇬🇧 SARA W.
+            </div>
+        </div>
+    </div>
+
+    
+
+    
+
+</div>
+            
+            <div class="text-center" style="margin-top: 50px;">
+                <p>我們要求所有分享經驗的會員實名露面, 對自己的承諾負責, 也代表對系統獲利的絕對自信</p>
+            </div>
+        </div>
+    </section>
+
+
+<section class="parallax-section">
+    <div class="parallax-bg"></div>
+    
+    </section>
+
+    
+
+    
+    <section class="pricing-section section-padding">
+        <div class="container">
+
+            <div class="text-center">
+                <span class="subtitle-en">WHY WE DO THIS</span>
+                <div class="hero-text-only">
+                <h1>
+                    不論你的年齡與職業, 只要你專心看完這部18分鐘影片, 
+                    就必定能在未來30天內賺進至少 <br>
+                    <span class="hero-number-block">$3,291,684</span>
+                </h1>
+                
+                <div class="arrow-scroll">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+                
+                
+                
+            </div>
+
+            <div class="optin-gold-card">
+    
+    <div class="video-wrapper" style="margin-top: 0; border: none; border-bottom: 1px solid var(--nk-gold-dark);">
+        <script src="https://fast.wistia.com/embed/b3q7co67ui.js" async type="module"></script>
+                <wistia-player media-id="b3q7co67ui" seo="false" aspect="1.7777777777777777"></wistia-player>
+    </div>
+
+    <div class="optin-header">
+        <span class="subtitle-en">LIMITED ACCESS</span>
+        <h2 style="margin-bottom: 10px;">立即獲取系統權限</h2>
+        <p style="font-size: 1rem; margin: 0; color: #ccc;">名額有限，請填寫下方資料以鎖定您的席位</p>
+        <div class="arrow-scroll">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+
+    </div>
+
+    <div class="optin-body">
+    <div class="optin-steps-container">
+
+        <div class="optin-highlight-box">
+            <div class="step-header">
+                <span class="step-num">01</span>
+                <h3 class="step-title-text">根據你要投資的金額<br>購買 USDT</h3>
+            </div>
+
+            <ul class="process-list">
+                <li class="process-item static">
+                    <div class="process-icon-box">
+                        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+                    </div>
+                    <span class="process-text">若你本身就持有 USDT 也有習慣的購買方式，請按自己的習慣方式購買。</span>
+                </li>
+
+                <li class="process-item static">
+                    <div class="process-icon-box">
+                        <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-5 14H9v-2h6v2zm0-5H9V8h6v5z"/></svg>
+                    </div>
+                    <span class="process-text">若你完全沒使用過 USDT，請點擊下方按鈕觀看 USDT 購買教學。</span>
+                </li>
+            </ul>
+
+            <a href="YOUR_TUTORIAL_LINK_HERE" target="_blank" class="nk-btn">
+                點此觀看購買 USDT 教學
+            </a>
+        </div>
+
+        <div class="optin-highlight-box" id="step-02-box">
+            <div class="step-header">
+                <span class="step-num">02</span>
+                <h3 class="step-title-text">將 USDT 發送至<br>我們的收款地址</h3>
+            </div>
+
+            <ul class="process-list" id="process-list-anim">
+                
+                <li class="process-item anim-wait">
+                    <div class="process-icon-box">
+                        <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+                    </div>
+                    <span class="process-text">點擊下方按鈕聯絡線上人員，告知我們你要投資的金額</span>
+                </li>
+
+                <li class="process-item anim-wait">
+                    <div class="process-icon-box">
+                        <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                    </div>
+                    <span class="process-text">我們提供 USDT 收款地址給你</span>
+                </li>
+
+                <li class="process-item anim-wait">
+                    <div class="process-icon-box">
+                        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+                    </div>
+                    <span class="process-text">你把正確金額的 USDT 發送至收款地址</span>
+                </li>
+
+                <li class="process-item anim-wait">
+                    <div class="process-icon-box">
+                        <svg viewBox="0 0 24 24"><path d="M23 4.18l-12-3L8 2.05v3.42L6 3.61l-3 1.6 4.63 2.58-1.78 1.94c-1.49-.64-3.17-.67-4.66.08l1.45 6.27c1.37.52 2.92.51 4.54-.31l1.79-1.95.03 5.56 3-1.6v-3.41l8.52 6.77 2.45-3.09-5.97-4.75 3-3.26L23 4.18z"/></svg>
+                    </div>
+                    <span class="process-text">我們確認無誤即完成投資</span>
+                </li>
+
+            </ul>
+
+            <a href="YOUR_ADDRESS_LINK_HERE" target="_blank" class="nk-btn">
+                點此獲取地址
+            </a>
+        </div>
+
+    </div>
+</div>
+</div>
+
+
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <img src="https://arftk.com/imgs1/logo1.png" alt="Logo" style="width: 100px; margin: 0 auto 20px; filter: grayscale(1);">
+            <p style="font-size: 0.75rem;">© 2026 NσK® INVESTMENT GROUP. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        
+        /* =========================================
+           1. NAVBAR SCROLL EFFECT (導航欄捲動變色)
+           ========================================= */
+        const navbar = document.getElementById('navbar');
+        if (navbar) {
+            window.addEventListener('scroll', function() {
+                if (window.scrollY > 50) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
+            });
+        }
+
+        /* =========================================
+           2. VIDEO AUTOPLAY (影片進入畫面自動播放)
+           ========================================= */
+        const videoObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                const videos = entry.target.querySelectorAll('video');
+                videos.forEach(video => {
+                    if (entry.isIntersecting) {
+                        if (video.paused) {
+                            video.play().catch(e => console.error("Autoplay prevented", e));
+                        }
+                    } else {
+                        if (!video.paused) video.pause();
+                    }
+                });
+                
+                // 同步更新按鈕狀態
+                const btn = entry.target.querySelector('.play-pause-btn');
+                const icon = entry.target.querySelector('.icon');
+                if(btn && icon) {
+                    const mainVideo = entry.target.querySelector('video');
+                    if(mainVideo) {
+                        mainVideo.addEventListener('play', () => icon.src = "https://arftk.com/imgs/pause.svg");
+                        mainVideo.addEventListener('pause', () => icon.src = "https://arftk.com/imgs/play.svg");
+                    }
+                }
+            });
+        }, { threshold: 0.5 });
+
+        document.querySelectorAll('.video-block').forEach(block => {
+            videoObserver.observe(block);
+            const video = block.querySelector('video');
+            const btn = block.querySelector('.play-pause-btn');
+            if(btn && video) {
+                btn.addEventListener('click', () => {
+                    video.paused ? video.play() : video.pause();
+                });
+            }
+        });
+
+        /* =========================================
+           3. PRICING ANIMATION (費用劃掉 + 淡入)
+           ========================================= */
+        const pricingSection = document.querySelector('.pricing-body');
+        const pricingRows = document.querySelectorAll('.pricing-anim-row');
+        const finalBox = document.querySelector('.final-price-anim');
+
+        if (pricingSection && pricingRows.length > 0) {
+            const pricingObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        let delay = 0;
+                        pricingRows.forEach((row) => {
+                            setTimeout(() => row.classList.add('visible'), delay);
+                            setTimeout(() => row.classList.add('struck'), delay + 800);
+                            delay += 1200;
+                        });
+                        setTimeout(() => {
+                            if (finalBox) finalBox.classList.add('visible');
+                        }, delay);
+                        pricingObserver.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.2 });
+            pricingObserver.observe(pricingSection);
+        }
+
+        /* =========================================
+           4. UNIVERSAL SCROLL REVEAL (通用卷軸動畫)
+           ========================================= */
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    revealObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.2, rootMargin: "0px 0px -50px 0px" });
+
+        const targetSelectors = '.zigzag-item, .nk-stagger-item, .feature-list, .reveal-up';
+        document.querySelectorAll(targetSelectors).forEach(el => {
+            revealObserver.observe(el);
+        });
+
+        /* =========================================
+           5. CALCULATOR LOGIC (獲利試算器)
+           ========================================= */
+        const slider = document.getElementById('nk-profit-slider');
+        if (slider) {
+            const displayVal = document.getElementById('nk-slider-val');
+            const trackFill = document.getElementById('nk-track-fill');
+            const resTier = document.getElementById('nk-res-tier');
+            const resMin = document.getElementById('nk-res-min');
+            const resMax = document.getElementById('nk-res-max');
+            const subMin = document.getElementById('nk-sub-min');
+            const subMax = document.getElementById('nk-sub-max');
+
+            const tiers = [
+                { min: 50000, name: 'TIER 4', pMin: 3.50, pMax: 3.75 },
+                { min: 25000, name: 'TIER 3', pMin: 3.00, pMax: 3.25 },
+                { min: 10000, name: 'TIER 2', pMin: 2.50, pMax: 2.75 },
+                { min: 5500,  name: 'TIER 1', pMin: 2.00, pMax: 2.25 },
+                { min: 0,     name: '未達標',  pMin: 0,    pMax: 0 }
+            ];
+
+            function formatMoney(num) {
+                return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            }
+
+            function updateCalc() {
+                const val = parseInt(slider.value);
+                displayVal.innerText = formatMoney(val);
+                const percent = ((val - slider.min) / (slider.max - slider.min)) * 100;
+                trackFill.style.width = percent + '%';
+
+                let currentTier = tiers[tiers.length - 1]; 
+                for (let t of tiers) {
+                    if (val >= t.min) {
+                        currentTier = t;
+                        break;
+                    }
+                }
+
+                if (currentTier.pMin === 0) {
+                    resTier.innerHTML = "<span style='color:#666; font-size:1.2rem'>未達最低門檻</span>";
+                    resMin.innerText = "$0";
+                    resMax.innerText = "$0";
+                    subMin.innerText = "需大於 $5,500";
+                    subMax.innerText = "";
+                } else {
+                    resTier.innerText = currentTier.name;
+                    const minProfit = Math.floor(val * currentTier.pMin);
+                    const maxProfit = Math.floor(val * currentTier.pMax);
+                    resMin.innerText = "$" + formatMoney(minProfit);
+                    resMax.innerText = "$" + formatMoney(maxProfit);
+                    subMin.innerText = `(${currentTier.pMin * 100}%)`;
+                    subMax.innerText = `(${currentTier.pMax * 100}%)`;
+                }
+            }
+            slider.addEventListener('input', updateCalc);
+            updateCalc();
+        }
+
+        /* =========================================
+           6. INFINITE AMPLIFIER COUNTER (獲利狂飆動畫)
+           ========================================= */
+        const counterTarget = document.getElementById('nk-counter-target');
+        const ampWrapper = document.querySelector('.nk-infinite-amp-wrapper');
+        let hasAnimated = false;
+
+        function formatMoneyStr(num) {
+            return "$" + num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+
+        function runCounterAnimation() {
+            if (hasAnimated) return;
+            hasAnimated = true;
+
+            const endValue = 1000000; // 目標一百萬
+            const duration = 3000; // 動畫時間 3秒
+            const startTime = performance.now();
+
+            function step(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                
+                // 使用 easeOutExpo 讓結尾變慢，更有質感
+                const ease = (progress === 1) ? 1 : 1 - Math.pow(2, -10 * progress);
+                
+                const currentNum = Math.floor(ease * endValue);
+                if(counterTarget) counterTarget.innerText = formatMoneyStr(currentNum);
+
+                if (progress < 1) {
+                    requestAnimationFrame(step);
+                } else {
+                    if(counterTarget) counterTarget.innerText = formatMoneyStr(endValue);
+                }
+            }
+            requestAnimationFrame(step);
+        }
+
+        // 獨立的 Observer 避免衝突
+        const counterObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    runCounterAnimation();
+                    counterObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.5 });
+
+        if (ampWrapper) {
+            counterObserver.observe(ampWrapper);
+        }
+    });
+</script>
+<script>
+    // --- NσK CONTINUOUS PROFIT STREAM LOGIC ---
+    document.addEventListener("DOMContentLoaded", function() {
+        const particlesContainer = document.getElementById('nk-profit-particles-container');
+        let isStreamActive = true;
+
+        // 隨機數字生成器 (20000 - 50000)
+        function getRandomProfit() {
+            const min = 20000;
+            const max = 50000;
+            // 產生隨機數並取整到百位 (例如 23,400)，看起來較真實
+            const randomNum = Math.floor((Math.random() * (max - min + 1) + min) / 100) * 100;
+            return randomNum.toLocaleString('en-US');
+        }
+
+        // 創建並發射一個獲利粒子
+        function spawnProfitParticle() {
+            if (!particlesContainer || !isStreamActive) return;
+
+            // 1. 創建元素
+            const particle = document.createElement('div');
+            particle.classList.add('profit-particle');
+            
+            // 2. 填充內容 (金色 USDT SVG + 隨機數字)
+            // 注意：這裡同樣使用了 CSS class 來應用金色濾鏡
+            particle.innerHTML = `
+                <img src="https://arftk.com/imgs/usdt.svg" class="gold-usdt-svg" style="width:20px; height:20px;" alt="USDT">
+                <span class="particle-val">+$${getRandomProfit()}</span>
+            `;
+
+            // 3. 加入容器
+            particlesContainer.appendChild(particle);
+
+            // 4. 動畫結束後移除元素 (重要！防止記憶體洩漏)
+            particle.addEventListener('animationend', () => {
+                particle.remove();
+            });
+        }
+
+        // 使用 IntersectionObserver 在元素進入畫面時才開始動畫
+        const streamObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    isStreamActive = true;
+                } else {
+                    isStreamActive = false; // 離開畫面時暫停產生，節省效能
+                }
+            });
+        }, { threshold: 0.1 });
+
+        if (particlesContainer) {
+            streamObserver.observe(document.querySelector('.nk-stream-wrapper'));
+            
+            // 啟動無限循環：每隔 1.2 秒發射一個新粒子
+            // 可以調整時間間隔來改變密集度 (例如 800ms 更密集, 1500ms 更稀疏)
+            setInterval(spawnProfitParticle, 2000);
+            
+            // 初始先發射一個，避免等待
+            setTimeout(spawnProfitParticle, 500);
+        }
+    });
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // 針對步驟二清單的動畫偵測
+        const processObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const items = entry.target.querySelectorAll('.process-item');
+                    // 逐條加入 .active 類別
+                    items.forEach((item, index) => {
+                        setTimeout(() => {
+                            item.classList.add('active');
+                        }, index * 400); // 每 400 毫秒出現一條
+                    });
+                    processObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.3 }); // 進入畫面 30% 時觸發
+
+        const processList = document.getElementById('process-list-anim');
+        if (processList) {
+            processObserver.observe(processList);
+        }
+    });
+</script>
+</body>
+</html>
