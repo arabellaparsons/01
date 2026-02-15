@@ -1553,7 +1553,7 @@
 /* --- RWD: Mobile Specific --- */
 @media (max-width: 768px) {
     .nk-tier-grid-v2 { grid-template-columns: 1fr; gap: 30px; }
-    .nk-tier-container-v2 { padding: 0 20px !important; }
+    .nk-tier-container-v2 { padding: 0 10px !important; }
 
     .nk-tier-title { font-size: 2rem; }
     .nk-calc-title { font-size: 1.5rem; }
@@ -1722,8 +1722,8 @@
 }
 
 .nk-amp-header-minimal h3 {
-    font-family: var(--font-tc);
-    font-size: 1.8rem;
+    font-family: var(--nk-font-tc);
+    font-size: 1.5rem;
     margin-bottom: 40px;
     color: #fff;
 }
@@ -1941,8 +1941,8 @@
 }
 
 .nk-stream-header h3 {
-    font-family: var(--font-tc);
-    font-size: 1.8rem;
+    font-family: var(--nk-font-tc);
+    font-size: 1.5rem;
     margin-bottom: 40px;
     color: #fff;
 }
@@ -2379,7 +2379,7 @@
     font-family: var(--nk-font-tc);
     font-size: 1.8rem;
     color: #fff;
-    font-weight: 600;
+    font-weight: 700;
     line-height: 1.3;
     margin-bottom: 20px;
 }
@@ -2457,6 +2457,235 @@
         margin-top: 0;
     }
 }
+
+/* --- NσK MULTIPLIER FLOW BOX (PURE CSS ANIMATION) --- */
+.nk-multiplier-box {
+    margin-top: 60px;
+    padding-top: 40px;
+    border-top: 1px solid rgba(197, 160, 89, 0.2);
+    width: 100%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* 流程圖容器 */
+.nk-flow-chart {
+    position: relative;
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto 50px; /* 與下方 CTA 的距離 */
+    padding-left: 30px; /* 留給左側線條空間 */
+    display: flex;
+    flex-direction: column;
+    gap: 40px; /* 每個步驟的間距 */
+}
+
+/* --- 線條設定 --- */
+.flow-line-bg, .flow-line-gold {
+    position: absolute;
+    left: 9px; /* 線條位置 */
+    top: 10px;
+    width: 2px;
+    border-radius: 2px;
+}
+
+/* 背景暗線 (全長) */
+.flow-line-bg {
+    height: calc(100% - 20px);
+    background: #222;
+    z-index: 1;
+}
+
+/* 動畫金線 (會變長) */
+.flow-line-gold {
+    height: 0%;
+    background: var(--nk-gold-rich);
+    z-index: 2;
+    box-shadow: 0 0 10px var(--nk-gold-rich);
+    animation: lineFlowDown 6s infinite linear;
+}
+
+/* --- 步驟與節點 --- */
+.flow-step {
+    position: relative;
+    display: flex;
+    align-items: center;
+    z-index: 5; /* 確保在線條之上 */
+}
+
+/* 節點圓點 */
+.flow-node {
+    width: 20px;
+    height: 20px;
+    background: #0a0a0a;
+    border: 2px solid #333; /* 初始深灰 */
+    border-radius: 50%;
+    position: absolute;
+    left: -30px; /* 對齊線條 */
+    transition: 0.3s;
+    box-shadow: 0 0 10px rgba(0,0,0,0.8);
+    
+    /* 節點發光動畫 */
+    animation: nodeGlow 6s infinite;
+}
+
+/* 文字 */
+.flow-text {
+    font-family: var(--nk-font-tc);
+    font-size: 1.3rem; /* 字體大小 */
+    color: #444; /* 初始暗色 */
+    font-weight: 500;
+    margin-left: 10px;
+    letter-spacing: 1px;
+    transition: 0.3s;
+    
+    /* 文字點亮動畫 */
+    animation: textLightUp 6s infinite;
+}
+
+/* --- 動畫時序控制 (Staggered Delays) --- */
+/* 總時長 6秒，包含最後的停頓重置 */
+
+/* Step 1: 0% 開始 */
+.flow-step:nth-child(3) .flow-node,
+.flow-step:nth-child(3) .flow-text { animation-delay: 0s; }
+
+/* Step 2: 20% 開始 */
+.flow-step:nth-child(4) .flow-node,
+.flow-step:nth-child(4) .flow-text { animation-delay: 1.2s; }
+
+/* Step 3: 40% 開始 */
+.flow-step:nth-child(5) .flow-node,
+.flow-step:nth-child(5) .flow-text { animation-delay: 2.4s; }
+
+/* Step 4: 60% 開始 */
+.flow-step:nth-child(6) .flow-node,
+.flow-step:nth-child(6) .flow-text { animation-delay: 3.6s; }
+
+
+/* --- KEYFRAMES 動畫關鍵影格 --- */
+
+/* 金線往下流動 */
+@keyframes lineFlowDown {
+    0% { height: 0%; opacity: 1; }
+    70% { height: 100%; opacity: 1; } /* 流到底部 */
+    85% { height: 100%; opacity: 0; } /* 漸隱 */
+    100% { height: 0%; opacity: 0; } /* 重置 */
+}
+
+/* 節點變色 */
+@keyframes nodeGlow {
+    0% { border-color: #333; background: #0a0a0a; transform: scale(1); }
+    5% { border-color: var(--nk-gold-rich); background: var(--nk-gold-rich); transform: scale(1.2); box-shadow: 0 0 15px var(--nk-gold-rich); } /* 瞬間點亮 */
+    80% { border-color: var(--nk-gold-rich); background: var(--nk-gold-rich); transform: scale(1); box-shadow: 0 0 10px rgba(197,160,89,0.5); } /* 維持亮色 */
+    90% { border-color: #333; background: #0a0a0a; box-shadow: none; } /* 熄滅 */
+    100% { border-color: #333; background: #0a0a0a; }
+}
+
+/* 文字變色 */
+@keyframes textLightUp {
+    0% { color: #444; text-shadow: none; transform: translateX(0); }
+    5% { color: #fff; text-shadow: 0 0 10px var(--nk-gold-rich); transform: translateX(5px); } /* 瞬間變白金 */
+    80% { color: var(--nk-gold-rich); text-shadow: 0 0 5px rgba(197,160,89,0.3); transform: translateX(0); } /* 轉為金色維持 */
+    90% { color: #444; text-shadow: none; } /* 熄滅 */
+    100% { color: #444; }
+}
+
+
+/* --- URGENCY CTA (高強度行動呼籲) --- */
+.nk-urgency-cta {
+    background: linear-gradient(135deg, rgba(10,10,10,1) 0%, rgba(20,20,20,1) 100%);
+    border: 2px solid var(--nk-gold-rich); /* 強烈金框 */
+    box-shadow: 0 0 30px rgba(197, 160, 89, 0.15), inset 0 0 20px rgba(197, 160, 89, 0.05);
+    padding: 30px 20px;
+    width: 100%;
+    max-width: 600px;
+    text-align: center;
+    border-radius: 4px;
+    position: relative;
+    overflow: hidden;
+    animation: pulseBorder 3s infinite alternate; /* 邊框呼吸效果 */
+}
+
+/* 掃光特效 */
+.nk-urgency-cta::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 100%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(197, 160, 89, 0.1), transparent);
+    animation: sweepLight 4s infinite;
+}
+
+.urgency-icon {
+    font-size: 2rem;
+    margin-bottom: 10px;
+    display: block;
+    animation: shakeIcon 3s infinite;
+}
+
+.urgency-title {
+    font-family: var(--nk-font-tc);
+    color: #fff;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.urgency-desc {
+    font-size: 1.1rem;
+    color: #ccc;
+    line-height: 1.6;
+}
+
+.highlight-gold {
+    color: var(--nk-gold-rich);
+    font-weight: 700;
+    border-bottom: 1px solid var(--nk-gold-rich);
+    padding-bottom: 2px;
+}
+
+@keyframes pulseBorder {
+    0% { border-color: var(--nk-gold-dark); box-shadow: 0 0 10px rgba(197, 160, 89, 0.1); }
+    100% { border-color: var(--nk-gold-rich); box-shadow: 0 0 30px rgba(197, 160, 89, 0.4); }
+}
+
+@keyframes sweepLight {
+    0% { left: -100%; }
+    50% { left: 100%; }
+    100% { left: 100%; }
+}
+
+@keyframes shakeIcon {
+    0%, 90% { transform: rotate(0deg); }
+    92% { transform: rotate(-10deg); }
+    94% { transform: rotate(10deg); }
+    96% { transform: rotate(-10deg); }
+    98% { transform: rotate(10deg); }
+    100% { transform: rotate(0deg); }
+}
+
+/* RWD Mobile 調整 */
+@media (max-width: 768px) {
+    .nk-flow-chart {
+        padding-left: 25px;
+        gap: 30px;
+    }
+    .flow-text {
+        font-size: 1.1rem;
+    }
+    .nk-urgency-cta {
+        padding: 25px 15px;
+        border-width: 1px; /* 手機版框細一點 */
+    }
+    .urgency-title {
+        font-size: 1.3rem;
+    }
+}
 </style>
 </head>
 <body>
@@ -2493,7 +2722,7 @@
             <div class="text-center" style="margin-bottom: 50px;">
                 <span class="subtitle-en">SYSTEM REVEALED</span>
                 <h2>獨家揭密：系統實戰運作邏輯</h2>
-                <div class="divider"></div>
+                
                 <p>為何系統能做到精準的自動化獲利？</p>
                 
                 <div class="arrow-scroll">
@@ -2594,10 +2823,11 @@
 
  <div class="text-center" style="margin-bottom: 50px;">
                 <span class="subtitle-en">FUNDING METHOD</span>
-                <h2>會員能使用USDT快速從系統出入金</h2>
-                <div class="divider"></div>
-                <p>為何我們選擇以USDT作為出入金方式</p>
-                
+                <h2>會員們能透過最快速的方式從系統出入金</h2>
+                <div class="hero-text-only">
+                    <span class="hero-number-block">USDT</span>
+            </div>
+                <p>為何我們使用USDT作為出入金方式</p>
                 <div class="arrow-scroll">
                     <span></span>
                     <span></span>
@@ -2627,206 +2857,132 @@
             <div class="feature-title-group">
                 <span class="feature-reason-tag">LIVE PROOF</span>
                 <h3 class="feature-heading-styled">
-                    真實交易紀錄與獲利展示
+                    使用USDT出入金的獨特優勢
                     <div class="feature-heading-line"></div>
                 </h3>
             </div>
             
             <p>這不僅僅是理論，我們將毫無保留地展示 NσK® 系統在不同市場行情下的真實表現。</p>
             <p>下方圖片展示了系統在劇烈波動的「非農數據夜」以及平穩震盪盤整期的操作細節。您可以清楚看到 AI 如何精準捕捉每一個微小的獲利空間。</p>
-        </div>
 
-        <div class="nk-zigzag-gallery">
+            <div class="nk-zigzag-gallery">
             
-            <div class="zigzag-item">
-                <img src="https://arftk.com/imgs1/trading11.jpg" alt="Entry Point">
-                <div class="zigzag-overlay">
-                    <div class="zigzag-text">
-                        <span class="zigzag-title">精準進場點</span>
-                        <span class="zigzag-desc">AI 於回調低點精準佈局</span>
-                    </div>
-                </div>
+    <div class="zigzag-item">
+        <img src="https://arftk.com/imgs1/trading11.jpg" alt="Instant Arrival">
+        <div class="zigzag-overlay">
+            <div class="zigzag-text">
+                <span class="zigzag-title">秒級到帳</span>
+                <span class="zigzag-desc">告別傳統銀行的冗長審核，實現 24/7 全天候資金秒級劃轉，流動性由您全權掌握。</span>
             </div>
-
-            <div class="zigzag-item">
-                <img src="https://arftk.com/imgs/10m3.jpg" alt="Profit Secured">
-                <div class="zigzag-overlay">
-                    <div class="zigzag-text">
-                        <span class="zigzag-title">獲利鎖定</span>
-                        <span class="zigzag-desc">自動移動止損，確保利潤入袋</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="zigzag-item">
-                <img src="https://arftk.com/imgs1/sys0001.jpg" alt="Risk Control">
-                <div class="zigzag-overlay">
-                    <div class="zigzag-text">
-                        <span class="zigzag-title">風險控管</span>
-                        <span class="zigzag-desc">波動過大時自動暫停交易</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="zigzag-item">
-                <img src="https://arftk.com/imgs/10m5.jpg" alt="Final Result">
-                <div class="zigzag-overlay">
-                    <div class="zigzag-text">
-                        <span class="zigzag-title">最終獲利結算</span>
-                        <span class="zigzag-desc">單日累積收益達 12.5%</span>
-                    </div>
-                </div>
-            </div>
-
         </div>
-
-        <div class="nk-zigzag-gallery">
-            
-            <div class="zigzag-item">
-                <img src="https://arftk.com/imgs1/trading11.jpg" alt="Entry Point">
-                <div class="zigzag-overlay">
-                    <div class="zigzag-text">
-                        <span class="zigzag-title">精準進場點</span>
-                        <span class="zigzag-desc">AI 於回調低點精準佈局</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="zigzag-item">
-                <img src="https://arftk.com/imgs/10m3.jpg" alt="Profit Secured">
-                <div class="zigzag-overlay">
-                    <div class="zigzag-text">
-                        <span class="zigzag-title">獲利鎖定</span>
-                        <span class="zigzag-desc">自動移動止損，確保利潤入袋</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="zigzag-item">
-                <img src="https://arftk.com/imgs1/sys0001.jpg" alt="Risk Control">
-                <div class="zigzag-overlay">
-                    <div class="zigzag-text">
-                        <span class="zigzag-title">風險控管</span>
-                        <span class="zigzag-desc">波動過大時自動暫停交易</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="zigzag-item">
-                <img src="https://arftk.com/imgs/10m5.jpg" alt="Final Result">
-                <div class="zigzag-overlay">
-                    <div class="zigzag-text">
-                        <span class="zigzag-title">最終獲利結算</span>
-                        <span class="zigzag-desc">單日累積收益達 12.5%</span>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-
-        <div class="content-block" style="margin-top: 40px; border-top: 1px solid #222; padding-top: 30px;">
-            <p style="font-size: 0.9rem; color: #888;">
-                * 所有交易紀錄皆已經過第三方審計機構認證，確保數據真實不可篡改。
-            </p>
-        </div>
-
     </div>
+
+    <div class="zigzag-item">
+        <img src="https://arftk.com/imgs/10m3.jpg" alt="Transparent Settlement">
+        <div class="zigzag-overlay">
+            <div class="zigzag-text">
+                <span class="zigzag-title">結算透明</span>
+                <span class="zigzag-desc">鏈上數據實時可查，每一筆獲利結算皆公開透明且不可篡改，確保資金絕對歸屬。</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="zigzag-item">
+        <img src="https://arftk.com/imgs1/sys0001.jpg" alt="Payment Freedom">
+        <div class="zigzag-overlay">
+            <div class="zigzag-text">
+                <span class="zigzag-title">收款自由</span>
+                <span class="zigzag-desc">打破傳統金融國界限制與外匯管制，無論您身處世界何地，皆能即時調度您的全球資產。</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="zigzag-item">
+        <img src="https://arftk.com/imgs/10m5.jpg" alt="Tax Flexibility">
+        <div class="zigzag-overlay">
+            <div class="zigzag-text">
+                <span class="zigzag-title">稅務彈性</span>
+                <span class="zigzag-desc">加密資產具備高度隱私特性，為高淨值客戶提供極具優勢的資產配置與稅務規劃空間。</span>
+            </div>
+        </div>
+    </div>
+
 </div>
-
-
-            <div class="feature-row sticky-mode">
-    
-    <div class="sticky-video-col">
-        <div class="video-wrapper">
-            <div class="video-block">
-                <video src="https://arftk.com/imgs1/dash.mp4" muted loop playsinline></video>
-                <button class="play-pause-btn">
-                    <img decoding="async" class="icon" src="https://arftk.com/imgs/play.svg">
-                </button>
-            </div>
         </div>
-        <p style="margin-top: 20px; font-size: 0.9rem; text-align: center; color: #666;">
-            ▲ 系統實時運作監控畫面
-        </p>
-    </div>
-
-    <div class="feature-content scrollable-content-col">
 
         <div class="content-block">
             <div class="feature-title-group">
-            <span class="feature-reason-tag">ABSOLUTE ADVANTAGE</span>
-            <h3 class="feature-heading-styled">
-                AI 在金融交易的絕對優勢
-                <div class="feature-heading-line"></div>
-            </h3>
+                <span class="feature-reason-tag">LIVE PROOF</span>
+                <h3 class="feature-heading-styled">
+                    我們如何確保你的資金安全?
+                    <div class="feature-heading-line"></div>
+                </h3>
+            </div>
+            
+            <p>這不僅僅是理論，我們將毫無保留地展示 NσK® 系統在不同市場行情下的真實表現。</p>
+            <p>下方圖片展示了系統在劇烈波動的「非農數據夜」以及平穩震盪盤整期的操作細節。您可以清楚看到 AI 如何精準捕捉每一個微小的獲利空間。</p>
+
+            <div class="nk-zigzag-gallery">
+            
+            <div class="zigzag-item">
+                <img src="https://arftk.com/imgs1/trading11.jpg" alt="Entry Point">
+                <div class="zigzag-overlay">
+                    <div class="zigzag-text">
+                        <span class="zigzag-title">大量客戶信任</span>
+                        <span class="zigzag-desc">AI 於回調低點精準佈局</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="zigzag-item">
+                <img src="https://arftk.com/imgs/10m3.jpg" alt="Profit Secured">
+                <div class="zigzag-overlay">
+                    <div class="zigzag-text">
+                        <span class="zigzag-title">頂級合作夥伴</span>
+                        <span class="zigzag-desc">自動移動止損，確保利潤入袋</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="zigzag-item">
+                <img src="https://arftk.com/imgs1/sys0001.jpg" alt="Risk Control">
+                <div class="zigzag-overlay">
+                    <div class="zigzag-text">
+                        <span class="zigzag-title">專業團隊操作</span>
+                        <span class="zigzag-desc">波動過大時自動暫停交易</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="zigzag-item">
+                <img src="https://arftk.com/imgs/10m5.jpg" alt="Final Result">
+                <div class="zigzag-overlay">
+                    <div class="zigzag-text">
+                        <span class="zigzag-title">多年累積名聲</span>
+                        <span class="zigzag-desc">單日累積收益達 12.5%</span>
+                    </div>
+                </div>
+            </div>
+
         </div>
 
-        <ul class="feature-list" id="animated-feature-list" style="margin: 0; width: 100%;">
-            <li style="padding: 15px; font-size: 1.1rem;">
-                直接連接至多個大型資料庫，毫秒抓取千萬筆數據
-            </li>
-            <li style="padding: 15px; font-size: 1.1rem;">
-                在數秒之內，完成人類需要數日才能完成的分析與計算
-            </li>
-            <li style="padding: 15px; font-size: 1.1rem;">
-                沒有任何情緒與體力因素，100% 按照交易策略執行
-            </li>
-            <li style="padding: 15px; font-size: 1.1rem;">
-                計算與執行不但快速，並且比人類更精準，無誤差
-            </li>
-        </ul>
+        <p style="margin-top: 50px;">下方圖片展示了系統在劇烈波動的「非農數據夜」以及平穩震盪盤整期的操作細節。您可以清楚看到 AI 如何精準捕捉每一個微小的獲利空間。</p>
 
 
-        </div>
-
-
-        
-        <div class="content-block">
-            <span class="feature-reason-tag">STEP 01</span>
-            <h3 class="sticky-content-title">訊號偵測與過濾</h3>
-            <p>
-                系統首先會掃描全球 12 大交易所的即時報價，過濾掉 99% 的無效雜訊。只有當價格波動符合「高機率獲利模型」時，AI 才會將其標記為潛在機會。
-            </p>
-            <div class="video-wrapper" style="margin-top: 20px;">
+        <div class="video-wrapper" style="margin-top: 20px;">
                 <div class="video-block">
                     <video src="https://arftk.com/imgs1/abm.mp4" muted loop playsinline></video>
                     <button class="play-pause-btn"><img class="icon" src="https://arftk.com/imgs/play.svg"></button>
                 </div>
             </div>
+
         </div>
 
-        <div class="content-block">
-            <span class="feature-reason-tag">STEP 02</span>
-            <h3 class="sticky-content-title">資金部位計算</h3>
-            <p>
-                確認訊號後，第二步是風險控管。系統會根據您帳戶目前的總資金，自動計算出最安全的進場手數，確保單筆交易風險不超過總資產的 2%。
-            </p>
-            <div class="video-wrapper" style="margin-top: 20px;">
-                <div class="video-block">
-                    <video src="https://arftk.com/imgs1/rrm.mp4" muted loop playsinline></video>
-                    <button class="play-pause-btn"><img class="icon" src="https://arftk.com/imgs/play.svg"></button>
-                </div>
-            </div>
-        </div>
-
-        <div class="content-block">
-            <span class="feature-reason-tag">STEP 03</span>
-            <h3 class="sticky-content-title">自動出場獲利</h3>
-            <p>
-                進場的瞬間，止損點 (Stop Loss) 與獲利點 (Take Profit) 便已同時設定完成。一旦達到預設獲利目標，系統毫秒級自動平倉，將利潤鎖入您的帳戶。
-            </p>
-            <div class="video-wrapper" style="margin-top: 20px;">
-                <div class="video-block">
-                    <video src="https://arftk.com/imgs1/axis.mp4" muted loop playsinline></video>
-                    <button class="play-pause-btn"><img class="icon" src="https://arftk.com/imgs/play.svg"></button>
-                </div>
-            </div>
-        </div>
 
     </div>
-
-
 </div>
+
+
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
@@ -2849,11 +3005,35 @@
     });
 </script>
 
+<div class="marquee-wrapper marquee-lg">
+                <div class="text-center" style="margin-bottom: 20px;">
+                    <span class="subtitle-en" style="letter-spacing: 5px; font-size: 0.9rem;">REAL MEMBER RESULTS</span>
+                <h2>從現在起, NσK® 團隊將為你帶來最大的財富</h2></div>
+                
+                <div class="marquee-glow-line"></div>
+                
+                <div class="marquee-viewport">
+                    <div class="marquee-track">
+                        <div class="marquee-item"><img src="https://arftk.com/imgs/10m1.jpg"></div>
+                        <div class="marquee-item"><img src="https://arftk.com/imgs/10m2.jpg"></div>
+                        <div class="marquee-item"><img src="https://arftk.com/imgs/10m3.jpg"></div>
+                        <div class="marquee-item"><img src="https://arftk.com/imgs/10m4.jpg"></div>
+                        <div class="marquee-item"><img src="https://arftk.com/imgs/10m5.jpg"></div>
+                        <div class="marquee-item"><img src="https://arftk.com/imgs/10m1.jpg"></div>
+                        <div class="marquee-item"><img src="https://arftk.com/imgs/10m2.jpg"></div>
+                        <div class="marquee-item"><img src="https://arftk.com/imgs/10m3.jpg"></div>
+                        <div class="marquee-item"><img src="https://arftk.com/imgs/10m4.jpg"></div>
+                        <div class="marquee-item"><img src="https://arftk.com/imgs/10m5.jpg"></div>
+                    </div>
+                </div>
+                
+                <div class="marquee-glow-line"></div>
+            </div>
 
 <div class="nk-stream-wrapper">
     <div class="nk-stream-header">
         <span class="subtitle-en">CASH FLOW MECHANISM</span>
-        <h3>一次性存款，不間斷獲利流</h3>
+        <h3>一次性存款,永久性獲利</h3>
     </div>
 
     <div class="nk-stream-stage">
@@ -2898,58 +3078,6 @@
     </section>
 
 
-<section class="nk-stagger-section">
-    <div class="container text-center" style="margin-bottom: 50px;">
-        <span class="subtitle-en">LIFESTYLE GALLERY</span>
-        <h2>加入會員後的真實生活改變</h2>
-        <div class="divider"></div>
-    </div>
-
-    <div class="nk-stagger-grid">
-        
-        <div class="nk-stagger-item">
-            <img src="https://arftk.com/imgs/10m1.jpg" alt="Luxury Car">
-            <div class="nk-stagger-overlay">
-                <div class="nk-stagger-text">
-                    <span class="nk-stagger-title">頂級超跑</span>
-                    <span class="nk-stagger-desc">從負債累累到擁有夢想車庫</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="nk-stagger-item">
-            <img src="https://arftk.com/imgs/10m2.jpg" alt="First Class">
-            <div class="nk-stagger-overlay">
-                <div class="nk-stagger-text">
-                    <span class="nk-stagger-title">環球旅行</span>
-                    <span class="nk-stagger-desc">隨時出發，體驗頭等艙的奢華</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="nk-stagger-item">
-            <img src="https://arftk.com/imgs/10m3.jpg" alt="Mansion">
-            <div class="nk-stagger-overlay">
-                <div class="nk-stagger-text">
-                    <span class="nk-stagger-title">湖畔豪宅</span>
-                    <span class="nk-stagger-desc">給家人最安全舒適的居住環境</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="nk-stagger-item">
-            <img src="https://arftk.com/imgs/10m5.jpg" alt="Freedom">
-            <div class="nk-stagger-overlay">
-                <div class="nk-stagger-text">
-                    <span class="nk-stagger-title">時間自由</span>
-                    <span class="nk-stagger-desc">不再被工作綁架，享受陪伴的時光</span>
-                </div>
-            </div>
-        </div>
-
-    </div>
-</section>
-
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         const staggerObserver = new IntersectionObserver((entries) => {
@@ -2970,14 +3098,36 @@
 
 
 <section class="nk-tier-section">
+
     <div class="nk-tier-container-v2">
+        <div class="text-center" style="margin-bottom: 50px;">
+                <span class="subtitle-en">SYSTEM REVEALED</span>
+                <div class="hero-text-only">
+                <h1>在這部影片中我們將深入介紹<br>
+                    <span class="hero-number-block">NσK® SYSTEM</span>
+                </h1>
+            </div>
+                
+                <div class="arrow-scroll">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+
+            <div class="video-wrapper deep-dive-hero-video" style="max-width: 900px; margin: 0 auto 80px;">
+                <script src="https://fast.wistia.com/embed/b3q7co67ui.js" async type="module"></script>
+                <wistia-player media-id="b3q7co67ui" seo="false" aspect="1.7777777777777777"></wistia-player>
+            </div>
 
         <div class="nk-infinite-amp-wrapper">
     <div class="nk-amp-overlay-gradient"></div>
     
     <div class="nk-amp-header-minimal">
-        <span class="subtitle-en">SYSTEM MECHANISM</span>
-        <h3>資金池放大效應示意</h3>
+        <span class="subtitle-en">FRACTIONAL SHARES</span>
+        <h3>你投資的金額越高,你的獲利金額將成「倍數」增長</h3>
+        <p>不只是成正比,而是呈現倍數關係<br>因為我們的Fractional Shares機制讓每一位會員都能得到系統資金池的部份輔助資金</p>
+        <h3>你的投資金額可能只有4-5位數美金,但系統實際替你操作的是6-7位數美金</h3>
     </div>
 
     <div class="nk-infinite-stage">
@@ -3021,7 +3171,55 @@
             </div>
         </div>
     </div>
+
+    <div class="nk-multiplier-box">
+    
+    <div class="nk-flow-chart">
+        <div class="flow-line-bg"></div>
+        <div class="flow-line-gold"></div>
+
+        <div class="flow-step">
+            <div class="flow-node"></div>
+            <div class="flow-text">你投資金額越高</div>
+        </div>
+
+        <div class="flow-step">
+            <div class="flow-node"></div>
+            <div class="flow-text">從系統資金池得到更龐大的資金</div>
+        </div>
+
+        <div class="flow-step">
+            <div class="flow-node"></div>
+            <div class="flow-text">每筆交易獲利呈現倍數增長</div>
+        </div>
+
+        <div class="flow-step">
+            <div class="flow-node"></div>
+            <div class="flow-text">每月提領金額翻倍</div>
+        </div>
+    </div>
+
+    <div class="nk-urgency-cta">
+        <div class="urgency-icon">⚠️</div>
+        <h4 class="urgency-title">把握唯一一次的投資機會</h4>
+        <p class="urgency-desc">
+            如果想得到最高獲利，請務必<span class="highlight-gold">存入您能負擔的最大資金</span>。
+            <br>這是改變階級的唯一途徑。
+        </p>
+    </div>
+
 </div>
+
+</div>
+
+<div class="text-center">
+                <span class="subtitle-en">TIER EXPLAINED</span>
+                <h2>最低存款金額</h2>
+                <span class="hero-number-block">$5,500<span style="font-size: 0.4em; margin-left: 15px;">USDT</span></span>
+                <h2>根據你的存款金額,一共分成4個等級的收益</h2>
+                <div class="divider"></div>
+            </div>
+
         <div class="nk-tier-grid-v2">
             <div class="nk-tier-card-v2 tier-1">
                 <div class="nk-header-box">
@@ -3215,58 +3413,6 @@
     </div>
 </section>
 
-
-    <section class="section-padding nk-collage-section">
-    <div class="container text-center">
-        <span class="subtitle-en">LIFESTYLE UPGRADE</span>
-        <h2>加入會員後的真實生活樣貌</h2>
-        <div class="divider"></div>
-    </div>
-
-    <div class="nk-collage-wrapper">
-        
-        <div class="nk-collage-item">
-            <img src="https://arftk.com/imgs/10m1.jpg" alt="Luxury Car">
-            <div class="nk-collage-caption">
-                <span class="nk-caption-title">THE ASSETS</span>
-                <p class="nk-caption-desc">超跑與資產配置</p>
-            </div>
-        </div>
-
-        <div class="nk-collage-item">
-            <img src="https://arftk.com/imgs/10m3.jpg" alt="Mansion">
-            <div class="nk-collage-caption">
-                <span class="nk-caption-title">THE MANSION</span>
-                <p class="nk-caption-desc">頂級居住環境</p>
-            </div>
-        </div>
-
-        <div class="nk-collage-item">
-            <img src="https://arftk.com/imgs1/trading11.jpg" alt="Trading">
-            <div class="nk-collage-caption">
-                <span class="nk-caption-title">THE SYSTEM</span>
-                <p class="nk-caption-desc">全自動獲利監控</p>
-            </div>
-        </div>
-
-        <div class="nk-collage-item">
-            <img src="https://arftk.com/imgs/10m5.jpg" alt="Travel">
-            <div class="nk-collage-caption">
-                <span class="nk-caption-title">THE FREEDOM</span>
-                <p class="nk-caption-desc">全球自由通行</p>
-            </div>
-        </div>
-        
-        <div class="nk-collage-item">
-            <img src="https://arftk.com/imgs/10m5.jpg" alt="Travel">
-            <div class="nk-collage-caption">
-                <span class="nk-caption-title">THE FREEDOM</span>
-                <p class="nk-caption-desc">全球自由通行</p>
-            </div>
-        </div>
-
-    </div>
-</section>
 
 
     <section class="section-padding">
