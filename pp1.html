@@ -335,7 +335,7 @@
     padding: 4px 18px; /* 膠囊的厚度與寬度 */
     border-radius: 50px; /* 極致圓角創造膠囊感 */
     
-    /* 奢華黑金漸層背景 (稍微透一點，製造層次感) */
+    /* 奢華黑金漸層背景 (稍微透一點,製造層次感) */
     background: linear-gradient(135deg, rgba(197, 160, 89, 0.15) 0%, rgba(5, 5, 5, 0.8) 100%);
     border: 1px solid rgba(197, 160, 89, 0.4); /* 微亮的金邊 */
     box-shadow: 0 5px 15px rgba(0,0,0,0.3), inset 0 0 10px rgba(197, 160, 89, 0.1); /* 外部陰影 + 內部微光 */
@@ -345,7 +345,7 @@
     font-weight: 500;
     letter-spacing: 1px;
     margin-bottom: 0px; /* 與下方大數字拉開距離 */
-    backdrop-filter: blur(5px); /* 稍微模糊背景，增加高級感 (支援的瀏覽器) */
+    backdrop-filter: blur(5px); /* 稍微模糊背景,增加高級感 (支援的瀏覽器) */
 }
 
 /* SVG Icon 樣式 */
@@ -439,12 +439,12 @@
             font-family: var(--nk-font-en); 
             font-size: 1.6rem; 
             
-            /* 【修改】預設改為亮色，不預先劃線 */
+            /* 【修改】預設改為亮色,不預先劃線 */
             color: var(--nk-gold-rich); 
             text-decoration: none !important; /* 確保沒有預設刪除線 */
             position: relative; /* 為了讓偽元素定位 */
             display: inline-block;
-            transition: color 0.5s ease 0.3s; /* 延遲文字變灰，配合畫線動畫 */
+            transition: color 0.5s ease 0.3s; /* 延遲文字變灰,配合畫線動畫 */
         }
 
         /* 偽元素：動態畫線 */
@@ -467,7 +467,7 @@
             transition: opacity 0.6s ease-out, transform 0.6s ease-out;
         }
 
-        /* 狀態 1: Fade In Up (只顯示，還沒劃掉) */
+        /* 狀態 1: Fade In Up (只顯示,還沒劃掉) */
         .pricing-anim-row.visible {
             opacity: 1;
             transform: translateY(0);
@@ -478,7 +478,7 @@
             color: var(--nk-gold-dark);
         }
         .pricing-anim-row.struck .row-value::after {
-            width: 100%; /* 線條寬度變 100%，產生畫線效果 */
+            width: 100%; /* 線條寬度變 100%,產生畫線效果 */
         }
 
         /* --- 7.3 FINAL PRICE BOX ANIMATION --- */
@@ -813,7 +813,7 @@
     justify-content: center;
     align-items: center;
     flex-wrap: wrap;
-    max-width: 1200px; /* 因為變寬了，容器也稍微加寬 */
+    max-width: 1200px; /* 因為變寬了,容器也稍微加寬 */
     margin: 40px auto 0;
     padding: 20px;
 }
@@ -832,8 +832,8 @@
     overflow: hidden;
     
     /* --- 調整灰階亮度的地方 (這裡是關鍵) --- */
-    /* grayscale(30%) = 只有 30% 是灰的，70% 是原色 (比原本亮很多) */
-    /* contrast(1.1) = 增加一點對比度，讓黑色更黑 */
+    /* grayscale(30%) = 只有 30% 是灰的,70% 是原色 (比原本亮很多) */
+    /* contrast(1.1) = 增加一點對比度,讓黑色更黑 */
     filter: grayscale(30%) contrast(1.1); 
 }
 
@@ -845,7 +845,7 @@
 }
 
 /* --- 重疊與旋轉邏輯 (4x3 專用版) --- */
-/* 因為變成橫向，重疊幅度(margin-right)稍微調整 */
+/* 因為變成橫向,重疊幅度(margin-right)稍微調整 */
 .nk-collage-item:nth-child(1) {
     transform: rotate(-3deg) translateY(10px);
     z-index: 1;
@@ -975,7 +975,7 @@
     transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     cursor: pointer;
     overflow: hidden;
-    filter: grayscale(100%) contrast(1.1); /* 預設全黑白，更冷酷 */
+    filter: grayscale(100%) contrast(1.1); /* 預設全黑白,更冷酷 */
     
     /* 這裡設定稍微的重疊 (減少重疊量) */
     margin: 0 -10px; 
@@ -1059,7 +1059,7 @@
 .feature-list li {
     opacity: 0;
     transform: translateX(-30px);
-    /* 使用貝茲曲線讓移動更有質感，不是死板的直線 */
+    /* 使用貝茲曲線讓移動更有質感,不是死板的直線 */
     transition: all 0.6s cubic-bezier(0.215, 0.610, 0.355, 1.000); 
 }
 
@@ -1076,12 +1076,12 @@
 .feature-list.visible li:nth-child(4) { transition-delay: 0.7s; }
 .feature-list.visible li:nth-child(5) { transition-delay: 0.9s; }
 
-/* --- STICKY FEATURE ROW (左側影片固定，右側長內容捲動) --- */
+/* --- STICKY FEATURE ROW (左側影片固定,右側長內容捲動) --- */
 
 /* 僅在桌面版生效 (大於 768px) */
 @media (min-width: 769px) {
     .feature-row.sticky-mode {
-        /* 關鍵 1: 改為靠上對齊，不然 sticky 會失效 (預設是 center) */
+        /* 關鍵 1: 改為靠上對齊,不然 sticky 會失效 (預設是 center) */
         align-items: start; 
     }
 
@@ -1090,7 +1090,7 @@
         position: sticky;
         top: 100px; /* 距離頂部 100px (避開 Header) */
         
-        /* 稍微調整一下左邊寬度，讓右邊多一點空間放長內容 */
+        /* 稍微調整一下左邊寬度,讓右邊多一點空間放長內容 */
         width: 100%; 
     }
 }
@@ -1190,16 +1190,16 @@
 .nk-input-field::placeholder {
     color: #ccc !important;           /* 強制設定顏色為 #ccc */
     font-family: var(--nk-font-tc);   /* 使用 Noto Serif TC (襯線體) */
-    font-weight: 300;                 /* 字體細一點，比較優雅 */
-    font-style: italic;               /* 斜體，增加質感 (選用) */
-    opacity: 0.7;                     /* 稍微透一點，不要搶走輸入框的風采 */
+    font-weight: 300;                 /* 字體細一點,比較優雅 */
+    font-style: italic;               /* 斜體,增加質感 (選用) */
+    opacity: 0.7;                     /* 稍微透一點,不要搶走輸入框的風采 */
     letter-spacing: 1px;
 }
 
 .nk-input-field {
     width: 100%;
     padding: 18px;
-    /* 讓輸入框深一點，對比 highlight box */
+    /* 讓輸入框深一點,對比 highlight box */
     background-color: rgba(0, 0, 0, 0.6);
     border: 1px solid #444;
     color: #fff;
@@ -1263,7 +1263,7 @@
     opacity: 0;
     transform: translateY(60px); 
     
-    /* 設定過渡動畫：0.8秒，使用優雅的貝茲曲線 */
+    /* 設定過渡動畫：0.8秒,使用優雅的貝茲曲線 */
     transition: opacity 0.8s ease-out, transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), border-color 0.3s, box-shadow 0.3s;
 }
 
@@ -1286,7 +1286,7 @@
 .nk-stagger-item:hover {
     border-color: var(--nk-gold-rich);
     box-shadow: 0 10px 40px rgba(197, 160, 89, 0.2);
-    /* Hover 時不改變 transform 位置，只改變 scale (在 img 上做) */
+    /* Hover 時不改變 transform 位置,只改變 scale (在 img 上做) */
 }
 
 /* 圖片本體 */
@@ -1317,10 +1317,10 @@
     transition: all 0.8s cubic-bezier(0.215, 0.610, 0.355, 1.000);
 }
 
-/* 當卡片浮現後，文字也跟著浮現 (但在圖片動畫之後) */
+/* 當卡片浮現後,文字也跟著浮現 (但在圖片動畫之後) */
 .nk-stagger-item.visible .nk-stagger-text {
     opacity: 1; transform: translateX(0);
-    transition-delay: 0.4s; /* 等圖片浮上來之後，文字再滑進來 */
+    transition-delay: 0.4s; /* 等圖片浮上來之後,文字再滑進來 */
 }
 
 .nk-stagger-title { font-size: 1.5rem; font-weight: 700; margin-bottom: 8px; display: block; color: #fff; }
@@ -1330,7 +1330,7 @@
 @media (max-width: 768px) {
     .nk-stagger-grid { grid-template-columns: 1fr; gap: 20px; }
     .nk-stagger-item { height: 300px; margin-top: 0 !important; }
-    /* 手機版取消延遲，讓使用者滑到就直接顯示，反應比較快 */
+    /* 手機版取消延遲,讓使用者滑到就直接顯示,反應比較快 */
     .nk-stagger-item:nth-child(even) { transition-delay: 0s; }
 }
 
@@ -1580,14 +1580,14 @@
 .nk-zigzag-gallery {
     display: flex;
     flex-direction: column;
-    gap: 60px; /* 拉開間距，讓每一張更有呼吸感 */
+    gap: 60px; /* 拉開間距,讓每一張更有呼吸感 */
     margin-top: 40px;
     width: 100%;
 }
 
 .zigzag-item {
     position: relative;
-    width: 75%; /* 桌面版寬度，製造左右空間 */
+    width: 75%; /* 桌面版寬度,製造左右空間 */
     aspect-ratio: 4 / 3; /* 強制 4:3 比例 */
     border: 1px solid var(--nk-gold-dark);
     background: #000;
@@ -1607,7 +1607,7 @@
     height: 100%;
     object-fit: cover;
     transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    filter: grayscale(20%); /* 預設微灰，更有質感 */
+    filter: grayscale(20%); /* 預設微灰,更有質感 */
 }
 
 /* --- 動畫觸發狀態 (由 JS 加入 .visible) --- */
@@ -1642,7 +1642,7 @@
     left: 0; 
     width: 100%; 
     height: 60%; /* 遮罩高度 */
-    /* 從透明到半黑到全黑的漸層，確保文字清晰 */
+    /* 從透明到半黑到全黑的漸層,確保文字清晰 */
     background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.6) 50%, transparent 100%);
     display: flex; 
     flex-direction: column; 
@@ -1659,11 +1659,11 @@
     transition: all 0.8s cubic-bezier(0.215, 0.610, 0.355, 1.000);
 }
 
-/* 當圖片浮現 (.visible) 後，文字才開始動作 */
+/* 當圖片浮現 (.visible) 後,文字才開始動作 */
 .zigzag-item.visible .zigzag-text {
     opacity: 1; 
     transform: translateX(0);
-    transition-delay: 0.4s; /* ★關鍵：延遲 0.4秒，等圖片定位後文字再滑入 */
+    transition-delay: 0.4s; /* ★關鍵：延遲 0.4秒,等圖片定位後文字再滑入 */
 }
 
 /* 文字樣式 */
@@ -1693,12 +1693,118 @@
         width: 100%; /* 手機版強制滿寬 */
         align-self: center !important; /* 取消左右交錯 */
         margin-bottom: 0;
-        /* 手機版取消延遲，讓反應更直接 */
+        /* 手機版取消延遲,讓反應更直接 */
         transition-delay: 0s !important; 
     }
     .zigzag-title { font-size: 1.3rem; }
 }
 
+/* --- NK TECH HUD CORE --- */
+
+/* 1. 科技標籤 (呼吸燈 Loop) */
+.nk-hud-tag {
+    display: inline-flex; align-items: center; gap: 8px;
+    border: 1px solid var(--nk-gold-dark); 
+    background: rgba(197, 160, 89, 0.05);
+    padding: 6px 14px; font-family: var(--nk-font-en); 
+    font-size: 0.8rem; color: var(--nk-gold-rich); 
+    letter-spacing: 2px; margin-bottom: 20px;
+    box-shadow: 0 0 10px rgba(197, 160, 89, 0.05);
+    backdrop-filter: blur(5px);
+}
+.nk-live-dot {
+    width: 6px; height: 6px; background: #00ff41; border-radius: 50%;
+    box-shadow: 0 0 8px #00ff41; animation: nk-pulse 2s infinite;
+}
+.nk-live-dot.red { background: #ff003c; box-shadow: 0 0 8px #ff003c; }
+
+/* 2. 數據面板 (雷達掃描 Loop) */
+.nk-stat-panel {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 15px;
+    margin: 20px 0; padding: 20px;
+    background: linear-gradient(180deg, rgba(20,20,20,0.6) 0%, rgba(0,0,0,0.8) 100%);
+    border: 1px solid #222; position: relative; overflow: hidden;
+}
+/* 掃描線動畫 */
+.nk-stat-panel::after {
+    content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.03), transparent);
+    animation: nk-radar-scan 3s infinite linear; pointer-events: none;
+}
+.nk-stat-val {
+    display: block; font-family: var(--nk-font-en); font-size: 1.6rem; 
+    color: #fff; line-height: 1; margin-bottom: 5px; font-weight: 700;
+    text-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
+.nk-stat-lbl { font-size: 0.7rem; color: #666; letter-spacing: 1px; text-transform: uppercase; }
+
+/* 3. AXIS 讀取條 (無限跑動 Loop) */
+.nk-loading-track { width: 100%; height: 2px; background: #333; margin-top: 10px; position: relative; overflow: hidden; }
+.nk-loading-bar {
+    position: absolute; left: 0; top: 0; height: 100%; width: 40%;
+    background: var(--nk-gold-rich);
+    box-shadow: 0 0 10px var(--nk-gold-rich);
+    animation: nk-bar-loop 2s infinite ease-in-out;
+}
+
+/* 4. 監控螢幕外框 */
+.nk-screen-frame {
+    border: 0px solid #333; padding: 0px;
+    margin-top: 50px; position: relative;
+}
+.nk-screen-label {
+    position: absolute; top: -20px; right: 0;
+    font-size: 0.65rem; color: #444; font-family: sans-serif; 
+    letter-spacing: 1px; font-weight: bold; display: flex; align-items: center; gap: 5px;
+}
+.nk-rec-dot { width: 6px; height: 6px; background: #d00; border-radius: 50%; animation: nk-blink 1s infinite; }
+
+/* 動畫 Keyframes */
+@keyframes nk-pulse { 0% { opacity: 0.5; } 50% { opacity: 1; box-shadow: 0 0 12px currentColor; } 100% { opacity: 0.5; } }
+@keyframes nk-radar-scan { 0% { left: -100%; } 100% { left: 200%; } }
+@keyframes nk-bar-loop { 0% { left: -40%; } 100% { left: 100%; } }
+@keyframes nk-blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+/* --- MOBILE RWD FIX (貼在最下方) --- */
+@media (max-width: 768px) {
+    
+    /* 1. 強制限制所有新元件寬度,防止撐開 */
+    .feature-content, 
+    .nk-stat-panel, 
+    .nk-screen-frame, 
+    .nk-hud-tag {
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important; /* 確保 padding 算在寬度內 */
+    }
+
+    /* 2. 數據面板改為「直向」排列 (原本是左右兩欄,手機會太擠) */
+    .nk-stat-panel {
+        grid-template-columns: 1fr !important; /* 強制變單欄 */
+        gap: 15px !important;
+        padding: 15px !important; /* 縮小內距 */
+        margin: 15px 0 !important;
+    }
+
+    /* 3. 調整手機版字體大小,避免標題折行太難看 */
+    .nk-stat-val { font-size: 1.5rem !important; }
+    .feature-heading-styled { font-size: 1.4rem !important; line-height: 1.3 !important; }
+
+    /* 4. 監控畫面的標籤調整 */
+    .nk-screen-label {
+        position: relative !important; /* 改為相對定位,避免蓋住影片 */
+        top: 0 !important; right: 0 !important;
+        margin-bottom: 5px !important;
+        justify-content: flex-end !important;
+        width: 100% !important;
+    }
+    
+    /* 5. 確保長單字自動換行 */
+    p, h3, span {
+        word-wrap: break-word !important;
+        overflow-wrap: break-word !important;
+    }
+}
 
     </style>
 </head>
@@ -1885,7 +1991,7 @@
             <span class="testi-amount">$178,013<span style="font-size: 0.4em; margin-left: 15px;">USD</span></span>
             
             <p class="testi-quote">
-                "原本是毫無金融交易經驗的高中老師，透過這個系統，我上個月的被動收入竟然超過了我十年的薪水總和。"
+                "原本是毫無金融交易經驗的高中老師,透過這個系統,我上個月的被動收入竟然超過了我十年的薪水總和."
             </p>
             
             <div class="testi-meta">
@@ -1905,7 +2011,7 @@
             <span class="testi-amount">$178,013<span style="font-size: 0.4em; margin-left: 15px;">USD</span></span>
             
             <p class="testi-quote">
-                "原本是毫無金融交易經驗的高中老師，透過這個系統，我上個月的被動收入竟然超過了我十年的薪水總和。"
+                "原本是毫無金融交易經驗的高中老師,透過這個系統,我上個月的被動收入竟然超過了我十年的薪水總和."
             </p>
             
             <div class="testi-meta">
@@ -2019,16 +2125,16 @@
 
         <ul class="feature-list" id="animated-feature-list" style="margin: 0; width: 100%;">
             <li style="padding: 15px; font-size: 1.1rem;">
-                直接連接至多個大型資料庫，毫秒抓取千萬筆數據
+                直接連接至多個大型資料庫,毫秒抓取千萬筆數據
             </li>
             <li style="padding: 15px; font-size: 1.1rem;">
-                在數秒之內，完成人類需要數日才能完成的分析與計算
+                在數秒之內,完成人類需要數日才能完成的分析與計算
             </li>
             <li style="padding: 15px; font-size: 1.1rem;">
-                沒有任何情緒與體力因素，100% 按照交易策略執行
+                沒有任何情緒與體力因素,100% 按照交易策略執行
             </li>
             <li style="padding: 15px; font-size: 1.1rem;">
-                計算與執行不但快速，並且比人類更精準，無誤差
+                計算與執行不但快速,並且比人類更精準,無誤差
             </li>
         </ul>
 
@@ -2041,7 +2147,7 @@
             <span class="feature-reason-tag">STEP 01</span>
             <h3 class="sticky-content-title">訊號偵測與過濾</h3>
             <p>
-                系統首先會掃描全球 12 大交易所的即時報價，過濾掉 99% 的無效雜訊。只有當價格波動符合「高機率獲利模型」時，AI 才會將其標記為潛在機會。
+                系統首先會掃描全球 12 大交易所的即時報價,過濾掉 99% 的無效雜訊.只有當價格波動符合「高機率獲利模型」時,AI 才會將其標記為潛在機會.
             </p>
             <div class="video-wrapper" style="margin-top: 20px;">
                 <div class="video-block">
@@ -2055,7 +2161,7 @@
             <span class="feature-reason-tag">STEP 02</span>
             <h3 class="sticky-content-title">資金部位計算</h3>
             <p>
-                確認訊號後，第二步是風險控管。系統會根據您帳戶目前的總資金，自動計算出最安全的進場手數，確保單筆交易風險不超過總資產的 2%。
+                確認訊號後,第二步是風險控管.系統會根據您帳戶目前的總資金,自動計算出最安全的進場手數,確保單筆交易風險不超過總資產的 2%.
             </p>
             <div class="video-wrapper" style="margin-top: 20px;">
                 <div class="video-block">
@@ -2069,7 +2175,7 @@
             <span class="feature-reason-tag">STEP 03</span>
             <h3 class="sticky-content-title">自動出場獲利</h3>
             <p>
-                進場的瞬間，止損點 (Stop Loss) 與獲利點 (Take Profit) 便已同時設定完成。一旦達到預設獲利目標，系統毫秒級自動平倉，將利潤鎖入您的帳戶。
+                進場的瞬間,止損點 (Stop Loss) 與獲利點 (Take Profit) 便已同時設定完成.一旦達到預設獲利目標,系統毫秒級自動平倉,將利潤鎖入您的帳戶.
             </p>
             <div class="video-wrapper" style="margin-top: 20px;">
                 <div class="video-block">
@@ -2091,9 +2197,9 @@
         const listObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    // 加上 .visible class，CSS 就會開始跑動畫
+                    // 加上 .visible class,CSS 就會開始跑動畫
                     entry.target.classList.add('visible');
-                    // 動畫跑一次就好，跑完就取消偵測，避免來回滑動一直閃
+                    // 動畫跑一次就好,跑完就取消偵測,避免來回滑動一直閃
                     listObserver.unobserve(entry.target);
                 }
             });
@@ -2105,6 +2211,197 @@
         });
     });
 </script>
+
+
+
+<div class="feature-row sticky-mode">
+    
+    <div class="sticky-video-col">
+        <div class="video-wrapper">
+            <div class="video-block">
+                <script src="https://fast.wistia.com/embed/b3q7co67ui.js" async type="module"></script>
+                <wistia-player media-id="b3q7co67ui" seo="false" aspect="1.7777777777777777"></wistia-player>
+            </div>
+        </div>
+        <p style="margin-top: 20px; font-size: 0.9rem; text-align: center; color: #666;">
+            ▲ ABM 高頻傳輸架構演示
+        </p>
+    </div>
+
+    <div class="feature-content scrollable-content-col">
+        <div class="content-block">
+            
+            <div class="feature-title-group">
+                <span class="feature-reason-tag">SPEED DOMINANCE</span>
+                <h3 class="feature-heading-styled">
+                    毫秒之差,即是財富重分配
+                    <div class="feature-heading-line"></div>
+                </h3>
+            </div>
+            
+            <p>在金融世界裡,資訊的不對稱就是獲利的來源.NσK® 不只是交易系統,它是鋪設在全球光纖網絡上的掠食者.</p>
+            <p>當一般投資人還在看著延遲的 K 線圖時,我們的系統已經完成了獲利出場.這就是科技帶來的絕對不公平優勢.</p>
+
+            <div class="nk-hud-tag">
+                <div class="nk-live-dot"></div> ABM® TECHNOLOGY
+            </div>
+
+            <h3 class="feature-heading-styled" style="font-size: 1.8rem; margin-bottom: 15px;">
+                毫秒級橋接 30,000+ 金融標的
+            </h3>
+
+            <p style="font-size: 1.1rem; color: #ccc; line-height: 1.6;">
+                這不是交易,這是<strong>資訊掠奪</strong>.ABM 機制直連全球 12 大流動性供應商,比一般散戶快 0.02 秒取得報價.哪裡有價差,系統就在哪裡.
+            </p>
+
+            <div class="nk-stat-panel">
+                <div>
+                    <span class="nk-stat-val" style="color: var(--nk-gold-rich);">30,000+</span>
+                    <span class="nk-stat-lbl">ASSETS CONNECTED</span>
+                </div>
+                <div>
+                    <span class="nk-stat-val">12ms</span>
+                    <span class="nk-stat-lbl">LATENCY SPEED</span>
+                </div>
+            </div>
+
+            <div class="nk-screen-frame">
+                <div class="nk-screen-label"><div class="nk-rec-dot"></div> LIVE FEED</div>
+                <div class="video-wrapper" style="margin-top: 0;">
+                    <div class="video-block">
+                        <video src="https://arftk.com/imgs1/abm.mp4" muted loop playsinline autoplay></video>
+                        <button class="play-pause-btn"><img class="icon" src="https://arftk.com/imgs/play.svg"></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="feature-row sticky-mode">
+    
+    <div class="sticky-video-col">
+        <div class="video-wrapper">
+            <div class="video-block">
+                <script src="https://fast.wistia.com/embed/b3q7co67ui.js" async type="module"></script>
+                <wistia-player media-id="b3q7co67ui" seo="false" aspect="1.7777777777777777"></wistia-player>
+            </div>
+        </div>
+        <p style="margin-top: 20px; font-size: 0.9rem; text-align: center; color: #666;">
+            ▲ AXIS 系統實戰操作演示
+        </p>
+    </div>
+
+    <div class="feature-content scrollable-content-col">
+        <div class="content-block">
+            <div class="feature-title-group">
+    <span class="feature-reason-tag">PREDICTIVE CORE</span>
+    <h3 class="feature-heading-styled">
+        這不是預測，這是未來的劇本
+        <div class="feature-heading-line"></div>
+    </h3>
+</div>
+
+<p>當華爾街的分析師還在試圖解讀昨日的新聞，NσK® AXIS 早已鎖定了明日的趨勢。在我們的演算法眼中，市場沒有混亂的雜訊，只有一條條清晰可見的獲利軌跡。</p>
+<p>不需要相信行銷話術，請相信您的眼睛。下方是系統即時運算的畫面——這就是將「不確定性」轉化為「絕對收益」的暴力美學。</p>
+
+            <div class="nk-hud-tag">
+                <div class="nk-live-dot"></div> AXIS® ANALYTICS
+            </div>
+
+            <h3 class="feature-heading-styled" style="font-size: 1.8rem; margin-bottom: 15px;">
+                只狙擊「第一象限」的絕對暴利
+            </h3>
+
+            <p style="font-size: 1.1rem; color: #ccc; line-height: 1.6;">
+                我們不猜測行情,我們計算行情.系統交叉分析 <span style="color:#fff">Y軸(趨勢強度)</span> 與 <span style="color:#fff">X軸(市場動能)</span>.只有當訊號落入高強度的<strong>「第一象限」</strong>,AXIS 才會扣下扳機.
+            </p>
+
+            <div style="margin: 25px 0;">
+                <div style="display:flex; justify-content:space-between; font-size:0.8rem; color:var(--nk-gold-rich); margin-bottom:5px; font-family:var(--nk-font-en);">
+                    <span>AXIS CONFIDENCE SCORE</span>
+                    <span>CALCULATING... 98.6%</span>
+                </div>
+                <div class="nk-loading-track"><div class="nk-loading-bar"></div></div>
+            </div>
+
+            <div class="nk-screen-label"><div class="nk-rec-dot"></div> ANALYSIS MODE</div>
+            <div class="video-wrapper" style="margin-top: 0;">
+                <div class="video-block">
+                    <video src="https://arftk.com/imgs1/axis.mp4" muted loop playsinline autoplay></video>
+                    <button class="play-pause-btn"><img class="icon" src="https://arftk.com/imgs/play.svg"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="feature-row sticky-mode">
+    
+    <div class="sticky-video-col">
+        <div class="video-wrapper">
+            <div class="video-block">
+                <script src="https://fast.wistia.com/embed/b3q7co67ui.js" async type="module"></script>
+                <wistia-player media-id="b3q7co67ui" seo="false" aspect="1.7777777777777777"></wistia-player>
+            </div>
+        </div>
+        <p style="margin-top: 20px; font-size: 0.9rem; text-align: center; color: #666;">
+            ▲ RRM 風險對沖機制演示
+        </p>
+    </div>
+
+    <div class="feature-content scrollable-content-col">
+        <div class="content-block">
+            
+            <div class="feature-title-group">
+                <span class="feature-reason-tag">CAPITAL SHIELD</span>
+                <h3 class="feature-heading-styled">
+                    數學算力構築的資金堡壘
+                    <div class="feature-heading-line"></div>
+                </h3>
+            </div>
+            
+            <p>進攻決定你能賺多少,但防守決定你能活多久.在 NσK® 的字典裡,沒有「爆倉」這個詞.</p>
+            <p>我們不依賴運氣來避開風險,我們依賴數學.全天候的監控機制,確保你的資產在黑天鵝事件面前,依然穩如泰山.</p>
+
+            <div class="nk-hud-tag" style="border-color: rgba(255,0,60,0.4); background: rgba(255,0,60,0.05);">
+                <div class="nk-live-dot red"></div> RRM® PROTECTION
+            </div>
+
+            <h3 class="feature-heading-styled" style="font-size: 1.8rem; margin-bottom: 15px;">
+                讓虧損在數學上「幾乎不可能」
+            </h3>
+
+            <p style="font-size: 1.1rem; color: #ccc; line-height: 1.6;">
+                這是你的資金堡壘.RRM 監控 2,000+ 風險 KPI.一旦偵測到反轉,系統毫秒內在衍生品市場執行 <span style="color:#ff003c; border-bottom:1px solid #ff003c;">REVERSE HEDGING (反向對沖)</span>.
+            </p>
+
+            <div class="nk-stat-panel" style="border-color: rgba(255,0,60,0.3);">
+                <div>
+                    <span class="nk-stat-val" style="color: #ff003c; -webkit-text-fill-color: #ff003c;">2,000+</span>
+                    <span class="nk-stat-lbl">RISK KPIs</span>
+                </div>
+                <div>
+                    <span class="nk-stat-val">97%</span>
+                    <span class="nk-stat-lbl">LOSS NEUTRALIZED</span>
+                </div>
+            </div>
+
+            <div class="nk-screen-frame" style="border-color: rgba(255,0,60,0.3);">
+                <div class="nk-screen-label" style="color:#ff003c;"><div class="nk-rec-dot"></div> PROTECTION ACTIVE</div>
+                <div class="video-wrapper" style="margin-top: 0;">
+                    <div class="video-block">
+                        <video src="https://arftk.com/imgs1/rrm.mp4" muted loop playsinline autoplay></video>
+                        <button class="play-pause-btn"><img class="icon" src="https://arftk.com/imgs/play.svg"></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 <div class="feature-row sticky-mode">
@@ -2132,8 +2429,8 @@
                 </h3>
             </div>
             
-            <p>這不僅僅是理論，我們將毫無保留地展示 NσK® 系統在不同市場行情下的真實表現。</p>
-            <p>下方圖片展示了系統在劇烈波動的「非農數據夜」以及平穩震盪盤整期的操作細節。您可以清楚看到 AI 如何精準捕捉每一個微小的獲利空間。</p>
+            <p>這不僅僅是理論,我們將毫無保留地展示 NσK® 系統在不同市場行情下的真實表現.</p>
+            <p>下方圖片展示了系統在劇烈波動的「非農數據夜」以及平穩震盪盤整期的操作細節.您可以清楚看到 AI 如何精準捕捉每一個微小的獲利空間.</p>
         </div>
 
         <div class="nk-zigzag-gallery">
@@ -2153,7 +2450,7 @@
                 <div class="zigzag-overlay">
                     <div class="zigzag-text">
                         <span class="zigzag-title">獲利鎖定</span>
-                        <span class="zigzag-desc">自動移動止損，確保利潤入袋</span>
+                        <span class="zigzag-desc">自動移動止損,確保利潤入袋</span>
                     </div>
                 </div>
             </div>
@@ -2182,7 +2479,7 @@
 
         <div class="content-block" style="margin-top: 40px; border-top: 1px solid #222; padding-top: 30px;">
             <p style="font-size: 0.9rem; color: #888;">
-                * 所有交易紀錄皆已經過第三方審計機構認證，確保數據真實不可篡改。
+                * 所有交易紀錄皆已經過第三方審計機構認證,確保數據真實不可篡改.
             </p>
         </div>
 
@@ -2238,7 +2535,7 @@
             <span class="testi-amount">$178,013<span style="font-size: 0.4em; margin-left: 15px;">USD</span></span>
             
             <p class="testi-quote">
-                "原本是毫無金融交易經驗的高中老師，透過這個系統，我上個月的被動收入竟然超過了我十年的薪水總和。"
+                "原本是毫無金融交易經驗的高中老師,透過這個系統,我上個月的被動收入竟然超過了我十年的薪水總和."
             </p>
             
             <div class="testi-meta">
@@ -2258,7 +2555,7 @@
             <span class="testi-amount">$178,013<span style="font-size: 0.4em; margin-left: 15px;">USD</span></span>
             
             <p class="testi-quote">
-                "原本是毫無金融交易經驗的高中老師，透過這個系統，我上個月的被動收入竟然超過了我十年的薪水總和。"
+                "原本是毫無金融交易經驗的高中老師,透過這個系統,我上個月的被動收入竟然超過了我十年的薪水總和."
             </p>
             
             <div class="testi-meta">
@@ -2368,8 +2665,8 @@
             </h3>
         </div>
         
-        <p>這不是那些需要你整天盯盤的半自動軟體。一旦你設定好風險參數，系統便接管一切。</p>
-        <p>影片中可以看到，系統如何在毫秒之間偵測訊號並自動進場、出場。當你在睡覺、旅遊或陪伴家人時，AI 正在全球市場為你 24 小時不間斷地工作。</p>
+        <p>這不是那些需要你整天盯盤的半自動軟體.一旦你設定好風險參數,系統便接管一切.</p>
+        <p>影片中可以看到,系統如何在毫秒之間偵測訊號並自動進場、出場.當你在睡覺、旅遊或陪伴家人時,AI 正在全球市場為你 24 小時不間斷地工作.</p>
     </div>
 
 </div>
@@ -2420,7 +2717,7 @@
             <div class="nk-stagger-overlay">
                 <div class="nk-stagger-text">
                     <span class="nk-stagger-title">環球旅行</span>
-                    <span class="nk-stagger-desc">隨時出發，體驗頭等艙的奢華</span>
+                    <span class="nk-stagger-desc">隨時出發,體驗頭等艙的奢華</span>
                 </div>
             </div>
         </div>
@@ -2440,7 +2737,7 @@
             <div class="nk-stagger-overlay">
                 <div class="nk-stagger-text">
                     <span class="nk-stagger-title">時間自由</span>
-                    <span class="nk-stagger-desc">不再被工作綁架，享受陪伴的時光</span>
+                    <span class="nk-stagger-desc">不再被工作綁架,享受陪伴的時光</span>
                 </div>
             </div>
         </div>
@@ -2511,7 +2808,7 @@
     <div class="optin-header">
         <span class="subtitle-en">LIMITED ACCESS</span>
         <h2 style="margin-bottom: 10px;">立即獲取系統權限</h2>
-        <p style="font-size: 1rem; margin: 0; color: #ccc;">名額有限，請填寫下方資料以鎖定您的席位</p>
+        <p style="font-size: 1rem; margin: 0; color: #ccc;">名額有限,請填寫下方資料以鎖定您的席位</p>
         <div class="arrow-scroll">
                     <span></span>
                     <span></span>
@@ -2728,7 +3025,7 @@
            包含: Zig-Zag Gallery, Staggered Gallery, Feature List
            ========================================= */
         
-        // 觀察器設定：進入畫面 20% 時觸發，下方預留 -50px 緩衝
+        // 觀察器設定：進入畫面 20% 時觸發,下方預留 -50px 緩衝
         const revealObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
