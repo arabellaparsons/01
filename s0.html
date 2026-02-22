@@ -1,0 +1,3906 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NσK® INVESTMENT GROUP & SYSTEM</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Infant:wght@400;500;600;700&family=Noto+Serif+TC:wght@300;400;500;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+
+    <script src="https://fast.wistia.com/player.js" async></script>
+
+   <style>
+        /* --- CORE: Black Gold Luxury Variables --- */
+        :root {
+            --nk-bg-darkest: #050505;
+            --nk-bg-panel: #0f0f0f;
+            --nk-bg-card: #141414;
+            
+            --nk-gold-rich: #C5A059;      
+            --nk-gold-dark: #8a6d3b;      
+            --nk-gold-light: #e6d8be;     
+            
+            --nk-text-main: #e0e0e0;
+            --nk-text-muted: #ddd;
+            
+            --nk-font-en: 'Cormorant Infant', serif;
+            --nk-font-tc: 'Noto Serif TC', serif;
+            --nk-font-sans: 'Inter', sans-serif;
+            
+            --header-h-pc: 70px;
+            --header-h-mb: 55px; /* 手機版 Header 高度鎖死 */
+        }
+
+        /* --- RESET & BASE --- */
+        * { box-sizing: border-box; margin: 0; padding: 0; outline: none; }
+        
+        body {
+            background-color: var(--nk-bg-darkest);
+            color: var(--nk-text-main);
+            font-family: var(--nk-font-tc);
+            font-weight: 300;
+            line-height: 1.8;
+            overflow-x: hidden;
+            padding-top: var(--header-h-pc); /* 避免內容被 Header 遮擋 */
+        }
+
+        /* --- TYPOGRAPHY --- */
+        h1, h2, h3, h4, h5 { margin-bottom: 25px; color: #fff; line-height: 1.3; }
+        
+        h1, h2 { 
+            font-family: var(--nk-font-tc); 
+            font-weight: 700; 
+            letter-spacing: 1px; 
+        }
+
+        /* 桌機版 H2 調整為 2rem */
+        h2 {
+            font-size: 2rem; 
+        }
+
+        .subtitle-en {
+            font-family: var(--nk-font-en); color: var(--nk-gold-rich); font-size: 1.1rem;
+            letter-spacing: 3px; text-transform: uppercase; display: block; margin-bottom: 15px; font-weight: 600;
+        }
+        p { margin-bottom: 20px; color: var(--nk-text-muted); font-size: 1.1rem; }
+        
+        /* GLOBAL IMG RESET */
+        img { max-width: 100%; height: auto; display: block; }
+        a { text-decoration: none; color: inherit; transition: 0.3s; }
+        strong { color: #fff; font-weight: 600; }
+        .highlight { color: var(--nk-gold-rich); }
+
+        /* --- UTILITIES --- */
+        .container { width: 100%; max-width: 1000px; margin: 0 auto; padding: 0 10px; position: relative; z-index: 2; }
+        .container-wide { max-width: 1500px; } 
+        .text-center { text-align: center; }
+        .text-right { text-align: right; }
+        .section-padding { padding: 100px 0; }
+        .divider { width: 60px; height: 1px; background: var(--nk-gold-rich); margin: 40px auto; }
+        
+        /* --- COMPONENTS --- */
+        .nk-btn {
+            display: inline-block; padding: 20px 50px;
+            background: linear-gradient(135deg, var(--nk-gold-dark) 0%, var(--nk-gold-rich) 100%);
+            color: #000; font-family: var(--nk-font-tc); font-size: 1.3rem; font-weight: 700;
+            border: none; cursor: pointer; transition: all 0.4s ease;
+            box-shadow: 0 5px 20px rgba(197, 160, 89, 0.3); letter-spacing: 1px;
+            margin-top: 20px; width: 100%; max-width: 100%;
+            position: relative; overflow: hidden;
+        }
+        .nk-btn::after {
+            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: 0.5s;
+        }
+        .nk-btn:hover::after { left: 100%; }
+        .nk-btn:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(197, 160, 89, 0.5); filter: brightness(1.1); }
+
+       /* --- FIXED HEADER (強制置中版) --- */
+        .main-header {
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%;
+            height: var(--header-h-pc);
+            z-index: 9999;
+            display: flex;
+            justify-content: center; 
+            align-items: center;    
+            background: linear-gradient(180deg, #1f1f1f 0%, #0a0a0a 100%);
+            border-bottom: 1px solid var(--nk-gold-dark);
+            transition: all 0.4s ease;
+            overflow: hidden; 
+        }
+
+        .main-header .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .main-header.scrolled {
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(8px);
+            border-bottom: 1px solid rgba(197, 160, 89, 0.5);
+        }
+
+        /* LOGO 樣式 */
+        .header-logo {
+            height: 45px !important;
+            width: auto !important;
+            max-width: none;
+            object-fit: contain;
+            filter: brightness(0.8) contrast(1.2) sepia(1) hue-rotate(5deg) saturate(1.5) drop-shadow(0 0 10px rgba(212, 175, 55, 0.4));
+            transition: all 0.3s ease;
+        }
+
+        /* --- SPLIT SECTIONS (Images + Text) --- */
+        .split-section { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; margin-top: 80px; align-items: center; }
+        .split-section.reverse { direction: rtl; }
+        .split-section.reverse > div { direction: ltr; text-align: left; }
+
+        /* --- VIDEO PLAYER --- */
+        .video-wrapper {
+            position: relative; margin-top: 20px; padding: 5px; 
+            background: linear-gradient(135deg, #333 0%, #000 100%);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8); border: 1px solid #333;
+        }
+        .video-wrapper::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            border: 1px solid var(--nk-gold-dark); box-shadow: 0 0 15px rgba(197, 160, 89, 0.1);
+            pointer-events: none; z-index: 1;
+        }
+
+        /* --- CUSTOM AUTO PLAY VIDEO STYLES --- */
+        .video-block {
+            min-width: 100%;
+            margin: 0px 0;
+            position: relative;
+            overflow: hidden;
+            line-height: 0; /* 消除影片下方白邊 */
+        }
+        .video-block video {
+            width: 100%;
+            display: block;
+        }
+        .play-pause-btn {
+            position: absolute;
+            bottom: 15px;
+            left: 15px;
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid var(--nk-gold-dark); /* 整合主題金邊 */
+            border-radius: 5px;
+            cursor: pointer;
+            z-index: 10;
+            padding: 8px;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .play-pause-btn:hover {
+            background: var(--nk-gold-rich); /* Hover 變金色 */
+        }
+        .play-pause-btn .icon {
+            width: 20px;
+            height: 20px;
+            display: block;
+        }
+        
+        /* --- ARROW ANIMATION --- */
+        .arrow-scroll { margin: 30px auto 10px; width: 40px; height: 60px; position: relative; }
+        .arrow-scroll span {
+            display: block; width: 20px; height: 20px;
+            border-bottom: 2px solid var(--nk-gold-rich); border-right: 2px solid var(--nk-gold-rich);
+            transform: rotate(45deg); margin: -10px auto 0;
+            animation: arrow-glow 2s infinite; opacity: 0;
+        }
+        .arrow-scroll span:nth-child(2) { animation-delay: 0.2s; }
+        .arrow-scroll span:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes arrow-glow {
+            0% { opacity: 0; transform: rotate(45deg) translate(-5px, -5px); }
+            50% { opacity: 1; }
+            100% { opacity: 0; transform: rotate(45deg) translate(5px, 5px); }
+        }
+
+        /* --- 1. HERO SECTION (Original) --- */
+        .hero {
+            min-height: 85vh; display: flex; align-items: center; justify-content: center;
+            background: radial-gradient(circle at center, #1b1b1b 0%, #000000 100%);
+            position: relative; padding: 40px 0 20px; 
+        }
+        .hero h1 { 
+            font-size: 2.5rem; 
+            line-height: 1.5; 
+            max-width: 900px; 
+            margin: 0 auto 30px; 
+            font-weight: 700; 
+        }
+        
+        /* --- Hero Text Only Class (Reusable) --- */
+        .hero-text-only {
+            text-align: center;
+            margin-bottom: 50px; 
+        }
+        .hero-text-only h1 {
+            font-size: 2.5rem; 
+            line-height: 1.5; 
+            max-width: 900px; 
+            margin: 0 auto 30px; 
+            font-weight: 700; 
+            color: #fff;
+        }
+
+        .hero-number-block {
+            display: block; margin-top: 20px; margin-bottom: 10px;
+            font-family: var(--nk-font-en); font-size: 5rem; line-height: 1.1; font-weight: 700;
+            background: linear-gradient(to bottom, #fff 10%, var(--nk-gold-rich) 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            text-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .hero .warning { color: var(--nk-gold-rich); font-size: 1rem; letter-spacing: 2px; text-transform: uppercase; margin-top: 30px; display: block; }
+
+        /* --- 2. SOCIAL PROOF --- */
+        .logos-section { background: var(--nk-bg-panel); padding: 50px 0; border-top: 1px solid #222; border-bottom: 1px solid #222; }
+        .logos-grid { display: flex; justify-content: center; gap: 50px; flex-wrap: wrap; opacity: 0.5; filter: grayscale(100%); }
+        .logos-grid img { height: 35px; width: auto; }
+
+        /* --- 3. PROMISE --- */
+        .promise-section { background: var(--nk-bg-darkest); }
+        .promise-box {
+            border: 1px solid var(--nk-gold-dark); padding: 60px 40px; text-align: center;
+            background: linear-gradient(180deg, rgba(197,160,89,0.05) 0%, rgba(0,0,0,0) 100%);
+            position: relative; max-width: 800px; margin: 0 auto;
+        }
+        .promise-box::before { content: 'PROMISE'; position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--nk-bg-darkest); padding: 0 20px; color: var(--nk-gold-rich); font-family: var(--nk-font-en); letter-spacing: 3px; }
+        
+        /* --- 4. TESTIMONIALS --- */
+        .testimonials { display: grid; grid-template-columns: repeat(auto-fit, minmax(480px, 1fr)); gap: 40px; margin-top: 60px; 
+    width: 100%;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto; justify-content: center; }
+        .testi-card { background: var(--nk-bg-card); border: 1px solid #222; padding: 0; overflow: hidden; transition: transform 0.3s; }
+        .testi-card:hover { transform: translateY(-5px); border-color: var(--nk-gold-dark); }
+        
+        .testi-content {
+            padding: 30px;
+            text-align: center;
+            position: relative;
+        }
+        .testi-amount {
+            font-family: var(--nk-font-en);
+            font-size: 2.8rem;
+            font-weight: 700;
+            line-height: 1;
+            margin-bottom: 15px;
+            display: block;
+            background: linear-gradient(to bottom, #fff 10%, var(--nk-gold-rich) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 2px 10px rgba(197, 160, 89, 0.2));
+        }
+        .testi-quote {
+            font-style: italic;
+            color: #ccc;
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 25px;
+            text-align: justify;
+        }
+        .testi-meta {
+            display: block;
+            text-align: right;
+            font-family: var(--nk-font-en);
+            color: var(--nk-gold-rich);
+            font-size: 1.1rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            border-top: 1px solid #333;
+            padding-top: 15px;
+        }
+
+        @media (max-width: 768px) {
+            .testi-amount { font-size: 2.2rem; }
+            .testi-content { padding: 20px; }
+        }
+
+        .testi-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 4px 18px;
+            border-radius: 50px;
+            background: linear-gradient(135deg, rgba(197, 160, 89, 0.15) 0%, rgba(5, 5, 5, 0.8) 100%);
+            border: 1px solid rgba(197, 160, 89, 0.4);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3), inset 0 0 10px rgba(197, 160, 89, 0.1);
+            color: var(--nk-gold-rich);
+            font-size: 0.9rem;
+            font-weight: 500;
+            letter-spacing: 1px;
+            margin-bottom: 0px;
+            backdrop-filter: blur(5px);
+        }
+        .testi-badge svg {
+            width: 16px;
+            height: 16px;
+            margin-right: 8px;
+            stroke: var(--nk-gold-rich);
+            filter: drop-shadow(0 0 5px rgba(197, 160, 89, 0.5));
+        }
+
+        /* --- MARQUEE --- */
+        .marquee-wrapper { width: 100vw; position: relative; left: 50%; margin-left: -50vw; margin-top: 80px; margin-bottom: 20px; overflow: hidden; }
+        .marquee-glow-line { height: 1px; width: 100%; background: radial-gradient(circle, var(--nk-gold-rich) 0%, transparent 80%); box-shadow: 0 0 10px var(--nk-gold-dark); opacity: 0.7; }
+        .marquee-viewport { padding: 20px 0; overflow: hidden; -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent); mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent); }
+        .marquee-track { display: flex; width: max-content; animation: scroll-marquee 20s linear infinite; }
+        .marquee-track:hover { animation-play-state: paused; }
+        .marquee-item { flex-shrink: 0; padding: 0 10px; }
+        .marquee-item img { width: 280px; height: 280px; object-fit: cover; border: 1px solid var(--nk-gold-dark); box-shadow: 0 10px 30px rgba(0,0,0,0.8); filter: grayscale(0.5) contrast(1.1); transition: 0.3s; }
+        .marquee-item img:hover { filter: grayscale(0) contrast(1.2) brightness(1.1); border-color: var(--nk-gold-rich); }
+        @keyframes scroll-marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+        /* --- 5. FEATURES --- */
+        .feature-list { list-style: none; margin-top: 40px; max-width: 800px; margin-left: auto; margin-right: auto; }
+        .feature-list li { background: var(--nk-bg-panel); padding: 25px; margin-bottom: 15px; border-left: 3px solid var(--nk-gold-rich); display: flex; align-items: center; }
+        .feature-list li::before { content: '✓'; color: var(--nk-gold-rich); font-size: 1.5rem; margin-right: 20px; font-weight: bold; }
+
+        /* --- 6. GUARANTEE --- */
+        .guarantee-section { background: var(--nk-bg-panel); border-top: 1px solid #222; text-align: center; }
+        .money-back { font-size: 4rem; font-family: var(--nk-font-en); color: var(--nk-gold-rich); line-height: 1; margin: 20px 0; text-shadow: 0 5px 15px rgba(0,0,0,0.5); }
+
+        /* --- 7. PRICING --- */
+        .pricing-section { text-align: center; background: radial-gradient(circle at center, #1a1a1a 0%, #050505 100%); position: relative; }
+        
+        .pricing-unified-card {
+            max-width: 900px;
+            margin: 0 auto;
+            border: 0px solid var(--nk-gold-dark);
+            background: #141414;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.6);
+            padding: 0;
+            overflow: hidden;
+            transition: 0.3s;
+            position: relative;
+        }
+        .pricing-unified-card:hover {
+            border-color: var(--nk-gold-rich);
+            box-shadow: 0 0 30px rgba(197, 160, 89, 0.3);
+        }
+
+        .pricing-hero-img-box {
+            width: 100%;
+            overflow: hidden;
+            margin: 0;
+            padding: 0;
+            line-height: 0;
+        }
+        .pricing-hero-img-box img {
+            width: 100%;
+            display: block;
+            transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        .pricing-hero-img-box:hover img {
+            transform: scale(1.1);
+        }
+
+        .pricing-header { padding: 40px; border-bottom: 1px solid #222; background: linear-gradient(180deg, #1a1a1a 0%, #141414 100%); }
+        .pricing-body { padding: 90px; }
+        
+        .price-row {
+            max-width: 550px;        
+            margin-left: auto;       
+            margin-right: auto;      
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px dashed #333;
+        }
+        .price-row:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+        
+        .row-label { font-size: 1.1rem; color: #888; text-align: left; }
+        
+        .row-value { 
+            font-family: var(--nk-font-en); 
+            font-size: 1.6rem; 
+            color: var(--nk-text-main); 
+            text-decoration: none !important;
+            position: relative;
+            display: inline-block;
+            transition: color 0.5s ease 0.3s;
+        }
+
+        .row-value::after {
+            content: '';
+            position: absolute;
+            top: 55%;
+            left: 0;
+            width: 0%;
+            height: 2px;
+            background-color: #ff0000;
+            transition: width 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .pricing-anim-row {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+
+        .pricing-anim-row.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .pricing-anim-row.struck .row-value {
+            color: #444;
+        }
+        .pricing-anim-row.struck .row-value::after {
+            width: 100%;
+        }
+
+        .final-price-box { 
+            background: linear-gradient(135deg, rgba(197, 160, 89, 0.1) 0%, rgba(0,0,0,0) 100%); 
+            border: 1px solid rgba(197, 160, 89, 0.3); 
+            border-radius: 8px; 
+            padding: 30px; 
+            margin-top: 20px; 
+            overflow: hidden;
+        }
+
+        .final-price-anim {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .final-price-anim.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .deposit-label { display: block; color: var(--nk-gold-rich); font-size: 1rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 5px; }
+        .final-price { font-family: var(--nk-font-en); font-size: 5rem; line-height: 1; font-weight: 700; color: #fff; background: linear-gradient(to bottom, #fff 0%, var(--nk-gold-light) 50%, var(--nk-gold-rich) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 10px; filter: drop-shadow(0 5px 15px rgba(197, 160, 89, 0.2)); }
+        .pricing-footer { background: #0a0a0a; padding: 20px 40px; border-top: 1px solid #222; font-size: 0.9rem; color: #666; display: flex; align-items: center; justify-content: center; gap: 10px; }
+
+        /* --- DEEP DIVE --- */
+        .feature-row { background: #0f0f0f; border: 1px solid var(--nk-gold-rich); box-shadow: 0 0 25px rgba(197, 160, 89, 0.15); display: grid; grid-template-columns: 55% 40%; gap: 5%; margin-bottom: 85px; padding: 40px; align-items: center; }
+        .feature-row .video-wrapper { margin-top: 0; }
+        .feature-divider { width: 40px; height: 2px; background: var(--nk-gold-rich); margin: 20px 0; }
+        footer { background: #000; padding: 60px 0; text-align: center; border-top: 1px solid #222; font-size: 0.9rem; color: #666; }
+
+        /* --- NEW STYLES: 系統優化區塊美化 --- */
+        .img-zoom-container {
+            border: 1px solid var(--nk-gold-dark);
+            padding: 8px;
+            overflow: hidden;
+            position: relative;
+            transition: 0.3s;
+            background: #000;
+        }
+        .img-zoom-container:hover {
+            border-color: var(--nk-gold-rich);
+            box-shadow: 0 0 20px rgba(197, 160, 89, 0.2);
+        }
+        .img-zoom-container img {
+            width: 100%;
+            display: block;
+            transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        .img-zoom-container:hover img {
+            transform: scale(1.1);
+        }
+
+        .feature-title-group {
+            margin-bottom: 25px;
+        }
+        .feature-reason-tag {
+            font-family: var(--nk-font-en);
+            color: var(--nk-gold-rich);
+            font-size: 0.85rem;
+            border: 1px solid var(--nk-gold-dark);
+            padding: 4px 10px;
+            display: inline-block;
+            margin-bottom: 12px;
+            letter-spacing: 1px;
+        }
+        
+        .feature-heading-styled {
+            font-size: 1.8rem;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            white-space: nowrap;
+        }
+        .feature-heading-line {
+            height: 1px;
+            width: 100%;
+            background: linear-gradient(90deg, var(--nk-gold-dark), transparent);
+            margin-top: 5px;
+            flex-grow: 1;
+        }
+
+
+        /* --- RWD (Mobile Optimizations) --- */
+        @media (max-width: 768px) {
+            
+            body { padding-top: var(--header-h-mb); }
+            .main-header { height: var(--header-h-mb); }
+            
+            .header-logo { 
+                height: 70px !important; 
+                width: 70px !important;
+                max-width: none !important; 
+            }
+            
+            h2 { font-size: 1.5rem; }
+            
+            .hero { padding: 30px 0 20px; min-height: auto; }
+            .hero .container { padding-left: 10px; padding-right: 10px; }
+            
+            .hero h1 { 
+                font-size: 1.5rem; 
+                line-height: 1.6; 
+                margin-bottom: 20px; 
+            }
+            
+            .hero-text-only h1 {
+                font-size: 1.5rem; 
+                line-height: 1.6; 
+                margin-bottom: 20px; 
+            }
+            
+            .hero-number-block { font-size: 3rem; margin-top: 15px; }
+
+            .section-padding { padding: 60px 0; }
+            .money-back { font-size: 3rem; }
+            
+            .pricing-body { padding: 25px; }
+            .final-price { font-size: 3.5rem; }
+            .nk-btn { font-size: 1.1rem; padding: 18px 20px; }
+            
+            .testimonials { grid-template-columns: 1fr; }
+            .split-section { grid-template-columns: 1fr; gap: 40px; text-align: center; }
+            .text-right { text-align: center; } 
+            .split-section.reverse { direction: ltr; }
+            .split-section.reverse > div { text-align: center; }
+            .split-section img, .text-center img { 
+                margin-left: auto !important; margin-right: auto !important;
+                max-width: 100% !important; height: auto !important;
+            }
+            
+            .feature-row { grid-template-columns: 1fr; gap: 0; padding: 0; border-radius: 0; }
+            .feature-row .video-wrapper { padding: 0; border: 1px solid var(--nk-gold-dark); width: 100%; border-bottom: 1px solid var(--nk-gold-dark); border-top: 1px solid var(--nk-gold-dark); }
+            .feature-row .video-wrapper::before { display: none; }
+            .feature-content { padding: 30px 20px; }
+
+            .marquee-item img { width: 160px; height: 160px; }
+            @keyframes scroll-marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+            .feature-heading-styled {
+                font-size: 1.4rem;
+                flex-direction: column;
+                align-items: center;
+                gap: 10px;
+            }
+            .feature-heading-line {
+                width: 60px;
+                flex-grow: 0;
+            }
+        }
+       /* --- UNIVERSAL PARALLAX FIX (Mobile + Desktop) --- */
+    .parallax-section {
+        position: relative;
+        width: 100%;
+        min-height: 60vh; 
+        clip-path: inset(0); 
+        background-color: var(--nk-bg-darkest, #050505); 
+        margin: 40px 0;
+    }
+
+    .parallax-bg {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url('https://arftk.com/imgs1/box.jpg');
+        background-position: center center;
+        background-size: cover;
+        background-repeat: no-repeat;
+        z-index: -1;
+        will-change: transform;
+    }
+
+    @media (min-width: 769px) {
+        .parallax-section {
+            max-width: 1080px;
+            aspect-ratio: 16 / 9;
+            margin: 60px auto;
+            min-height: auto;
+        }
+
+        .parallax-bg {
+            width: 100%;
+            max-width: 1080px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .parallax-section::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg,  
+                var(--nk-bg-darkest, #050505) 0%, 
+                transparent 15%, 
+                transparent 85%, 
+                var(--nk-bg-darkest, #050505) 100%
+            );
+            pointer-events: none;
+            z-index: 2;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .parallax-section {
+            margin: 0;
+            clip-path: inset(0);
+            aspect-ratio: auto;
+        }
+        
+        .parallax-bg {
+            height: 80vh; 
+            top: -5vh;
+        }
+    }
+
+/* 1. Large 1x1 */
+.marquee-wrapper.marquee-lg .marquee-item img {
+    width: 450px; 
+    height: 450px;
+    object-fit: cover;
+}
+
+/* 2. Rectangle 4x3 */
+.marquee-wrapper.marquee-rect .marquee-item img {
+    width: 400px; 
+    height: 300px;
+    object-fit: cover;
+}
+
+@media (max-width: 768px) {
+    .marquee-wrapper.marquee-lg .marquee-item img {
+        width: 300px;
+        height: 300px;
+    }
+    .marquee-wrapper.marquee-rect .marquee-item img {
+        width: 280px;
+        height: 210px;
+    }
+}
+
+/* --- UPWARD ARROW ANIMATION --- */
+.arrow-scroll-up {
+    margin: 30px auto 10px;
+    width: 40px;
+    height: 60px;
+    position: relative;
+    cursor: pointer;
+}
+
+.arrow-scroll-up span {
+    display: block;
+    width: 20px;
+    height: 20px;
+    border-top: 2px solid var(--nk-gold-rich);
+    border-left: 2px solid var(--nk-gold-rich);
+    transform: rotate(45deg);
+    margin: -10px auto 0;
+    animation: arrow-glow-up 2s infinite;
+    opacity: 0;
+}
+
+.arrow-scroll-up span:nth-child(3) { animation-delay: 0s; }
+.arrow-scroll-up span:nth-child(2) { animation-delay: 0.2s; }
+.arrow-scroll-up span:nth-child(1) { animation-delay: 0.4s; }
+
+@keyframes arrow-glow-up {
+    0% { opacity: 0; transform: rotate(45deg) translate(5px, 5px); }
+    50% { opacity: 1; }
+    100% { opacity: 0; transform: rotate(45deg) translate(-5px, -5px); }
+}
+
+/* --- NK LUXURY COLLAGE GALLERY --- */
+.nk-collage-section {
+    position: relative;
+    overflow: hidden;
+    padding: 80px 0;
+}
+
+.nk-collage-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    max-width: 1200px;
+    margin: 40px auto 0;
+    padding: 20px;
+}
+
+.nk-collage-item {
+    position: relative;
+    width: 360px; 
+    height: 270px; 
+    background: #000;
+    border: 1px solid var(--nk-gold-dark);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.8);
+    transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    cursor: pointer;
+    overflow: hidden;
+    filter: grayscale(30%) contrast(1.1); 
+}
+
+.nk-collage-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.8s ease;
+}
+
+.nk-collage-item:nth-child(1) {
+    transform: rotate(-3deg) translateY(10px);
+    z-index: 1;
+    margin-right: -50px;
+}
+
+.nk-collage-item:nth-child(2) {
+    transform: rotate(2deg) translateY(-10px);
+    z-index: 2;
+    margin-right: -50px;
+    margin-top: 20px; 
+}
+
+.nk-collage-item:nth-child(3) {
+    transform: rotate(-2deg) translateY(15px);
+    z-index: 3;
+    margin-right: -50px;
+}
+
+.nk-collage-item:nth-child(4) {
+    transform: rotate(3deg) translateY(-5px);
+    z-index: 2;
+}
+
+.nk-collage-item:hover {
+    transform: scale(1.15) rotate(0deg) translateY(-10px);
+    z-index: 50 !important;
+    border-color: var(--nk-gold-rich);
+    box-shadow: 0 20px 60px rgba(197, 160, 89, 0.3);
+    filter: grayscale(0%) contrast(1.2); 
+}
+
+.nk-collage-item:hover img {
+    transform: scale(1.05);
+}
+
+.nk-collage-caption {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 20px;
+    background: linear-gradient(to top, #000 0%, transparent 100%);
+    opacity: 0;
+    transform: translateY(20px);
+    transition: 0.4s;
+}
+
+.nk-collage-item:hover .nk-collage-caption {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.nk-caption-title {
+    color: var(--nk-gold-rich);
+    font-family: var(--nk-font-en);
+    font-size: 1.2rem;
+    letter-spacing: 1px;
+    display: block;
+}
+.nk-caption-desc {
+    color: #ddd;
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+@media (max-width: 900px) {
+    .nk-collage-wrapper {
+        flex-direction: column;
+        height: auto;
+        padding-top: 40px;
+    }
+    
+    .nk-collage-item {
+        width: 100%;
+        max-width: 360px;
+        height: 270px; 
+        margin-right: 0 !important;
+        margin-left: 0 !important;
+        margin-bottom: -60px;
+    }
+    
+    .nk-collage-item:nth-child(1) { transform: rotate(-2deg); margin-top: 0; }
+    .nk-collage-item:nth-child(2) { transform: rotate(2deg); margin-top: 0; }
+    .nk-collage-item:nth-child(3) { transform: rotate(-1deg); }
+    .nk-collage-item:nth-child(4) { transform: rotate(1deg); margin-bottom: 0; }
+    
+    .nk-collage-item:hover {
+        transform: scale(1.05) rotate(0deg);
+        margin-bottom: 0;
+    }
+}
+
+/* --- NK WIDE LUXURY GALLERY --- */
+.nk-gallery-section {
+    padding: 60px 0;
+    overflow: hidden;
+}
+
+.nk-gallery-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    max-width: 1300px;
+    margin: 0 auto;
+    gap: 15px;
+}
+
+.nk-gallery-item {
+    position: relative;
+    background: #000;
+    border: 1px solid var(--nk-gold-dark);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    cursor: pointer;
+    overflow: hidden;
+    filter: grayscale(100%) contrast(1.1);
+    margin: 0 -10px; 
+}
+
+.nk-gallery-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s ease;
+}
+
+.ratio-sq .nk-gallery-item {
+    width: 320px;
+    height: 320px;
+}
+.ratio-rect .nk-gallery-item {
+    width: 360px;
+    height: 270px;
+}
+
+.nk-gallery-item:nth-child(odd) { transform: rotate(-1deg); }
+.nk-gallery-item:nth-child(even) { transform: rotate(1deg); }
+.nk-gallery-item:nth-child(3) { transform: rotate(0deg) translateY(-10px); z-index: 5; }
+
+.nk-gallery-item:hover {
+    z-index: 100;
+    transform: scale(1.1) rotate(0deg) !important;
+    border-color: var(--nk-gold-rich);
+    box-shadow: 0 0 25px rgba(197, 160, 89, 0.4);
+    filter: grayscale(0%) contrast(1.2);
+    margin: 0 10px;
+}
+
+.nk-gallery-overlay {
+    position: absolute;
+    bottom: 0; left: 0; width: 100%; height: 100%;
+    background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, transparent 60%);
+    opacity: 0;
+    transition: 0.3s;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 20px;
+}
+.nk-gallery-item:hover .nk-gallery-overlay { opacity: 1; }
+
+.g-title { color: var(--nk-gold-rich); font-family: var(--nk-font-en); font-size: 1.2rem; letter-spacing: 1px; }
+.g-desc { color: #fff; font-size: 0.9rem; }
+
+@media (max-width: 900px) {
+    .nk-gallery-wrapper {
+        flex-direction: column;
+        gap: 0px;
+    }
+    .nk-gallery-item {
+        width: 100% !important;
+        max-width: 400px;
+        height: 300px !important;
+        margin: 0 !important;
+        transform: rotate(0deg) !important;
+    }
+    .nk-gallery-item:hover {
+        transform: scale(1.02) !important;
+        margin: 0 !important;
+    }
+}
+
+/* --- FEATURE LIST SEQUENTIAL ANIMATION --- */
+.feature-list li {
+    opacity: 0;
+    transform: translateX(-30px);
+    transition: all 0.6s cubic-bezier(0.215, 0.610, 0.355, 1.000); 
+}
+
+.feature-list.visible li {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.feature-list.visible li:nth-child(1) { transition-delay: 0.1s; }
+.feature-list.visible li:nth-child(2) { transition-delay: 0.3s; }
+.feature-list.visible li:nth-child(3) { transition-delay: 0.5s; }
+.feature-list.visible li:nth-child(4) { transition-delay: 0.7s; }
+.feature-list.visible li:nth-child(5) { transition-delay: 0.9s; }
+
+/* --- STICKY FEATURE ROW --- */
+@media (min-width: 769px) {
+    .feature-row.sticky-mode {
+        align-items: start; 
+    }
+
+    .feature-row.sticky-mode .sticky-video-col {
+        position: sticky;
+        top: 100px;
+        width: 100%; 
+    }
+}
+
+.scrollable-content-col {
+    display: flex;
+    flex-direction: column;
+    gap: 60px;
+}
+
+.content-block {
+    border-bottom: 1px solid #222;
+    padding-bottom: 40px;
+}
+.content-block:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.sticky-content-title {
+    color: var(--nk-gold-rich);
+    font-size: 1.3rem;
+    margin-bottom: 15px;
+    display: block;
+    font-weight: 700;
+}
+
+/* --- NK WIDE LUXURY OPTIN FORM --- */
+.optin-gold-card {
+    max-width: 900px;
+    width: 100%;
+    margin: 0 auto;
+    background: #141414;
+    border: 1px solid var(--nk-gold-dark);
+    box-shadow: 0 30px 60px rgba(0,0,0,0.7);
+    overflow: hidden;
+    position: relative;
+    transition: 0.3s;
+}
+
+.optin-gold-card:hover {
+    border-color: var(--nk-gold-rich);
+    box-shadow: 0 0 40px rgba(197, 160, 89, 0.15);
+}
+
+.optin-header {
+    background: linear-gradient(180deg, #1a1a1a 0%, #141414 100%);
+    padding: 40px 20px 20px;
+    border-bottom: 0px solid #222;
+    text-align: center;
+}
+
+.optin-body {
+    padding: 40px;
+    padding-top: 0px;
+    background: #141414;
+    display: flex;
+    justify-content: center;
+}
+
+.optin-highlight-box {
+    width: 100%;
+    max-width: 650px;
+    background: linear-gradient(135deg, rgba(197, 160, 89, 0.1) 0%, rgba(0,0,0,0) 100%);
+    border: 1px solid rgba(197, 160, 89, 0.3);
+    border-radius: 8px;
+    padding: 40px;
+    position: relative;
+}
+
+.nk-input-group {
+    margin-bottom: 25px;
+    text-align: left;
+}
+
+.nk-input-label {
+    display: flex;         
+    align-items: center;   
+    gap: 8px;              
+    color: var(--nk-gold-rich);
+    font-family: var(--nk-font-en);
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+    letter-spacing: 1px;
+    font-weight: 600;
+}
+
+.nk-input-label svg {
+    width: 16px;           
+    height: 16px;
+    fill: var(--nk-gold-rich); 
+    opacity: 0.9;
+}
+
+.nk-input-field::placeholder {
+    color: #ccc !important;           
+    font-family: var(--nk-font-tc);   
+    font-weight: 300;                 
+    font-style: italic;               
+    opacity: 0.7;                     
+    letter-spacing: 1px;
+}
+
+.nk-input-field {
+    width: 100%;
+    padding: 18px;
+    background-color: rgba(0, 0, 0, 0.6);
+    border: 1px solid #444;
+    color: #fff;
+    font-size: 1.1rem;
+    font-family: var(--nk-font-sans);
+    transition: 0.3s;
+}
+
+.nk-input-field:focus {
+    border-color: var(--nk-gold-rich);
+    background-color: #000;
+    box-shadow: 0 0 15px rgba(197, 160, 89, 0.2);
+}
+
+@media (max-width: 768px) {
+    .optin-body { padding: 10px; }
+    .optin-highlight-box {
+        padding: 25px 10px;
+        width: 100%;
+    }
+}
+
+/* --- STAGGERED HIGH-LOW GALLERY --- */
+.nk-stagger-section {
+    padding: 80px 0;
+    overflow: hidden;
+}
+
+.nk-stagger-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.nk-stagger-item {
+    position: relative;
+    height: 400px;
+    border: 1px solid var(--nk-gold-dark);
+    overflow: hidden;
+    cursor: pointer;
+    background: #000;
+    opacity: 0;
+    transform: translateY(60px); 
+    transition: opacity 0.8s ease-out, transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), border-color 0.3s, box-shadow 0.3s;
+}
+
+.nk-stagger-item:nth-child(even) {
+    margin-top: 60px;
+    transition-delay: 0.2s; 
+}
+
+.nk-stagger-item.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.nk-stagger-item:hover {
+    border-color: var(--nk-gold-rich);
+    box-shadow: 0 10px 40px rgba(197, 160, 89, 0.2);
+}
+
+.nk-stagger-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    filter: grayscale(20%);
+}
+
+.nk-stagger-item:hover img {
+    transform: scale(1.1);
+    filter: grayscale(0%);
+}
+
+.nk-stagger-overlay {
+    position: absolute; bottom: 0; left: 0; width: 100%; height: 60%;
+    background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.6) 50%, transparent 100%);
+    display: flex; flex-direction: column; justify-content: flex-end; padding: 30px;
+    pointer-events: none;
+}
+
+.nk-stagger-text {
+    color: #fff; font-family: var(--nk-font-tc);
+    opacity: 0; transform: translateX(-40px);
+    transition: all 0.8s cubic-bezier(0.215, 0.610, 0.355, 1.000);
+}
+
+.nk-stagger-item.visible .nk-stagger-text {
+    opacity: 1; transform: translateX(0);
+    transition-delay: 0.4s;
+}
+
+.nk-stagger-title { font-size: 1.5rem; font-weight: 700; margin-bottom: 8px; display: block; color: #fff; }
+.nk-stagger-desc { font-size: 1rem; color: #ccc; font-weight: 300; }
+
+@media (max-width: 768px) {
+    .nk-stagger-grid { grid-template-columns: 1fr; gap: 20px; }
+    .nk-stagger-item { height: 300px; margin-top: 0 !important; }
+    .nk-stagger-item:nth-child(even) { transition-delay: 0s; }
+}
+
+/* --- TIER & CALCULATOR STYLES --- */
+.nk-tier-section {
+    position: relative;
+    width: 100%;
+}
+
+.nk-tier-container-v2 { 
+    width: 100%; 
+    max-width: 1000px; 
+    margin: 0 auto; 
+    box-sizing: border-box; 
+    padding: 0 10px; 
+}
+
+.nk-tier-grid-v2 { 
+    display: grid; 
+    grid-template-columns: repeat(2, 1fr); 
+    gap: 30px; 
+}
+
+.nk-tier-card-v2 {
+    background: #0a0a0a;
+    border: 1px solid #222; 
+    border-top: 1px solid #333;
+    position: relative; 
+    overflow: hidden;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    transition: all 0.5s ease;
+}
+
+.nk-tier-card-v2:hover { 
+    transform: translateY(-5px); 
+    border-color: var(--nk-gold-dark); 
+    box-shadow: 0 30px 60px rgba(197, 160, 89, 0.15); 
+}
+
+/* === 修改：黑金屬漸層 Header === */
+.nk-header-box {
+    padding: 30px 0 20px; 
+    text-align: center; 
+    position: relative;
+    background: linear-gradient(135deg, #2b2b2b 0%, #151515 30%, #050505 70%, #1a1a1a 100%);
+    border-bottom: 2px solid var(--nk-gold-dark);
+    box-shadow: inset 0 2px 5px rgba(255, 255, 255, 0.05), 0 10px 20px rgba(0,0,0,0.6);
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    gap: 15px;
+}
+
+.nk-header-logo { 
+    height: 35px; 
+    width: auto; 
+    transition: all 0.5s;
+}
+
+.tier-1 .nk-header-logo { filter: grayscale(1) brightness(2) drop-shadow(0 0 5px rgba(255,255,255,0.3)); }
+.tier-2 .nk-header-logo { filter: grayscale(1) sepia(1) hue-rotate(90deg) saturate(3) brightness(0.8); }
+.tier-3 .nk-header-logo { filter: grayscale(1) sepia(1) hue-rotate(320deg) saturate(4) brightness(0.7); }
+.tier-4 .nk-header-logo { filter: brightness(0.8) contrast(1.2) sepia(1) hue-rotate(5deg) saturate(1.5) drop-shadow(0 0 10px rgba(212, 175, 55, 0.6)); }
+.nk-calc-card .nk-header-logo { filter: brightness(0.8) contrast(1.2) sepia(1) hue-rotate(5deg) saturate(1.5) drop-shadow(0 0 10px rgba(212, 175, 55, 0.6)); }
+
+.nk-tier-title {
+    font-family: var(--nk-font-en); 
+    font-size: 2.2rem; 
+    font-weight: 600; 
+    letter-spacing: 2px;
+    color: var(--nk-gold-rich); 
+}
+
+.nk-calc-title {
+    font-family: var(--nk-font-tc); 
+    font-size: 1.8rem;
+    font-weight: 500;
+    letter-spacing: 2px;
+    color: #fff;
+}
+
+.nk-card-content { padding: 0; }
+
+.nk-data-item-box {
+    padding: 30px; 
+    border-bottom: 1px solid #1a1a1a; 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center;
+}
+.nk-data-item-box:last-child { border-bottom: none; }
+
+.nk-label-text { 
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.95rem; 
+    color: #888; 
+    letter-spacing: 1px; 
+}
+
+.nk-label-text svg {
+    width: 16px;
+    height: 16px;
+    stroke: var(--nk-gold-dark);
+    opacity: 0.9;
+}
+
+.nk-value-v2 {
+    font-family: var(--nk-font-en); 
+    font-size: 1.6rem; 
+    color: #eee; 
+    line-height: 1; 
+    font-weight: 500;
+}
+
+/* === 修改：新增 Tier 金色光暈漸變文字動畫 === */
+.tier-value-glow {
+    animation: tierValueShine 3s infinite alternate ease-in-out;
+    font-weight: 700;
+}
+@keyframes tierValueShine {
+    0% {
+        color: #ffffff;
+        text-shadow: 0 0 10px rgba(255, 255, 255, 0.6), 0 0 20px rgba(197, 160, 89, 0.3);
+    }
+    100% {
+        color: var(--nk-gold-rich);
+        text-shadow: 0 0 15px var(--nk-gold-rich), 0 0 30px rgba(197, 160, 89, 0.8), 0 0 45px rgba(197, 160, 89, 0.4);
+    }
+}
+
+.nk-highlight { color: var(--nk-gold-rich); }
+
+/* --- Calculator Specific --- */
+.nk-calc-card { 
+    margin-top: 60px;
+    border: 1px solid rgba(197, 160, 89, 0.3); 
+}
+
+.nk-input-section { 
+    padding: 40px; 
+    border-bottom: 1px solid #222; 
+}
+
+.nk-input-label-row { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: flex-end; 
+    margin-bottom: 25px; 
+}
+
+.nk-input-value { 
+    font-family: var(--nk-font-en); 
+    font-size: 3rem; 
+    color: var(--nk-gold-rich); 
+    line-height: 1; 
+    font-weight: 700;
+}
+
+.nk-range-wrapper { 
+    height: 4px; 
+    background: #333; 
+    width: 100%; 
+    position: relative; 
+    border-radius: 2px; 
+    margin-bottom: 15px;
+}
+
+.nk-range-limits {
+    display: flex;
+    justify-content: space-between; 
+    color: #666;
+    font-family: var(--nk-font-en);
+    font-size: 1rem;
+    margin-top: 10px;
+}
+
+.nk-range-slider { 
+    -webkit-appearance: none; 
+    width: 100%; 
+    height: 100%; 
+    background: transparent; 
+    outline: none; 
+    position: absolute; 
+    top: 0; 
+    z-index: 2; 
+    cursor: pointer; 
+}
+.nk-range-track-fill { 
+    position: absolute; 
+    top: 0; 
+    left: 0; 
+    height: 100%; 
+    background: var(--nk-gold-rich); 
+    width: 50%; 
+    box-shadow: 0 0 10px rgba(197, 160, 89, 0.5); 
+}
+.nk-range-slider::-webkit-slider-thumb {
+    -webkit-appearance: none; 
+    width: 24px; 
+    height: 24px; 
+    background: #000; 
+    border: 2px solid var(--nk-gold-rich); 
+    border-radius: 50%; 
+    cursor: grab; 
+    margin-top: -10px;
+    box-shadow: 0 0 15px rgba(197, 160, 89, 0.5);
+    transition: transform 0.2s;
+}
+.nk-range-slider::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+    background: var(--nk-gold-rich);
+}
+
+.nk-result-grid { display: grid; grid-template-columns: repeat(3, 1fr); }
+.nk-result-box {
+    padding: 30px 20px; 
+    text-align: center; 
+    border-right: 1px solid #222;
+}
+.nk-result-box:last-child { 
+    border-right: none; 
+    background: linear-gradient(180deg, rgba(197, 160, 89, 0.05) 0%, rgba(0,0,0,0) 100%); 
+}
+.nk-sub-text { font-size: 0.9rem; color: #555; margin-top: 5px; }
+
+@media (max-width: 768px) {
+    .nk-tier-grid-v2 { grid-template-columns: 1fr; gap: 30px; }
+    .nk-tier-container-v2 { padding: 0 10px !important; }
+
+    .nk-tier-title { font-size: 2rem; }
+    .nk-calc-title { font-size: 1.5rem; }
+    .nk-input-value { font-size: 2.5rem; }
+    
+    .nk-result-grid { grid-template-columns: 1fr; }
+    .nk-result-box { 
+        border-right: none; 
+        border-bottom: 1px solid #222; 
+        padding: 25px; 
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .nk-result-box .nk-label-text { margin-bottom: 0 !important; }
+    .nk-result-box > div { text-align: right; }
+    
+    .nk-input-label-row { flex-direction: column; align-items: flex-start; gap: 10px; }
+    .nk-input-value { align-self: flex-end; }
+}
+
+/* --- ZIG-ZAG STAGGERED GALLERY --- */
+.nk-zigzag-gallery {
+    display: flex;
+    flex-direction: column;
+    gap: 60px;
+    margin-top: 40px;
+    width: 100%;
+}
+
+.zigzag-item {
+    position: relative;
+    width: 75%;
+    aspect-ratio: 4 / 3;
+    border: 1px solid var(--nk-gold-dark);
+    background: #000;
+    overflow: hidden;
+    cursor: pointer;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.6);
+    opacity: 0;
+    transform: translateY(60px);
+    transition: opacity 0.8s ease-out, transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), border-color 0.3s;
+}
+
+.zigzag-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    filter: grayscale(20%);
+}
+
+.zigzag-item.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.zigzag-item:hover {
+    border-color: var(--nk-gold-rich);
+    box-shadow: 0 20px 60px rgba(197, 160, 89, 0.2);
+    z-index: 10;
+}
+.zigzag-item:hover img {
+    transform: scale(1.1);
+    filter: grayscale(0%);
+}
+
+.zigzag-item:nth-child(odd) { align-self: flex-start; }
+.zigzag-item:nth-child(even) { align-self: flex-end; }
+
+.zigzag-overlay {
+    position: absolute; 
+    bottom: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 60%;
+    background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.6) 50%, transparent 100%);
+    display: flex; 
+    flex-direction: column; 
+    justify-content: flex-end; 
+    padding: 10px;
+    pointer-events: none;
+}
+
+.zigzag-text {
+    opacity: 0; 
+    transform: translateX(-40px);
+    transition: all 0.8s cubic-bezier(0.215, 0.610, 0.355, 1.000);
+}
+
+.zigzag-item.visible .zigzag-text {
+    opacity: 1; 
+    transform: translateX(0);
+    transition-delay: 0.4s;
+}
+
+.zigzag-title { 
+    font-family: var(--nk-font-tc);
+    font-size: 1.5rem; 
+    font-weight: 700; 
+    margin-bottom: 5px; 
+    display: block; 
+    color: #fff; 
+    text-shadow: 0 2px 10px rgba(0,0,0,0.8);
+}
+.zigzag-desc { 
+    font-family: var(--nk-font-tc);
+    font-size: 1rem; 
+    color: #ccc; 
+    font-weight: 300; 
+    letter-spacing: 1px;
+}
+
+@media (max-width: 768px) {
+    .nk-zigzag-gallery { gap: 30px; }
+    .zigzag-item {
+        width: 100%;
+        align-self: center !important;
+        margin-bottom: 0;
+        transition-delay: 0s !important; 
+    }
+    .zigzag-title { font-size: 1.3rem; }
+}
+
+/* --- NσK INFINITE AMPLIFIER --- */
+.nk-infinite-amp-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 900px;
+    margin: 60px auto 100px;
+    padding: 60px 20px;
+    background: #000;
+    border: 1px solid #1a1a1a;
+    border-top: 1px solid var(--nk-gold-dark);
+    box-shadow: 0 50px 100px rgba(0,0,0,0.9);
+    overflow: hidden;
+    text-align: center;
+}
+
+.nk-amp-overlay-gradient {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background: radial-gradient(circle at center, rgba(197, 160, 89, 0.08) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+.nk-amp-header-minimal h3 {
+    font-family: var(--nk-font-tc);
+    font-size: 1.5rem;
+    margin-bottom: 40px;
+    color: #fff;
+}
+
+.nk-infinite-stage {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    height: 250px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.amp-pipeline {
+    position: absolute; top: 50%; left: 0; width: 100%; height: 2px;
+    background: #222;
+    z-index: 0;
+    transform: translateY(-50%);
+}
+.amp-flow-line {
+    position: absolute; top: 0; left: 0; height: 100%; width: 100%;
+    background: linear-gradient(90deg, transparent 0%, var(--nk-gold-rich) 50%, transparent 100%);
+    background-size: 50% 100%;
+    background-repeat: no-repeat;
+    opacity: 0;
+    animation: flowPulse 2s infinite linear;
+}
+
+.amp-station {
+    position: relative; z-index: 2;
+    background: #0a0a0a;
+    border: 1px solid #333;
+    padding: 20px;
+    width: 180px;
+    height: 160px;
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    justify-content: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.amp-station-icon {
+    width: 50px; height: 50px;
+    flex-shrink: 0; 
+    border-radius: 50%;
+    background: #151515;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 15px;
+    border: 1px solid #333;
+}
+.amp-station-icon svg { width: 24px; fill: #666; }
+
+.station-right { border-color: var(--nk-gold-dark); }
+.station-right .icon-gold { border-color: var(--nk-gold-rich); background: rgba(197, 160, 89, 0.1); box-shadow: 0 0 20px rgba(197, 160, 89, 0.2); }
+.station-right svg { fill: var(--nk-gold-rich); }
+
+.amp-station-label { font-size: 0.75rem; letter-spacing: 2px; color: #666; margin-bottom: 5px; font-family: var(--nk-font-en); }
+.text-gold { color: var(--nk-gold-rich); }
+
+.amp-station-value { font-family: var(--nk-font-en); font-size: 1.5rem; color: #fff; line-height: 1.1; font-weight: 700; }
+.highlight-text { 
+    background: var(--nk-gold-rich); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    font-size: 1.6rem;
+    text-shadow: 0 0 30px rgba(197, 160, 89, 0.3);
+}
+
+.amp-core-reactor {
+    position: relative; z-index: 5;
+    width: 140px; height: 140px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; 
+}
+
+.amp-core-logo-box {
+    width: 80px; height: 80px;
+    background: #000;
+    border-radius: 50%;
+    border: 1px solid var(--nk-gold-rich);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 10;
+    box-shadow: 0 0 50px rgba(197, 160, 89, 0.2);
+    animation: coreBreath 3s infinite ease-in-out;
+}
+.amp-core-logo-box img { width: 45px; filter: brightness(1.2); }
+
+.amp-core-glow {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    width: 140px; height: 140px;
+    border: 1px dashed rgba(197, 160, 89, 0.3);
+    border-radius: 50%;
+    animation: coreSpin 10s linear infinite;
+}
+
+.amp-injector {
+    position: absolute; left: 50%; transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center;
+    width: 2px;
+}
+.injector-top { top: -80px; height: 80px; }
+.injector-bottom { bottom: -80px; height: 80px;}
+
+.injector-label {
+    white-space: nowrap; font-size: 0.65rem; color: var(--nk-gold-rich); letter-spacing: 1px;
+    opacity: 0; animation: labelFadeIn 3s infinite;
+}
+
+.injector-stream {
+    width: 2px; flex-grow: 1;
+    background: linear-gradient(to bottom, transparent, var(--nk-gold-rich), transparent);
+    position: relative; overflow: hidden;
+}
+.injector-stream::after {
+    content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 20px;
+    background: #fff; filter: blur(2px);
+    animation: injectDrop 1.5s infinite ease-in;
+}
+.injector-bottom .injector-stream::after { animation-direction: reverse; }
+
+@keyframes flowPulse {
+    0% { left: 0%; width: 0%; opacity: 0; }
+    20% { left: 0%; width: 50%; opacity: 1; }
+    50% { left: 50%; width: 50%; opacity: 1; }
+    80% { left: 100%; width: 0%; opacity: 0; }
+    100% { left: 100%; opacity: 0; }
+}
+@keyframes flowPulseVert {
+    0% { top: 0%; height: 0%; opacity: 0; }
+    20% { top: 0%; height: 50%; opacity: 1; }
+    50% { top: 50%; height: 50%; opacity: 1; }
+    80% { top: 100%; height: 0%; opacity: 0; }
+    100% { top: 100%; opacity: 0; }
+}
+@keyframes injectDrop { 0% { top: -20px; opacity: 0; } 50% { opacity: 1; } 100% { top: 100%; opacity: 0; } }
+@keyframes labelFadeIn { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; text-shadow: 0 0 10px var(--nk-gold-rich); } }
+@keyframes coreBreath { 0%, 100% { box-shadow: 0 0 30px rgba(197, 160, 89, 0.2); transform: scale(1); border-color: #555; } 50% { box-shadow: 0 0 60px rgba(197, 160, 89, 0.6); transform: scale(1.05); border-color: var(--nk-gold-rich); } }
+@keyframes coreSpin { 100% { transform: translate(-50%, -50%) rotate(360deg); } }
+
+@media (max-width: 768px) {
+    .nk-infinite-stage {
+        flex-direction: column;
+        height: auto;
+        gap: 60px;
+        padding: 40px 0;
+    }
+    
+    .amp-pipeline {
+        width: 2px; 
+        height: 100%; 
+        top: 0; 
+        left: 50%; 
+        transform: translateX(-50%);
+    }
+    .amp-flow-line {
+        background: linear-gradient(180deg, transparent 0%, var(--nk-gold-rich) 50%, transparent 100%);
+        background-size: 100% 50%;
+        animation: flowPulseVert 2s infinite linear;
+    }
+    
+    .injector-top { top: -50px; height: 50px; }
+    .injector-bottom { bottom: -50px; height: 50px; }
+    
+    .nk-infinite-amp-wrapper { padding: 40px 10px; }
+    
+    .amp-station { 
+        width: 100%; 
+        max-width: 280px; 
+        height: auto; 
+        flex-direction: row; 
+        justify-content: flex-start; 
+        gap: 20px; 
+        text-align: left;
+        padding: 15px 20px;
+    }
+    
+    .amp-station-icon { margin-bottom: 0; }
+    
+    .station-right { 
+        flex-direction: row-reverse; 
+        text-align: right; 
+        justify-content: flex-start;
+    }
+}
+
+/* --- NσK CONTINUOUS PROFIT STREAM --- */
+.nk-stream-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 1000px;
+    margin: 60px auto;
+    padding: 50px 30px;
+    background: linear-gradient(145deg, #080808 0%, #121212 100%);
+    border: 1px solid #222;
+    border-top: 2px solid var(--nk-gold-dark);
+    box-shadow: 0 30px 60px rgba(0,0,0,0.8), inset 0 0 30px rgba(197, 160, 89, 0.05);
+    border-radius: 4px;
+    overflow: hidden;
+    text-align: center;
+}
+
+.nk-stream-header h3 {
+    font-family: var(--nk-font-tc);
+    font-size: 1.5rem;
+    margin-bottom: 40px;
+    color: #fff;
+}
+
+.nk-stream-stage {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 30px;
+    height: 220px;
+    position: relative;
+}
+
+.stream-node {
+    display: flex; flex-direction: column; align-items: center;
+    position: relative; z-index: 10;
+    flex-shrink: 0;
+}
+
+.node-icon-box {
+    width: 80px; height: 80px;
+    border-radius: 50%;
+    background: #1a1a1a;
+    border: 2px solid #333;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 15px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+    transition: all 0.3s;
+}
+
+.icon-user svg { width: 40px; fill: #666; }
+.node-user:hover .icon-user { border-color: #555; box-shadow: 0 0 20px rgba(255,255,255,0.1); }
+
+.icon-system { border-color: var(--nk-gold-dark); background: linear-gradient(45deg, #1a1a1a, #2a2210); }
+.icon-system img { width: 45px; filter: brightness(1.2); animation: subtlePulse 3s infinite ease-in-out; }
+.node-system:hover .icon-system { box-shadow: 0 0 30px rgba(197, 160, 89, 0.3); }
+
+.node-label { font-family: var(--font-en); font-size: 0.8rem; letter-spacing: 2px; color: #888; }
+
+.stream-flows-container {
+    flex-grow: 1;
+    height: 100%;
+    display: flex; flex-direction: column; justify-content: center;
+    gap: 50px;
+    position: relative;
+}
+
+.flow-line {
+    position: relative;
+    width: 100%;
+    height: 50px;
+    display: flex; align-items: center;
+}
+
+.flow-track {
+    position: absolute; top: 50%; left: 0; width: 100%; height: 2px;
+    transform: translateY(-50%);
+    z-index: 0;
+}
+.track-gold { background: linear-gradient(90deg, rgba(197, 160, 89, 0.2), var(--nk-gold-rich), rgba(197, 160, 89, 0.2)); box-shadow: 0 0 15px rgba(197, 160, 89, 0.2); }
+.track-stable { background: linear-gradient(90deg, #333, #666, #333); }
+
+.flow-label {
+    position: absolute; width: 100%; text-align: center;
+    font-size: 0.75rem; color: var(--nk-gold-rich); letter-spacing: 2px; opacity: 0.8;
+}
+.label-top { top: -15px; }
+
+.static-usdt-box {
+    position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+    display: flex; flex-direction: column; align-items: center;
+    z-index: 5;
+    background: #080808;
+    padding: 0 15px;
+}
+.static-label { margin-top: 5px; font-size: 0.8rem; color: #888; letter-spacing: 1px; }
+
+.gold-usdt-svg {
+    width: 28px; height: 28px;
+    filter: brightness(0) saturate(100%) invert(78%) sepia(23%) saturate(1119%) hue-rotate(359deg) brightness(88%) contrast(86%);
+}
+
+#nk-profit-particles-container {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    overflow: hidden; 
+    pointer-events: none;
+    z-index: 5;
+}
+
+.profit-particle {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex; align-items: center; gap: 8px;
+    background: rgba(10, 10, 10, 0.8);
+    border: 1px solid var(--nk-gold-dark);
+    padding: 8px 25px;
+    border-radius: 25px;
+    box-shadow: 0 0 15px rgba(197, 160, 89, 0.3);
+    white-space: nowrap;
+    animation: flowRightToLeft 6s linear forwards;
+}
+
+.profit-particle .particle-val {
+    font-family: var(--font-en); font-weight: 700; color: #fff; font-size: 0.9rem;
+    text-shadow: 0 0 5px var(--nk-gold-rich);
+}
+
+@keyframes flowRightToLeft {
+    0% { left: 105%; opacity: 0; transform: translateY(-50%) scale(0.8); }
+    10% { opacity: 1; transform: translateY(-50%) scale(1); }
+    90% { opacity: 1; transform: translateY(-50%) scale(1); }
+    100% { left: -25%; opacity: 0; transform: translateY(-50%) scale(0.8); }
+}
+
+@keyframes subtlePulse {
+    0%, 100% { transform: scale(1); filter: brightness(1.2); }
+    50% { transform: scale(1.05); filter: brightness(1.4) drop-shadow(0 0 10px var(--nk-gold-rich)); }
+}
+
+@media (max-width: 768px) {
+    .nk-stream-wrapper { padding: 40px 20px; }
+    
+    .nk-stream-stage {
+        flex-direction: column;
+        height: 480px;
+        gap: 20px;
+    }
+    
+    .node-user { order: 1; }
+    
+    .stream-flows-container { 
+        order: 2; 
+        flex-direction: row; 
+        width: 100%; 
+        height: 100%; 
+        gap: 0; 
+    }
+    .node-system { order: 3; }
+    
+    .flow-line { 
+        width: 50%;
+        height: 100%; 
+        flex-direction: column; 
+        justify-content: center;
+    }
+    
+    .flow-bottom { order: 1; } 
+    .flow-top { order: 2; }
+    
+    .flow-track { 
+        width: 2px; height: 100%; 
+        top: 0; left: 50%; 
+        transform: translateX(-50%); 
+    }
+    .track-gold { background: linear-gradient(180deg, rgba(197, 160, 89, 0.2), var(--nk-gold-rich), rgba(197, 160, 89, 0.2)); }
+    .track-stable { background: linear-gradient(180deg, #333, #666, #333); }
+    
+    .static-usdt-box { 
+        background: #080808; 
+        padding: 15px 5px; 
+        width: 90%; 
+    }
+    .static-label { margin-top: 8px; line-height: 1.3; }
+
+    .flow-label { 
+        top: 50%; left: 50%; 
+        transform: translate(-50%, -50%); 
+        background: #080808; 
+        padding: 15px 5px; 
+        width: 90%;
+        z-index: 2;
+        line-height: 1.3;
+    }
+
+    .profit-particle {
+        top: auto; 
+        left: 50%;
+        transform: translateX(-50%);
+        animation: flowBottomToTop 3s linear forwards;
+    }
+}
+
+@keyframes flowBottomToTop {
+    0% { top: 105%; opacity: 0; transform: translateX(-50%) scale(0.8); }
+    10% { opacity: 1; transform: translateX(-50%) scale(1); }
+    90% { opacity: 1; transform: translateX(-50%) scale(1); }
+    100% { top: -25%; opacity: 0; transform: translateX(-50%) scale(0.8); }
+}
+
+/* --- NEW: Step Process Styles --- */
+.optin-steps-container {
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+    width: 100%;
+    align-items: center;
+}
+
+.step-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+    margin-bottom: 35px;
+    border-bottom: 1px solid rgba(197, 160, 89, 0.2);
+    padding-bottom: 25px;
+    width: 100%;
+}
+
+.step-num {
+    font-family: var(--nk-font-en);
+    font-size: 4rem;
+    line-height: 1;
+    color: var(--nk-gold-rich);
+    font-weight: 700;
+    letter-spacing: -2px;
+    position: relative;
+    padding-right: 30px;
+}
+
+.step-num::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 80%;
+    width: 2px;
+    background: var(--nk-gold-rich);
+    opacity: 0.8;
+}
+
+.step-title-text {
+    font-family: var(--nk-font-tc);
+    font-size: 1.6rem;
+    color: #fff;
+    font-weight: 600;
+    line-height: 1.4;
+    text-align: left;
+    margin: 0;
+}
+
+.process-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+}
+
+.process-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid #333;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    text-align: left;
+}
+
+.process-item.static {
+    opacity: 1;
+    transform: none;
+    border-color: rgba(197, 160, 89, 0.2);
+}
+
+.process-item.anim-wait {
+    opacity: 0;
+    transform: translateX(30px);
+}
+
+.process-item.active {
+    opacity: 1;
+    transform: translateX(0);
+    border-color: var(--nk-gold-dark);
+    background: linear-gradient(90deg, rgba(197, 160, 89, 0.05) 0%, transparent 100%);
+}
+
+.process-item:hover {
+    border-color: var(--nk-gold-rich);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.process-icon-box {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #0a0a0a;
+    border: 1px solid var(--nk-gold-dark);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.process-icon-box svg {
+    width: 20px;
+    height: 20px;
+    fill: var(--nk-gold-rich);
+}
+
+.process-text {
+    color: #ddd;
+    font-size: 1.1rem;
+    line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+    .step-header {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+    }
+    .step-num {
+        padding-right: 0;
+        margin-bottom: 10px;
+    }
+    .step-num::after {
+        width: 60px;
+        height: 2px;
+        top: auto;
+        bottom: -5px;
+        left: 50%;
+        transform: translateX(-50%);
+        right: auto;
+    }
+    .step-title-text {
+        text-align: center;
+        font-size: 1.4rem;
+    }
+}
+
+/* --- NEW: Feature Row Step Layout --- */
+.step-layout-block {
+    display: flex;
+    gap: 40px;
+    margin-bottom: 40px;
+    padding-bottom: 40px;
+    border-bottom: 1px solid #222;
+}
+
+.step-layout-block:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+.step-num-col {
+    position: relative;
+    padding-right: 30px;
+    flex-shrink: 0;
+}
+
+.step-num-col::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 5px;
+    height: 100%;
+    width: 2px;
+    background: var(--nk-gold-rich);
+}
+
+.step-big-num {
+    font-family: var(--nk-font-en);
+    font-size: 5rem;
+    line-height: 0.8;
+    font-weight: 700;
+    color: var(--nk-gold-rich);
+    display: block;
+    margin-top: -5px;
+}
+
+.step-info-col {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.step-sub-en {
+    font-family: var(--nk-font-en);
+    color: var(--nk-gold-rich);
+    font-size: 1rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.step-title-cn {
+    font-family: var(--nk-font-tc);
+    font-size: 1.8rem;
+    color: #fff;
+    font-weight: 700;
+    line-height: 1.3;
+    margin-bottom: 20px;
+}
+
+.step-body-text p {
+    color: #ccc;
+    font-size: 1.05rem;
+    line-height: 1.7;
+    margin-bottom: 15px;
+    text-align: justify;
+}
+
+.step-img-box {
+    margin-top: 20px;
+    border: 1px solid var(--nk-gold-dark);
+    overflow: hidden;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.step-img-box img {
+    width: 100%;
+    height: auto;
+    display: block;
+    transition: transform 0.5s ease;
+}
+
+.step-img-box:hover {
+    border-color: var(--nk-gold-rich);
+    box-shadow: 0 0 20px rgba(197, 160, 89, 0.3);
+}
+
+.step-img-box:hover img {
+    transform: scale(1.05);
+}
+
+.step-video-box {
+    margin-top: 20px;
+    border: 1px solid var(--nk-gold-dark);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    overflow: hidden;
+    position: relative;
+}
+
+.step-video-box video {
+    width: 100%;
+    display: block;
+}
+
+@media (max-width: 768px) {
+    .step-layout-block {
+        flex-direction: column;
+        gap: 15px;
+        margin-bottom: 30px;
+        padding-bottom: 30px;
+    }
+    
+    .step-num-col {
+        padding-right: 0;
+        border-bottom: 1px solid rgba(197, 160, 89, 0.3);
+        padding-bottom: 10px;
+        width: fit-content;
+    }
+
+    .step-num-col::after {
+        display: none;
+    }
+    
+    .step-big-num {
+        font-size: 3.5rem;
+        margin-top: 0;
+    }
+}
+
+/* --- NσK MULTIPLIER FLOW BOX --- */
+.nk-multiplier-box {
+    margin-top: 60px;
+    padding-top: 40px;
+    border-top: 1px solid rgba(197, 160, 89, 0.2);
+    width: 100%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.nk-flow-chart {
+    position: relative;
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto 50px;
+    padding-left: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+}
+
+.flow-line-bg, .flow-line-gold {
+    position: absolute;
+    left: 9px;
+    top: 10px;
+    width: 2px;
+    border-radius: 2px;
+}
+
+.flow-line-bg {
+    height: calc(100% - 20px);
+    background: #222;
+    z-index: 1;
+}
+
+.flow-line-gold {
+    height: 0%;
+    background: var(--nk-gold-rich);
+    z-index: 2;
+    box-shadow: 0 0 10px var(--nk-gold-rich);
+    animation: lineFlowDown 6s infinite linear;
+}
+
+.flow-step {
+    position: relative;
+    display: flex;
+    align-items: center;
+    z-index: 5;
+}
+
+.flow-node {
+    width: 20px;
+    height: 20px;
+    background: #0a0a0a;
+    border: 2px solid #333;
+    border-radius: 50%;
+    position: absolute;
+    left: -30px;
+    transition: 0.3s;
+    box-shadow: 0 0 10px rgba(0,0,0,0.8);
+    animation: nodeGlow 6s infinite;
+}
+
+.flow-text {
+    font-family: var(--nk-font-tc);
+    font-size: 1.3rem;
+    color: #444;
+    font-weight: 500;
+    margin-left: 10px;
+    letter-spacing: 1px;
+    transition: 0.3s;
+    animation: textLightUp 6s infinite;
+}
+
+.flow-step:nth-child(3) .flow-node,
+.flow-step:nth-child(3) .flow-text { animation-delay: 0s; }
+.flow-step:nth-child(4) .flow-node,
+.flow-step:nth-child(4) .flow-text { animation-delay: 1.2s; }
+.flow-step:nth-child(5) .flow-node,
+.flow-step:nth-child(5) .flow-text { animation-delay: 2.4s; }
+.flow-step:nth-child(6) .flow-node,
+.flow-step:nth-child(6) .flow-text { animation-delay: 3.6s; }
+
+@keyframes lineFlowDown {
+    0% { height: 0%; opacity: 1; }
+    70% { height: 100%; opacity: 1; }
+    85% { height: 100%; opacity: 0; }
+    100% { height: 0%; opacity: 0; }
+}
+
+@keyframes nodeGlow {
+    0% { border-color: #333; background: #0a0a0a; transform: scale(1); }
+    5% { border-color: var(--nk-gold-rich); background: var(--nk-gold-rich); transform: scale(1.2); box-shadow: 0 0 15px var(--nk-gold-rich); }
+    80% { border-color: var(--nk-gold-rich); background: var(--nk-gold-rich); transform: scale(1); box-shadow: 0 0 10px rgba(197,160,89,0.5); }
+    90% { border-color: #333; background: #0a0a0a; box-shadow: none; }
+    100% { border-color: #333; background: #0a0a0a; }
+}
+
+@keyframes textLightUp {
+    0% { color: #444; text-shadow: none; transform: translateX(0); }
+    5% { color: #fff; text-shadow: 0 0 10px var(--nk-gold-rich); transform: translateX(5px); }
+    80% { color: var(--nk-gold-rich); text-shadow: 0 0 5px rgba(197,160,89,0.3); transform: translateX(0); }
+    90% { color: #444; text-shadow: none; }
+    100% { color: #444; }
+}
+
+/* --- URGENCY CTA --- */
+.nk-urgency-cta {
+    background: linear-gradient(135deg, rgba(10,10,10,1) 0%, rgba(20,20,20,1) 100%);
+    border: 2px solid var(--nk-gold-rich);
+    box-shadow: 0 0 30px rgba(197, 160, 89, 0.15), inset 0 0 20px rgba(197, 160, 89, 0.05);
+    padding: 30px 20px;
+    width: 100%;
+    max-width: 600px;
+    text-align: center;
+    border-radius: 4px;
+    position: relative;
+    overflow: hidden;
+    animation: pulseBorder 3s infinite alternate;
+}
+
+.nk-urgency-cta::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 100%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(197, 160, 89, 0.1), transparent);
+    animation: sweepLight 4s infinite;
+}
+
+.urgency-icon {
+    width: 60px;
+    height: 60px;
+    margin: 0 auto 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: shakeIcon 4s infinite ease-in-out; 
+}
+
+.urgency-icon svg {
+    width: 100%;
+    height: 100%;
+    filter: drop-shadow(0 0 15px rgba(197, 160, 89, 0.6));
+    stroke: var(--nk-gold-rich);
+}
+
+.urgency-title {
+    font-family: var(--nk-font-tc);
+    color: #fff;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.urgency-desc {
+    font-size: 1.1rem;
+    color: #ccc;
+    line-height: 1.6;
+}
+
+.highlight-gold {
+    color: var(--nk-gold-rich);
+    font-weight: 700;
+    border-bottom: 1px solid var(--nk-gold-rich);
+    padding-bottom: 2px;
+}
+
+@keyframes pulseBorder {
+    0% { border-color: var(--nk-gold-dark); box-shadow: 0 0 10px rgba(197, 160, 89, 0.1); }
+    100% { border-color: var(--nk-gold-rich); box-shadow: 0 0 30px rgba(197, 160, 89, 0.4); }
+}
+
+@keyframes sweepLight {
+    0% { left: -100%; }
+    50% { left: 100%; }
+    100% { left: 100%; }
+}
+
+@keyframes shakeIcon {
+    0%, 85% { transform: rotate(0deg) scale(1); }
+    87% { transform: rotate(-10deg) scale(1.1); }
+    89% { transform: rotate(10deg) scale(1.1); }
+    91% { transform: rotate(-10deg) scale(1.1); }
+    93% { transform: rotate(10deg) scale(1.1); }
+    95% { transform: rotate(0deg) scale(1); }
+    100% { transform: rotate(0deg) scale(1); }
+}
+
+@media (max-width: 768px) {
+    .nk-flow-chart {
+        padding-left: 25px;
+        gap: 30px;
+    }
+    .flow-text {
+        font-size: 1.1rem;
+    }
+    .nk-urgency-cta {
+        padding: 25px 15px;
+        border-width: 1px;
+    }
+    .urgency-title {
+        font-size: 1.3rem;
+    }
+}
+
+/* --- NEW: VERTICAL TESTIMONIALS --- */
+.testimonials-vertical-layout {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 40px;
+    width: 100%;
+    max-width: 1200px;
+    margin: 60px auto 0;
+    padding: 0 10px;
+}
+
+.testi-card-vertical {
+    width: 300px;
+    background: var(--nk-bg-card);
+    border: 1px solid var(--nk-gold-dark);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.testi-card-vertical:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 30px 60px rgba(197, 160, 89, 0.15);
+    border-color: var(--nk-gold-rich);
+}
+
+.testi-content-top {
+    padding: 30px 20px 15px;
+    text-align: center;
+    flex-shrink: 0;
+}
+
+.testi-amount-v {
+    font-family: var(--nk-font-en);
+    font-size: 2.5rem;
+    font-weight: 700;
+    line-height: 1.1;
+    margin: 15px 0 5px;
+    background: linear-gradient(to bottom, #fff 10%, var(--nk-gold-rich) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 2px 10px rgba(197, 160, 89, 0.2));
+}
+
+.testi-meta-right {
+    display: block;
+    text-align: right;
+    font-family: var(--nk-font-en);
+    color: var(--nk-gold-rich);
+    font-size: 0.95rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-top: 5px;
+    border-top: 1px solid #333;
+    padding-top: 10px;
+}
+
+.video-wrapper-vertical {
+    width: 100%;
+    height: 533px; 
+    margin-top: auto;
+    position: relative;
+    background: #000;
+    border-top: 1px solid #333;
+}
+
+.video-wrapper-vertical .video-block {
+    width: 100%;
+    height: 100%;
+}
+
+.video-wrapper-vertical video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+@media (max-width: 768px) {
+    .testimonials-vertical-layout {
+        flex-direction: row;       
+        flex-wrap: nowrap;         
+        justify-content: flex-start; 
+        overflow-x: auto;          
+        overflow-y: hidden;        
+        gap: 20px;                 
+        padding: 20px 15px 40px;   
+        margin-top: 30px;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;     
+    }
+
+    .testimonials-vertical-layout::-webkit-scrollbar {
+        display: none; 
+    }
+
+    .testi-card-vertical {
+        flex: 0 0 auto;            
+        width: 260px;              
+        scroll-snap-align: center; 
+    }
+    
+    .video-wrapper-vertical {
+        height: 462px; 
+    }
+
+    .testi-amount-v {
+        font-size: 2.2rem;
+    }
+
+    .mobile-swipe-indicator {
+        display: flex !important;
+    }
+}
+
+.mobile-swipe-indicator {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: -10px;
+    margin-bottom: 40px;
+    color: var(--nk-gold-rich);
+    font-size: 0.9rem;
+    font-weight: 500;
+    letter-spacing: 1px;
+    opacity: 0.8;
+}
+
+.mobile-swipe-indicator svg {
+    width: 18px;
+    height: 18px;
+    stroke: var(--nk-gold-rich);
+    animation: swipe-right-anim 1.5s infinite ease-in-out;
+}
+
+@keyframes swipe-right-anim {
+    0% { transform: translateX(0); opacity: 0.5; }
+    50% { transform: translateX(8px); opacity: 1; }
+    100% { transform: translateX(0); opacity: 0.5; }
+}
+
+.nk-tier-card-v2 .testi-card-vertical {
+    width: 100%; 
+    border: none; 
+    box-shadow: none; 
+    background: transparent; 
+    border-radius: 0;
+}
+
+.nk-tier-card-v2 .testi-card-vertical:hover {
+    transform: none;
+    box-shadow: none;
+    border-color: transparent;
+}
+
+.nk-tier-card-v2 .video-wrapper-vertical {
+    width: 100%;
+    height: auto; 
+    background: transparent;
+    border-top: 1px dashed #333;
+    padding: 30px 0; 
+    display: flex;
+    justify-content: center; 
+    align-items: center;
+}
+
+.nk-tier-card-v2 .video-wrapper-vertical .video-block {
+    min-width: 0 !important; 
+    width: 100%;
+    max-width: 300px;
+    margin: 0 auto;   
+    aspect-ratio: 9 / 16;
+    height: auto;
+    border-radius: 0px; 
+    border: 1px solid var(--nk-gold-dark); 
+    box-shadow: 0 10px 30px rgba(0,0,0,0.8); 
+    overflow: hidden;
+}
+
+.nk-tier-card-v2 .video-wrapper-vertical video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+@media (max-width: 768px) {
+    .nk-tier-card-v2 .video-wrapper-vertical .video-block {
+        max-width: 250px;
+    }
+}
+</style>
+</head>
+<body>
+
+    <nav class="main-header scrolled" id="navbar">
+        <div class="container text-center">
+            <img src="https://arftk.com/imgs1/logo1.png" alt="NσK Logo" class="header-logo">
+        </div>
+    </nav>
+
+<section class="section-padding" style="background: #080808;">
+        <div class="container container-wide">
+            <div class="text-center" style="margin-bottom: 50px;">
+                <span class="subtitle-en">WELCOME ABOARD</span>
+                <div class="hero-text-only">
+                <h1>恭喜你成功進入<br>
+                    <span class="hero-number-block">NσK® SYSTEM</span>
+                    距離每月數萬美金的自動獲利只剩一步之遙
+                </h1>
+            </div>
+                
+                <div class="arrow-scroll">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+
+            <div class="video-wrapper deep-dive-hero-video" style="max-width: 900px; margin: 0 auto 80px;">
+                <script src="https://fast.wistia.com/embed/b3q7co67ui.js" async type="module"></script>
+                <wistia-player media-id="b3q7co67ui" seo="false" aspect="1.7777777777777777"></wistia-player>
+            </div>
+
+          
+            <div class="text-center" style="margin-bottom: 50px;">
+                <span class="subtitle-en">ACTIVATION</span>
+                <h2>系統開通流程：3個簡單步驟</h2>
+                
+                <p>請依造以下說明開通你的系統帳號</p>
+                
+                <div class="arrow-scroll">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+
+
+            <div class="feature-row sticky-mode">
+    
+    <div class="sticky-video-col">
+        <div class="video-wrapper">
+            <div class="video-block">
+                <script src="https://fast.wistia.com/embed/b3q7co67ui.js" async type="module"></script>
+                <wistia-player media-id="b3q7co67ui" seo="false" aspect="1.7777777777777777"></wistia-player>
+            </div>
+        </div>
+        <p style="margin-top: 20px; font-size: 0.9rem; text-align: center; color: #666;">
+            ▲ 開戶流程與資金說明
+        </p>
+    </div>
+
+    <div class="feature-content scrollable-content-col">
+
+    <div class="step-layout-block">
+        <div class="step-num-col">
+            <span class="step-big-num">01</span>
+        </div>
+        
+        <div class="step-info-col">
+            <span class="step-sub-en">DEPOSIT TRADING CAPITAL</span>
+            <h3 class="step-title-cn">依個人狀況存款至系統帳號</h3>
+            
+            <div class="step-body-text">
+                <p>跟任何投資一樣，系統必須要有能夠操作的資金，才能替你進行自動交易與獲利，因此第一個步驟就是先完成存款。</p>
+                <p>存款金額大小則依照你個人狀況決定，未來的獲利標準則會根據你的存款金額分成 Tier 1~4，請詳見下方 Tier 1~4 的存款要求與獲利標準。</p>
+            </div>
+
+            <div class="step-img-box">
+                <img src="https://arftk.com/imgs1/clients03.jpg" alt="Deposit Step">
+            </div>
+        </div>
+    </div>
+
+    <div class="step-layout-block">
+        <div class="step-num-col">
+            <span class="step-big-num">02</span>
+        </div>
+        
+        <div class="step-info-col">
+            <span class="step-sub-en">ONLINE MEETING</span>
+            <h3 class="step-title-cn">線上會議，開通系統與操作教學</h3>
+            
+            <div class="step-body-text">
+                <p>處理完你的交易資金之後，我們會安排一次線上視訊會議，替你開通系統帳戶 & 示範基本系統操作，並綁定你指定的收款銀行帳戶。</p>
+                <p>同時為了符合歐洲證交法的規定，我們必須確認客戶身分，才能為其進行資金管理。</p>
+            </div>
+
+            <div class="step-img-box">
+                <img src="https://arftk.com/imgs1/trading11.jpg" alt="Meeting Step">
+            </div>
+        </div>
+    </div>
+
+    <div class="step-layout-block">
+        <div class="step-num-col">
+            <span class="step-big-num">03</span>
+        </div>
+        
+        <div class="step-info-col">
+            <span class="step-sub-en">SYSTEM ACTIVATED</span>
+            <h3 class="step-title-cn">系統正式啟動與獲利提領</h3>
+            
+            <div class="step-body-text">
+                <p>完成會議之後,你的交易帳號就會正式開始運作,你可以透過手機或電腦，隨時隨地登入後台查看即時交易狀況與每日獲利數據</p>
+                <p>系統將會 24 小時不間斷地為你監控市場，並自動執行所有買賣操作，你無需進行任何手動干預。</p>
+            </div>
+
+            <div class="video-wrapper">
+                <div class="video-block">
+                    <video src="https://arftk.com/imgs1/dash.mp4" muted loop playsinline></video>
+                    
+                    <button class="play-pause-btn">
+                        <img decoding="async" class="icon" src="https://arftk.com/imgs/play.svg">
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+</div>
+
+
+ <div class="text-center" style="margin-bottom: 50px;">
+                <span class="subtitle-en">FUNDING METHOD</span>
+                <h2>系統出入金採用最方便快速的方式</h2>
+                <div class="hero-text-only">
+                    <span class="hero-number-block">USDT</span>
+                    <p>為何我們使用USDT作為出入金方式</p>
+            </div>
+                
+                <div class="arrow-scroll">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+
+
+
+            <div class="feature-row sticky-mode">
+    
+    <div class="sticky-video-col">
+        <div class="video-wrapper">
+            <div class="video-block">
+                <script src="https://fast.wistia.com/embed/b3q7co67ui.js" async type="module"></script>
+                <wistia-player media-id="b3q7co67ui" seo="false" aspect="1.7777777777777777"></wistia-player>
+            </div>
+        </div>
+        <p style="margin-top: 20px; font-size: 0.9rem; text-align: center; color: #666;">
+            ▲ 系統實戰操作演示
+        </p>
+    </div>
+
+    <div class="feature-content scrollable-content-col">
+
+        <div class="content-block">
+            <div class="feature-title-group">
+                <span class="feature-reason-tag">ADVANTAGE</span>
+                <h3 class="feature-heading-styled">
+                    使用USDT出入金的獨特優勢
+                    <div class="feature-heading-line"></div>
+                </h3>
+            </div>
+            
+            <p>使用USDT存款讓系統會員們不必與企業客戶一樣,進行當面會議,合約擬定,簽約儀式,以及稅務文件&銀行帳戶審核等繁複法律手續,能夠立刻完成入金啟動系統</p>
+            <div class="nk-zigzag-gallery">
+            
+    <div class="zigzag-item">
+        <img src="https://arftk.com/imgs1/trading11.jpg" alt="Instant Arrival">
+        <div class="zigzag-overlay">
+            <div class="zigzag-text">
+                <span class="zigzag-title">秒級到帳</span>
+                <span class="zigzag-desc">告別傳統銀行的冗長審核，實現 24/7 全天候資金秒級劃轉，流動性由您全權掌握。</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="zigzag-item">
+        <img src="https://arftk.com/imgs/10m3.jpg" alt="Transparent Settlement">
+        <div class="zigzag-overlay">
+            <div class="zigzag-text">
+                <span class="zigzag-title">結算透明</span>
+                <span class="zigzag-desc">鏈上數據實時可查，每一筆獲利結算皆公開透明且不可篡改，確保資金絕對歸屬。</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="zigzag-item">
+        <img src="https://arftk.com/imgs1/sys0001.jpg" alt="Payment Freedom">
+        <div class="zigzag-overlay">
+            <div class="zigzag-text">
+                <span class="zigzag-title">收款自由</span>
+                <span class="zigzag-desc">打破傳統金融國界限制與外匯管制，無論您身處世界何地，都能輕鬆領取你的獲利</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="zigzag-item">
+        <img src="https://arftk.com/imgs/10m5.jpg" alt="Tax Flexibility">
+        <div class="zigzag-overlay">
+            <div class="zigzag-text">
+                <span class="zigzag-title">稅務彈性</span>
+                <span class="zigzag-desc">加密資產具備高度隱私特性，提供會員們極具優勢的資產配置與稅務規劃空間。</span>
+            </div>
+        </div>
+    </div>
+
+</div>
+        </div>
+
+        <div class="content-block">
+            <div class="feature-title-group">
+                <span class="feature-reason-tag">LIVE PROOF</span>
+                <h3 class="feature-heading-styled">
+                    為何你能放心投資系統
+                    <div class="feature-heading-line"></div>
+                </h3>
+            </div>
+            <p>使用USDT存款讓系統會員們不必與企業客戶一樣,進行當面會議,合約擬定,簽約儀式,以及稅務文件&銀行帳戶審核等繁複法律手續,能夠立刻完成入金啟動系統</p>
+            <span class="feature-reason-tag">REASON 01</span>
+            <h3 class="sticky-content-title">6-7位數美金入金已不是個案：大量「鯨魚」的重倉佈局</h3>
+            <p>
+                小散戶還在擔心幾百塊的輸贏，真正的富人已經將 NσK® 視為資產配置的核心。我們處理的不是「零用錢」，而是改變家族命運的「資本」。6-7位數美金的入金已是日常，這就是對系統穩定性最有力的投票。這不是投機客的，這裡是巨鯨的獵場.
+            </p>
+            <div class="video-wrapper" style="margin-top: 20px;">
+                <div class="video-block">
+                    <video src="https://arftk.com/imgs1/clients.mp4" muted loop playsinline></video>
+                    <button class="play-pause-btn"><img class="icon" src="https://arftk.com/imgs/play.svg"></button>
+                </div>
+            </div>
+            <p style="margin-top: 50px;">
+                因為掌握了超越市場的技術,NσK® 經常受邀出席全球金融科技高峰會,定義未來的交易標準.我們不只是參與者,更是各大頂尖券商爭相合作的戰略夥伴.當別人在討論趨勢時,我們正在創造趨勢.
+            </p>
+            <div class="video-wrapper" style="margin-top: 20px;">
+                <div class="video-block">
+                    <video src="https://arftk.com/imgs1/clients1.mp4" muted loop playsinline></video>
+                    <button class="play-pause-btn"><img class="icon" src="https://arftk.com/imgs/play.svg"></button>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-block">
+            <span class="feature-reason-tag">REASON 02</span>
+            <h3 class="sticky-content-title">不必只聽我們說什麼,看看我們大量的實名,露面的獲利見證影片</h3>
+            <p>
+                劇本可以杜撰,但這些發自內心的震撼與銀行帳戶的入帳金額沒人敢偽造
+這不只是見證,這是人生徹底反轉.從家庭主婦到退休高管,我們好幾位會員們願意透過鏡頭,分享他們人生中「財富自由」的轉捩點
+            </p>
+            <div class="video-wrapper" style="margin-top: 20px;">
+                <div class="video-block">
+                <script src="https://fast.wistia.com/embed/b3q7co67ui.js" async type="module"></script>
+                <wistia-player media-id="b3q7co67ui" seo="false" aspect="1.7777777777777777"></wistia-player>
+            </div>
+            </div>
+        </div>
+
+
+        <div class="content-block">
+            <span class="feature-reason-tag">REASON 02</span>
+            <h3 class="sticky-content-title">不必只聽我們說什麼,看看我們大量的實名,露面的獲利見證影片</h3>
+            <p>
+                NσK® 僅對接持有 FCA、ASIC 等頂級監管牌照的流動性供應商 (Liquidity Providers)。我們嚴格採用「資金隔離 (Segregated Accounts)」政策，確保您的本金與公司的營運資金完全分開。這不是口頭承諾，這是受國際金融法律保護的鋼鐵契約
+            </p>
+            <div class="video-wrapper" style="margin-top: 20px;">
+                <div class="video-block">
+                    <video src="https://arftk.com/imgs1/partner.mp4" muted loop playsinline></video>
+                    <button class="play-pause-btn"><img class="icon" src="https://arftk.com/imgs/play.svg"></button>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="content-block">
+            <span class="feature-reason-tag">STEP 04</span>
+            <h3 class="sticky-content-title">一切交給最頂尖的團隊&最先進的科技,你只須負責提款享受</h3>
+            <p>
+                從入金的那一刻起，NσK® 的核心團隊就接管了一切。無論是凌晨的聯準會決議，還是突發的黑天鵝事件，我們的交易室都在第一線為你精準鎖定所有利潤.
+            </p>
+            <div class="video-wrapper" style="margin-top: 20px;">
+                <div class="video-block">
+                    <video src="https://arftk.com/imgs1/team.mp4" muted loop playsinline></video>
+                    <button class="play-pause-btn"><img class="icon" src="https://arftk.com/imgs/play.svg"></button>
+                </div>
+            </div>
+            <p style="margin-top: 50px;">
+                您唯一需要做的操作，就只有「提款」。
+            </p>
+            <div class="video-wrapper" style="margin-top: 20px;">
+                <div class="video-block">
+                    <video src="https://arftk.com/imgs1/wdrw.mp4" muted loop playsinline></video>
+                    <button class="play-pause-btn"><img class="icon" src="https://arftk.com/imgs/play.svg"></button>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // 設定偵測器：當列表進入畫面 30% 時觸發
+        const listObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    // 加上 .visible class，CSS 就會開始跑動畫
+                    entry.target.classList.add('visible');
+                    // 動畫跑一次就好，跑完就取消偵測，避免來回滑動一直閃
+                    listObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.3 });
+
+        // 開始偵測所有 feature-list
+        document.querySelectorAll('.feature-list').forEach(list => {
+            listObserver.observe(list);
+        });
+    });
+</script>
+
+<div class="text-center">
+                <span class="subtitle-en">SUCCESS STORIES</span>
+                <h2>系統用戶已經提領上百萬的USDT</h2>
+                <div class="divider"></div>
+            </div>
+
+<div class="testimonials-vertical-layout">
+
+    <div class="testi-card-vertical">
+        <div class="testi-content-top">
+            <div class="testi-badge">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+                單月獲利
+            </div>
+            
+            <div class="testi-amount-v">$178,013<span style="font-size: 0.5em; margin-left: 5px; color:#666;">USD</span></div>
+            
+            <div class="testi-meta-right">🇬🇧 SARA W.</div>
+        </div>
+
+        <div class="video-wrapper-vertical">
+            <div class="video-block">
+                <video src="https://arftk.com/imgs/money005.mp4" muted loop playsinline></video>
+                <button class="play-pause-btn">
+                    <img class="icon" src="https://arftk.com/imgs/play.svg">
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="testi-card-vertical">
+        <div class="testi-content-top">
+            <div class="testi-badge">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+                單月獲利
+            </div>
+            
+            <div class="testi-amount-v">$205,110<span style="font-size: 0.5em; margin-left: 5px; color:#666;">USD</span></div>
+            
+            <div class="testi-meta-right">🇺🇸 PETER J.</div>
+        </div>
+
+        <div class="video-wrapper-vertical">
+            <div class="video-block">
+                <video src="https://arftk.com/imgs/money005.mp4" muted loop playsinline></video>
+                <button class="play-pause-btn">
+                    <img class="icon" src="https://arftk.com/imgs/play.svg">
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="testi-card-vertical">
+        <div class="testi-content-top">
+            <div class="testi-badge">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+                單月獲利
+            </div>
+            
+            <div class="testi-amount-v">$192,550<span style="font-size: 0.5em; margin-left: 5px; color:#666;">USD</span></div>
+            
+            <div class="testi-meta-right">🇧🇪 JUSTIN R.</div>
+        </div>
+
+        <div class="video-wrapper-vertical">
+            <div class="video-block">
+                <video src="https://arftk.com/imgs/money005.mp4" muted loop playsinline></video>
+                <button class="play-pause-btn">
+                    <img class="icon" src="https://arftk.com/imgs/play.svg">
+                </button>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="mobile-swipe-indicator">
+    往右滑看更多
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="5" y1="12" x2="19" y2="12"></line>
+        <polyline points="12 5 19 12 12 19"></polyline>
+    </svg>
+</div>
+
+<div class="nk-stream-wrapper">
+    <div class="nk-stream-header">
+        <span class="subtitle-en">CASH FLOW MECHANISM</span>
+        <h2>一次性存款,永久性獲利</h2>
+    </div>
+
+    <div class="nk-stream-stage">
+        
+        <div class="stream-node node-user">
+            <div class="node-icon-box icon-user">
+                <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+            </div>
+            <div class="node-label">INVESTOR</div>
+        </div>
+
+        <div class="stream-flows-container">
+            
+            <div class="flow-line flow-top">
+                <div class="flow-track track-gold"></div>
+                <div class="flow-label label-top">不間斷的獲利</div>
+                <div id="nk-profit-particles-container"></div>
+            </div>
+
+            <div class="flow-line flow-bottom">
+                <div class="flow-track track-stable"></div>
+                <div class="static-usdt-box">
+                    <img src="https://arftk.com/imgs/usdt.svg" class="gold-usdt-svg" alt="USDT">
+                    <span class="static-label">一次性投資</span>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="stream-node node-system">
+            <div class="node-icon-box icon-system">
+                <img src="https://arftk.com/imgs1/logo1.png" alt="NσK System">
+            </div>
+            <div class="node-label text-gold">NσK® SYSTEM</div>
+        </div>
+
+    </div>
+</div>
+
+            
+        </div>
+    </section>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const staggerObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    // 動畫跑一次後取消偵測
+                    staggerObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.3 }); // 進入畫面 30% 時觸發
+
+        document.querySelectorAll('.nk-stagger-item').forEach(item => {
+            staggerObserver.observe(item);
+        });
+    });
+</script>
+
+
+
+<section class="parallax-section">
+    <div class="parallax-bg"></div>
+    
+    </section>
+
+
+<section class="nk-tier-section section-padding">
+
+    <div class="nk-tier-container-v2">
+        <div class="text-center" style="margin-bottom: 50px;">
+                <span class="subtitle-en">FRACTIONAL SHARES</span>
+                <div class="hero-text-only">
+                <h1>NσK® 系統為何能夠利用你的小資金每月獲利<br>
+                    <span class="hero-number-block">$100,000</span>
+                </h1>
+            </div>
+                
+                <div class="arrow-scroll">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+
+            <div class="video-wrapper deep-dive-hero-video" style="max-width: 900px; margin: 0 auto 80px;">
+                <script src="https://fast.wistia.com/embed/b3q7co67ui.js" async type="module"></script>
+                <wistia-player media-id="b3q7co67ui" seo="false" aspect="1.7777777777777777"></wistia-player>
+            </div>
+
+        <div class="nk-infinite-amp-wrapper">
+    <div class="nk-amp-overlay-gradient"></div>
+    
+    <div class="nk-amp-header-minimal">
+        <span class="subtitle-en">FRACTIONAL SHARES</span>
+        <h2>你投資的金額越高,你的獲利金額將成「倍數」增長</h2>
+        <p>不只是成正比,而是呈現倍數關係<br>因為我們的Fractional Shares機制讓每一位會員都能得到系統資金池的部份輔助資金<br><br>因此就算你的投資金額可能只有幾千美金</p>
+        <h3>系統實際替你運用高達數十萬美金</h3>
+    </div>
+
+    <div class="nk-infinite-stage">
+        <div class="amp-pipeline">
+            <div class="amp-flow-line"></div>
+        </div>
+
+        <div class="amp-station station-left">
+            <div class="amp-station-icon">
+                <svg viewBox="0 0 24 24"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg>
+            </div>
+            <div class="amp-station-info">
+                <div class="amp-station-label">INITIAL CAPITAL</div>
+                <div class="amp-station-value">$10,000</div>
+            </div>
+        </div>
+
+        <div class="amp-core-reactor">
+            <div class="amp-injector injector-top">
+                <span class="injector-label">FRACTIONAL SHARES</span>
+                <div class="injector-stream"></div>
+            </div>
+            <div class="amp-injector injector-bottom">
+                <div class="injector-stream"></div>
+                <span class="injector-label">SYSTEM FUND POOL</span>
+            </div>
+
+            <div class="amp-core-glow"></div>
+            <div class="amp-core-logo-box">
+                <img src="https://arftk.com/imgs1/logo1.png" alt="Core">
+            </div>
+        </div>
+
+        <div class="amp-station station-right">
+            <div class="amp-station-icon icon-gold">
+                <svg viewBox="0 0 24 24"><path d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6z"/></svg>
+            </div>
+            <div class="amp-station-info">
+                <div class="amp-station-label text-gold">ACTUAL CAPITAL</div>
+                <div class="amp-station-value highlight-text" id="nk-counter-target">$0</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="nk-multiplier-box">
+    
+    <div class="nk-flow-chart">
+        <div class="flow-line-bg"></div>
+        <div class="flow-line-gold"></div>
+
+        <div class="flow-step">
+            <div class="flow-node"></div>
+            <div class="flow-text">你投資金額越高</div>
+        </div>
+
+        <div class="flow-step">
+            <div class="flow-node"></div>
+            <div class="flow-text">從系統資金池得到更龐大的資金</div>
+        </div>
+
+        <div class="flow-step">
+            <div class="flow-node"></div>
+            <div class="flow-text">每筆交易獲利呈現倍數增長</div>
+        </div>
+
+        <div class="flow-step">
+            <div class="flow-node"></div>
+            <div class="flow-text">每月提領金額翻倍</div>
+        </div>
+    </div>
+
+    <div class="nk-urgency-cta">
+        <div class="urgency-icon">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="var(--nk-gold-rich)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M12 8V12" stroke="var(--nk-gold-rich)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M12 16H12.01" stroke="var(--nk-gold-rich)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </div>
+        <h4 class="urgency-title">把握唯一一次的投資機會</h4>
+        <p class="urgency-desc">
+            如果想得到最高獲利，請務必<span class="highlight-gold">存入您能負擔的最大資金</span>。
+            <br>這是你最大化系統獲利的唯一方式.
+        </p>
+    </div>
+
+</div>
+
+</div>
+
+<div class="text-center">
+                <span class="subtitle-en">TIER EXPLAINED</span>
+                <h2>NσK®系統共分成4個等級的收益,最低存款金額只須</h2>
+                <span class="hero-number-block">$5,500<span style="font-size: 0.4em; margin-left: 15px;">USDT</span></span>
+                <h2>請觀看存款金額與分級說明</h2>
+                <div class="divider"></div>
+            </div>
+
+        <div class="nk-tier-grid-v2">
+    <div class="nk-tier-card-v2 tier-1">
+        <div class="nk-header-box">
+            <img src="https://arftk.com/imgs1/logo1.png" class="nk-header-logo" alt="Logo">
+            <span class="nk-tier-title">TIER 1</span>
+        </div>
+        <div class="nk-card-content">
+            <div class="nk-data-item-box">
+                <span class="nk-label-text">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/></svg>
+                    最低投資金額
+                </span>
+                <div class="nk-value-v2 tier-value-glow">$5,500 ~ $9,999</div>
+            </div>
+            <div class="nk-data-item-box">
+                <span class="nk-label-text">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+                    每月收益 %
+                </span>
+                <div class="nk-value-v2 tier-value-glow">200% ~ 225%</div>
+            </div>
+
+            <div class="testi-card-vertical">
+                <div class="testi-content-top">
+                    <div class="testi-badge">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+                        單月獲利實證
+                    </div>
+                    <div class="testi-amount-v">$15,250<span style="font-size: 0.5em; margin-left: 5px; color:#666;">USD</span></div>
+                    <div class="testi-meta-right">🇬🇧 MARK T.</div>
+                </div>
+                <div class="video-wrapper-vertical">
+                    <div class="video-block">
+                        <video src="https://arftk.com/imgs1/m12.mp4" muted loop playsinline></video>
+                        <button class="play-pause-btn">
+                            <img class="icon" src="https://arftk.com/imgs/play.svg">
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="nk-tier-card-v2 tier-2">
+        <div class="nk-header-box">
+            <img src="https://arftk.com/imgs1/logo1.png" class="nk-header-logo" alt="Logo">
+            <span class="nk-tier-title">TIER 2</span>
+        </div>
+        <div class="nk-card-content">
+            <div class="nk-data-item-box">
+                <span class="nk-label-text">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/></svg>
+                    最低投資金額
+                </span>
+                <div class="nk-value-v2 tier-value-glow">$10,000 +</div>
+            </div>
+            <div class="nk-data-item-box">
+                <span class="nk-label-text">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+                    每月收益 %
+                </span>
+                <div class="nk-value-v2 tier-value-glow">250% ~ 275%</div>
+            </div>
+
+            <div class="testi-card-vertical">
+                <div class="testi-content-top">
+                    <div class="testi-badge">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+                        單月獲利實證
+                    </div>
+                    <div class="testi-amount-v">$48,300<span style="font-size: 0.5em; margin-left: 5px; color:#666;">USD</span></div>
+                    <div class="testi-meta-right">🇨🇦 JASON K.</div>
+                </div>
+                <div class="video-wrapper-vertical">
+                    <div class="video-block">
+                        <video src="https://arftk.com/imgs1/m10.mp4" muted loop playsinline></video>
+                        <button class="play-pause-btn">
+                            <img class="icon" src="https://arftk.com/imgs/play.svg">
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="nk-tier-card-v2 tier-3">
+            <div class="nk-header-box">
+            <img src="https://arftk.com/imgs1/logo1.png" class="nk-header-logo" alt="Logo">
+            <span class="nk-tier-title">TIER 3</span>
+        </div>
+        <div class="nk-card-content">
+            <div class="nk-data-item-box">
+                <span class="nk-label-text">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/></svg>
+                    最低投資金額
+                </span>
+                <div class="nk-value-v2 tier-value-glow">$25,000 +</div>
+            </div>
+            <div class="nk-data-item-box">
+                <span class="nk-label-text">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+                    每月收益 %
+                </span>
+                <div class="nk-value-v2 tier-value-glow">300% ~ 325%</div>
+            </div>
+
+            <div class="testi-card-vertical">
+                <div class="testi-content-top">
+                    <div class="testi-badge">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+                        單月獲利實證
+                    </div>
+                    <div class="testi-amount-v">$125,400<span style="font-size: 0.5em; margin-left: 5px; color:#666;">USD</span></div>
+                    <div class="testi-meta-right">🇦🇺 EMILY R.</div>
+                </div>
+                <div class="video-wrapper-vertical">
+                    <div class="video-block">
+                        <video src="https://arftk.com/imgs1/m05.mp4" muted loop playsinline></video>
+                        <button class="play-pause-btn">
+                            <img class="icon" src="https://arftk.com/imgs/play.svg">
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="nk-tier-card-v2 tier-4">
+            <div class="nk-header-box">
+            <img src="https://arftk.com/imgs1/logo1.png" class="nk-header-logo" alt="Logo">
+            <span class="nk-tier-title">TIER 4</span>
+        </div>
+        <div class="nk-card-content">
+            <div class="nk-data-item-box">
+                <span class="nk-label-text">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/></svg>
+                    最低投資金額
+                </span>
+                <div class="nk-value-v2 tier-value-glow">$50,000+</div>
+            </div>
+            <div class="nk-data-item-box">
+                <span class="nk-label-text">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+                    每月收益 %
+                </span>
+                <div class="nk-value-v2 tier-value-glow">350% ~ 375%</div>
+            </div>
+
+            <div class="testi-card-vertical">
+                <div class="testi-content-top">
+                    <div class="testi-badge">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+                        單月獲利實證
+                    </div>
+                    <div class="testi-amount-v">$280,000<span style="font-size: 0.5em; margin-left: 5px; color:#666;">USD</span></div>
+                    <div class="testi-meta-right">🇺🇸 DAVID C.</div>
+                </div>
+                <div class="video-wrapper-vertical">
+                    <div class="video-block">
+                        <video src="https://arftk.com/imgs1/m08.mp4" muted loop playsinline></video>
+                        <button class="play-pause-btn">
+                            <img class="icon" src="https://arftk.com/imgs/play.svg">
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+        
+        <div class="nk-tier-card-v2 nk-calc-card">
+            <div class="nk-header-box">
+                <img src="https://arftk.com/imgs1/logo1.png" class="nk-header-logo" alt="Logo">
+                <span class="nk-calc-title">獲利試算器</span>
+            </div>
+
+            <div class="nk-card-content">
+                <div class="nk-input-section">
+                    <div class="nk-input-label-row">
+                        <span class="nk-label-text" style="font-size: 1.1rem;">調整預計投入金額 (USDT)</span>
+                        <span class="nk-input-value">$<span id="nk-slider-val">25,000</span></span>
+                    </div>
+                    <div class="nk-range-wrapper">
+                        <input type="range" min="2500" max="50000" step="500" value="25000" class="nk-range-slider" id="nk-profit-slider">
+                        <div class="nk-range-track-fill" id="nk-track-fill"></div>
+                    </div>
+                    <div class="nk-range-limits">
+                        <span>$2,500</span>
+                        <span>$50,000</span>
+                    </div>
+                </div>
+
+                <div class="nk-result-grid">
+                    <div class="nk-result-box">
+                        <span class="nk-label-text" style="display:block; margin-bottom: 10px;">所屬 Tier</span>
+                        <div class="nk-value-v2" id="nk-res-tier">TIER 2</div>
+                    </div>
+                    <div class="nk-result-box">
+                        <span class="nk-label-text" style="display:block; margin-bottom: 10px;">最低月收益</span>
+                        <div class="nk-value-v2" id="nk-res-min">$62,500</div>
+                    </div>
+                    <div class="nk-result-box highlight-box">
+                        <span class="nk-label-text" style="display:block; margin-bottom: 10px;">預估月收益 (總金額)</span>
+                        <div class="nk-value-v2 nk-highlight" id="nk-res-max">$68,750</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<section class="parallax-section">
+    <div class="parallax-bg"></div>
+    
+    </section>
+
+    
+
+    
+    <section class="pricing-section section-padding">
+        <div class="container">
+
+            <div class="text-center">
+                <span class="subtitle-en">WHY WE DO THIS</span>
+                <div class="hero-text-only">
+                <h1>
+                    不論你的年齡與職業, 只要你專心看完這部18分鐘影片,  
+                    就必定能在未來30天內賺進至少 <br>
+                    <span class="hero-number-block">$3,291,684</span>
+                </h1>
+                
+                <div class="arrow-scroll">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+                
+                
+                
+            </div>
+
+            <div class="optin-gold-card">
+    
+    <div class="video-wrapper" style="margin-top: 0; border: none; border-bottom: 1px solid var(--nk-gold-dark);">
+        <script src="https://fast.wistia.com/embed/b3q7co67ui.js" async type="module"></script>
+                <wistia-player media-id="b3q7co67ui" seo="false" aspect="1.7777777777777777"></wistia-player>
+    </div>
+
+    <div class="optin-header">
+        <span class="subtitle-en">LIMITED ACCESS</span>
+        <h2 style="margin-bottom: 10px;">《系統存款流程》</h2>
+        <p style="font-size: 1rem; margin: 0; color: #ccc;">請依造下方說明完成USDT存款</p>
+        <div class="arrow-scroll">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+
+    </div>
+
+    <div class="optin-body">
+    <div class="optin-steps-container">
+
+        <div class="optin-highlight-box">
+            <div class="step-header">
+                <span class="step-num">01</span>
+                <h3 class="step-title-text">根據你要投資的金額<br>購買 USDT</h3>
+            </div>
+
+            <ul class="process-list">
+                <li class="process-item static">
+                    <div class="process-icon-box">
+                        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+                    </div>
+                    <span class="process-text">若你本身就持有 USDT 也有習慣的購買方式，請按自己的習慣方式購買。</span>
+                </li>
+
+                <li class="process-item static">
+                    <div class="process-icon-box">
+                        <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-5 14H9v-2h6v2zm0-5H9V8h6v5z"/></svg>
+                    </div>
+                    <span class="process-text">若你完全沒使用過 USDT，請點擊下方按鈕觀看 USDT 購買教學。</span>
+                </li>
+            </ul>
+
+            <a href="YOUR_TUTORIAL_LINK_HERE" target="_blank" class="nk-btn">
+                點此觀看購買 USDT 教學
+            </a>
+        </div>
+
+        <div class="optin-highlight-box" id="step-02-box">
+            <div class="step-header">
+                <span class="step-num">02</span>
+                <h3 class="step-title-text">將 USDT 發送至<br>我們的收款地址</h3>
+            </div>
+
+            <ul class="process-list" id="process-list-anim">
+                
+                <li class="process-item anim-wait">
+                    <div class="process-icon-box">
+                        <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+                    </div>
+                    <span class="process-text">點擊下方按鈕聯絡線上人員，告知我們你要投資的金額</span>
+                </li>
+
+                <li class="process-item anim-wait">
+                    <div class="process-icon-box">
+                        <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5-2.5-1.12 2.5-2.5 2.5z"/></svg>
+                    </div>
+                    <span class="process-text">我們提供 USDT 收款地址給你</span>
+                </li>
+
+                <li class="process-item anim-wait">
+                    <div class="process-icon-box">
+                        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+                    </div>
+                    <span class="process-text">你把正確金額的 USDT 發送至收款地址</span>
+                </li>
+
+                <li class="process-item anim-wait">
+                    <div class="process-icon-box">
+                        <svg viewBox="0 0 24 24"><path d="M23 4.18l-12-3L8 2.05v3.42L6 3.61l-3 1.6 4.63 2.58-1.78 1.94c-1.49-.64-3.17-.67-4.66.08l1.45 6.27c1.37.52 2.92.51 4.54-.31l1.79-1.95.03 5.56 3-1.6v-3.41l8.52 6.77 2.45-3.09-5.97-4.75 3-3.26L23 4.18z"/></svg>
+                    </div>
+                    <span class="process-text">我們確認無誤即完成投資</span>
+                </li>
+
+            </ul>
+
+            <a href="YOUR_ADDRESS_LINK_HERE" target="_blank" class="nk-btn">
+                點此獲取地址
+            </a>
+        </div>
+
+    </div>
+</div>
+</div>
+
+
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <img src="https://arftk.com/imgs1/logo1.png" alt="Logo" style="width: 50px; margin: 0 auto 0px; filter: grayscale(1);">
+            <p style="font-size: 0.75rem;">© 2026 NσK® INVESTMENT GROUP.
+        </div>
+    </footer>
+
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        
+        /* =========================================
+           1. NAVBAR SCROLL EFFECT (導航欄捲動變色)
+           ========================================= */
+        const navbar = document.getElementById('navbar');
+        if (navbar) {
+            window.addEventListener('scroll', function() {
+                if (window.scrollY > 50) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
+            });
+        }
+
+        /* =========================================
+           2. VIDEO AUTOPLAY (影片進入畫面自動播放)
+           ========================================= */
+        const videoObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                const videos = entry.target.querySelectorAll('video');
+                videos.forEach(video => {
+                    if (entry.isIntersecting) {
+                        if (video.paused) {
+                            video.play().catch(e => console.error("Autoplay prevented", e));
+                        }
+                    } else {
+                        if (!video.paused) video.pause();
+                    }
+                });
+                
+                // 同步更新按鈕狀態
+                const btn = entry.target.querySelector('.play-pause-btn');
+                const icon = entry.target.querySelector('.icon');
+                if(btn && icon) {
+                    const mainVideo = entry.target.querySelector('video');
+                    if(mainVideo) {
+                        mainVideo.addEventListener('play', () => icon.src = "https://arftk.com/imgs/pause.svg");
+                        mainVideo.addEventListener('pause', () => icon.src = "https://arftk.com/imgs/play.svg");
+                    }
+                }
+            });
+        }, { threshold: 0.5 });
+
+        document.querySelectorAll('.video-block').forEach(block => {
+            videoObserver.observe(block);
+            const video = block.querySelector('video');
+            const btn = block.querySelector('.play-pause-btn');
+            if(btn && video) {
+                btn.addEventListener('click', () => {
+                    video.paused ? video.play() : video.pause();
+                });
+            }
+        });
+
+        /* =========================================
+           3. PRICING ANIMATION (費用劃掉 + 淡入)
+           ========================================= */
+        const pricingSection = document.querySelector('.pricing-body');
+        const pricingRows = document.querySelectorAll('.pricing-anim-row');
+        const finalBox = document.querySelector('.final-price-anim');
+
+        if (pricingSection && pricingRows.length > 0) {
+            const pricingObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        let delay = 0;
+                        pricingRows.forEach((row) => {
+                            setTimeout(() => row.classList.add('visible'), delay);
+                            setTimeout(() => row.classList.add('struck'), delay + 800);
+                            delay += 1200;
+                        });
+                        setTimeout(() => {
+                            if (finalBox) finalBox.classList.add('visible');
+                        }, delay);
+                        pricingObserver.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.2 });
+            pricingObserver.observe(pricingSection);
+        }
+
+        /* =========================================
+           4. UNIVERSAL SCROLL REVEAL (通用卷軸動畫)
+           ========================================= */
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    revealObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.2, rootMargin: "0px 0px -50px 0px" });
+
+        const targetSelectors = '.zigzag-item, .nk-stagger-item, .feature-list, .reveal-up';
+        document.querySelectorAll(targetSelectors).forEach(el => {
+            revealObserver.observe(el);
+        });
+
+        /* =========================================
+           5. CALCULATOR LOGIC (獲利試算器)
+           ========================================= */
+        const slider = document.getElementById('nk-profit-slider');
+        if (slider) {
+            const displayVal = document.getElementById('nk-slider-val');
+            const trackFill = document.getElementById('nk-track-fill');
+            const resTier = document.getElementById('nk-res-tier');
+            const resMin = document.getElementById('nk-res-min');
+            const resMax = document.getElementById('nk-res-max');
+
+            const tiers = [
+                { min: 50000, name: 'TIER 4', pMin: 3.50, pMax: 3.75 },
+                { min: 25000, name: 'TIER 3', pMin: 3.00, pMax: 3.25 },
+                { min: 10000, name: 'TIER 2', pMin: 2.50, pMax: 2.75 },
+                { min: 0,     name: 'TIER 1', pMin: 2.00, pMax: 2.25 }
+            ];
+
+            function formatMoney(num) {
+                return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            }
+
+            function updateCalc() {
+                const val = parseInt(slider.value);
+                displayVal.innerText = formatMoney(val);
+                const percent = ((val - slider.min) / (slider.max - slider.min)) * 100;
+                trackFill.style.width = percent + '%';
+
+                let currentTier = tiers[tiers.length - 1]; 
+                for (let t of tiers) {
+                    if (val >= t.min) {
+                        currentTier = t;
+                        break;
+                    }
+                }
+
+                resTier.innerText = currentTier.name;
+                const minProfit = Math.floor(val * currentTier.pMin);
+                const maxProfit = Math.floor(val * currentTier.pMax);
+                resMin.innerText = "$" + formatMoney(minProfit);
+                resMax.innerText = "$" + formatMoney(maxProfit);
+            }
+            slider.addEventListener('input', updateCalc);
+            updateCalc();
+        }
+
+        /* =========================================
+           6. INFINITE AMPLIFIER COUNTER (獲利狂飆動畫)
+           ========================================= */
+        const counterTarget = document.getElementById('nk-counter-target');
+        const ampWrapper = document.querySelector('.nk-infinite-amp-wrapper');
+        let hasAnimated = false;
+
+        function formatMoneyStr(num) {
+            return "$" + num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+
+        function runCounterAnimation() {
+            if (hasAnimated) return;
+            hasAnimated = true;
+
+            const endValue = 1000000; // 目標一百萬
+            const duration = 3000; // 動畫時間 3秒
+            const startTime = performance.now();
+
+            function step(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                
+                // 使用 easeOutExpo 讓結尾變慢，更有質感
+                const ease = (progress === 1) ? 1 : 1 - Math.pow(2, -10 * progress);
+                
+                const currentNum = Math.floor(ease * endValue);
+                if(counterTarget) counterTarget.innerText = formatMoneyStr(currentNum);
+
+                if (progress < 1) {
+                    requestAnimationFrame(step);
+                } else {
+                    if(counterTarget) counterTarget.innerText = formatMoneyStr(endValue);
+                }
+            }
+            requestAnimationFrame(step);
+        }
+
+        // 獨立的 Observer 避免衝突
+        const counterObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    runCounterAnimation();
+                    counterObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.5 });
+
+        if (ampWrapper) {
+            counterObserver.observe(ampWrapper);
+        }
+    });
+</script>
+<script>
+    // --- NσK CONTINUOUS PROFIT STREAM LOGIC ---
+    document.addEventListener("DOMContentLoaded", function() {
+        const particlesContainer = document.getElementById('nk-profit-particles-container');
+        let isStreamActive = true;
+
+        // 隨機數字生成器 (20000 - 50000)
+        function getRandomProfit() {
+            const min = 20000;
+            const max = 50000;
+            // 產生隨機數並取整到百位 (例如 23,400)，看起來較真實
+            const randomNum = Math.floor((Math.random() * (max - min + 1) + min) / 100) * 100;
+            return randomNum.toLocaleString('en-US');
+        }
+
+        // 創建並發射一個獲利粒子
+        function spawnProfitParticle() {
+            if (!particlesContainer || !isStreamActive) return;
+
+            // 1. 創建元素
+            const particle = document.createElement('div');
+            particle.classList.add('profit-particle');
+            
+            // 2. 填充內容 (金色 USDT SVG + 隨機數字)
+            // 注意：這裡同樣使用了 CSS class 來應用金色濾鏡
+            particle.innerHTML = `
+                <img src="https://arftk.com/imgs/usdt.svg" class="gold-usdt-svg" style="width:20px; height:20px;" alt="USDT">
+                <span class="particle-val">+$${getRandomProfit()}</span>
+            `;
+
+            // 3. 加入容器
+            particlesContainer.appendChild(particle);
+
+            // 4. 動畫結束後移除元素 (重要！防止記憶體洩漏)
+            particle.addEventListener('animationend', () => {
+                particle.remove();
+            });
+        }
+
+        // 使用 IntersectionObserver 在元素進入畫面時才開始動畫
+        const streamObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    isStreamActive = true;
+                } else {
+                    isStreamActive = false; // 離開畫面時暫停產生，節省效能
+                }
+            });
+        }, { threshold: 0.1 });
+
+        if (particlesContainer) {
+            streamObserver.observe(document.querySelector('.nk-stream-wrapper'));
+            
+            // 啟動無限循環：每隔 1.2 秒發射一個新粒子
+            // 可以調整時間間隔來改變密集度 (例如 800ms 更密集, 1500ms 更稀疏)
+            setInterval(spawnProfitParticle, 2000);
+            
+            // 初始先發射一個，避免等待
+            setTimeout(spawnProfitParticle, 500);
+        }
+    });
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // 針對步驟二清單的動畫偵測
+        const processObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const items = entry.target.querySelectorAll('.process-item');
+                    // 逐條加入 .active 類別
+                    items.forEach((item, index) => {
+                        setTimeout(() => {
+                            item.classList.add('active');
+                        }, index * 400); // 每 400 毫秒出現一條
+                    });
+                    processObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.3 }); // 進入畫面 30% 時觸發
+
+        const processList = document.getElementById('process-list-anim');
+        if (processList) {
+            processObserver.observe(processList);
+        }
+    });
+</script>
+</body>
+</html>
