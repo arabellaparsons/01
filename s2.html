@@ -1,17 +1,15 @@
 <!DOCTYPE html>
+
 <html lang="zh-TW">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NσK® INVESTMENT GROUP & SYSTEM</title>
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Infant:wght@400;500;600;700&family=Noto+Serif+TC:wght@300;400;500;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
-
-    <script src="https://fast.wistia.com/player.js" async></script>
-
-   <style>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>NσK® INVESTMENT GROUP &amp; SYSTEM</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Infant:wght@400;500;600;700&amp;family=Noto+Serif+TC:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500&amp;display=swap" rel="stylesheet"/>
+<script async="" src="https://fast.wistia.com/player.js"></script>
+<style>
         /* --- CORE: Black Gold Luxury Variables --- */
         :root {
             --nk-bg-darkest: #050505;
@@ -1977,434 +1975,404 @@
 }
 
     
-        /* =======================================================
-           ✨ PLYR 播放器 WISTIA 風格魔改區 (給 Testimonial 使用)
-           ======================================================= */
-        :root {
-            --plyr-color-main: #C5A059;
-            --plyr-range-track-height: 3px;
-            --plyr-range-thumb-height: 10px;
-            --plyr-range-thumb-width: 10px;
-            --plyr-range-thumb-background: #ffffff;
-            --plyr-range-thumb-shadow: 0 0 12px rgba(255, 255, 255, 0.9), 0 0 20px rgba(255, 255, 255, 0.6);
+        /* --- LUXURY REVEAL UP ANIMATION (安全放手版，絕不干擾Hover) --- */
+        .reveal-up {
+            opacity: 0; /* 預設隱藏，避免閃爍 */
         }
-        .plyr--video .plyr__control--overlaid { background-color: var(--nk-gold-rich) !important; border-radius: 0 !important; width: 110px !important; height: 70px !important; padding: 0 !important; display: flex !important; justify-content: center !important; align-items: center !important; transition: background-color 0.2s ease !important; border: none !important; }
-        .plyr--video .plyr__control--overlaid:hover { background-color: var(--nk-gold-dark) !important; }
-        .plyr--video .plyr__control--overlaid svg { display: none !important; }
-        .plyr--video .plyr__control--overlaid::after { content: ''; display: block; width: 0; height: 0; border-style: solid; border-width: 16px 0 16px 20px; border-color: transparent transparent transparent #ffffff; margin-left: 8px; opacity: 1 !important;  }
-        .plyr__controls [data-plyr="play"] svg { display: none !important; }
-        .plyr__controls [data-plyr="play"]::after { content: ''; display: inline-block; width: 0; height: 0; border-style: solid; border-width: 8px 0 8px 14px; border-color: transparent transparent transparent #ffffff; margin-left: 2px; }
-        .plyr--playing .plyr__controls [data-plyr="play"]::after { border-width: 0 4px 0 4px; border-color: #ffffff; width: 14px; height: 16px; margin-left: 0; background: transparent; box-sizing: border-box; }
-        .plyr__tooltip, .plyr__menu__container, .plyr__volume--display, .plyr__control, .plyr__control--pressed, .plyr__control:hover { border-radius: 0 !important; }
-        .plyr--video .plyr__time { font-family: var(--nk-font-en) !important; font-size: 1.1rem !important; letter-spacing: 1px !important; font-weight: 600 !important; }
-        .plyr--video .plyr__controls { background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0) 100%) !important; padding-top: 45px !important; padding-bottom: 5px !important; }
-        @media (max-width: 768px) { .plyr--video .plyr__control--overlaid { width: 80px !important; height: 50px !important; } .plyr--video .plyr__control--overlaid::after { border-width: 12px 0 12px 16px; margin-left: 6px; } }
+        .reveal-up.visible {
+            opacity: 1; /* 動畫結束後的最終狀態 */
+            /* backwards 讓元素在 delay 等待期間就套用 0% 的隱藏與下沉狀態 */
+            animation: luxuryFadeUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) backwards;
+        }
+        .reveal-up.delay-1.visible { animation-delay: 0.1s; }
+        .reveal-up.delay-2.visible { animation-delay: 0.25s; }
+        .reveal-up.delay-3.visible { animation-delay: 0.4s; }
+
+        @keyframes luxuryFadeUp {
+            0% { opacity: 0; transform: translateY(40px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
         
-    </style>
-    
-    <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
-</head>
+/* =======================================================
+   ✨ 自動注入: 避開 JS 的新影片區塊與 PLYR 播放器魔改區
+   ======================================================= */
+/* 複製原本 video-block 的屬性，維持外觀但避開自動播放偵測 */
+.plyr-video-block {
+    min-width: 100%;
+    margin: 0px 0;
+    position: relative;
+    overflow: hidden;
+    line-height: 0;
+}
+.plyr-video-block video {
+    width: 100%;
+    display: block;
+}
+
+/* --- Plyr 直角黑金魔改設定 --- */
+:root {
+    --plyr-color-main: var(--nk-gold-rich); 
+    --plyr-range-track-height: 3px;         
+    --plyr-range-thumb-height: 5px;        
+    --plyr-range-thumb-width: 5px;         
+    --plyr-range-thumb-background: #ffffff; 
+    --plyr-range-thumb-shadow: 0 0 7px rgba(255, 255, 255, 0.9), 0 0 20px rgba(255, 255, 255, 0.6); 
+    --plyr-tooltip-radius: 0px;             
+    --plyr-menu-radius: 0px;                
+    --plyr-control-radius: 0px;             
+}
+.plyr--video .plyr__control--overlaid {
+    background-color: rgba(197, 160, 89, 0.85) !important;
+    border-radius: 0 !important; width: 110px !important; height: 70px !important;  
+    padding: 0 !important; display: flex !important; justify-content: center !important;
+    align-items: center !important; transition: background-color 0.2s ease !important; border: none !important;
+}
+.plyr--video .plyr__control--overlaid:hover { background-color: rgba(138, 109, 59, 0.9) !important; }
+.plyr--video.plyr--paused .plyr__control--overlaid { opacity: 1 !important; }
+.plyr__controls .plyr__control { opacity: 1 !important; }
+.plyr--video .plyr__control--overlaid svg { display: none !important; }
+.plyr--video .plyr__control--overlaid::after {
+    content: ''; display: block; width: 0; height: 0; border-style: solid; border-width: 16px 0 16px 20px; 
+    border-color: transparent transparent transparent #ffffff; margin-left: 8px; opacity: 1 !important; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3)); 
+}
+.plyr__controls [data-plyr="play"] svg { display: none !important; }
+.plyr__controls [data-plyr="play"]::after {
+    content: ''; display: inline-block; width: 0; height: 0; border-style: solid; border-width: 8px 0 8px 14px;
+    border-color: transparent transparent transparent #ffffff; margin-left: 2px;
+}
+.plyr--playing .plyr__controls [data-plyr="play"]::after {
+    border-width: 0 4px 0 4px; border-color: #ffffff; width: 14px; height: 16px;
+    margin-left: 0; background: transparent; box-sizing: border-box;
+}
+.plyr__tooltip, .plyr__menu__container, .plyr__volume--display, .plyr__control, .plyr__control--pressed, .plyr__control:hover { border-radius: 0 !important; }
+.plyr--video .plyr__time { font-family: var(--nk-font-en) !important; font-size: 1.1rem !important; letter-spacing: 1px !important; font-weight: 600 !important; }
+.plyr--video .plyr__controls { background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0) 100%) !important; padding-top: 45px !important; padding-bottom: 5px !important; }
+@media (max-width: 768px) {
+    .plyr--video .plyr__control--overlaid { width: 80px !important; height: 50px !important; }
+    .plyr--video .plyr__control--overlaid::after { border-width: 12px 0 12px 16px; margin-left: 6px; }
+}
+.plyr__video-wrapper, .plyr__video-wrapper video, .plyr__poster { width: 100% !important; height: 100% !important; object-fit: cover !important; background-size: cover !important; }
+</style>
+<link href="https://cdn.plyr.io/3.7.8/plyr.css" rel="stylesheet"/></head>
 <body>
-
-    <nav class="main-header scrolled" id="navbar">
-        <div class="container text-center">
-            <img src="https://arftk.com/imgs1/logo1.png" alt="NσK Logo" class="header-logo">
-        </div>
-    </nav>
-
-    <header class="hero">
-        <div class="container">
-            <h1 class="text-center">
-                <span class="subtitle-en">SECRET REVEALED</span>
+<nav class="main-header scrolled" id="navbar">
+<div class="container text-center">
+<img alt="NσK Logo" class="header-logo" src="https://arftk.com/imgs1/logo1.png"/>
+</div>
+</nav>
+<header class="hero">
+<div class="container">
+<h1 class="text-center">
+<span class="subtitle-en">SECRET REVEALED</span>
                 不論你的年齡與職業, 只要你專心看完這部18分鐘影片, 
-                就必定能在未來30天內賺進至少 <br>
-                <span class="hero-number-block">$3,291,684<span style="font-size: 0.4em; margin-left: 15px;">USD</span></span>
-            </h1>
+                就必定能在未來30天內賺進至少 <br/>
+<span class="hero-number-block">$3,291,684<span style="font-size: 0.4em; margin-left: 15px;">USD</span></span>
+</h1>
+<div class="arrow-scroll">
+<span></span>
+<span></span>
+<span></span>
+</div>
+<div class="video-wrapper">
+<script async="" src="https://fast.wistia.com/embed/b3q7co67ui.js" type="module"></script>
+<wistia-player aspect="1.7777777777777777" media-id="b3q7co67ui" seo="false"></wistia-player>
+</div>
+<div class="marquee-wrapper marquee-rect" style="margin-bottom: 80px;">
+<div class="text-center" style="margin-bottom: 20px; padding: 0 15px;">
+<span class="subtitle-en" style="letter-spacing: 5px; font-size: 0.9rem;">REAL MEMBER RESULTS</span>
+<h2>華爾街基金經理聯手頂尖量化交易團隊共同研發...</h2></div>
+<div class="marquee-glow-line"></div>
+<div class="marquee-viewport">
+<div class="marquee-track">
+<div class="marquee-item"><img src="https://arftk.com/imgs1/trading15.jpg"/></div>
+<div class="marquee-item"><img src="https://arftk.com/imgs1/clients09.jpg"/></div>
+<div class="marquee-item"><img src="https://arftk.com/imgs1/trading11.jpg"/></div>
+<div class="marquee-item"><img src="https://arftk.com/imgs1/ctrader.jpg"/></div>
+<div class="marquee-item"><img src="https://arftk.com/imgs1/team00.jpg"/></div>
+<div class="marquee-item"><img src="https://arftk.com/imgs1/trading15.jpg"/></div>
+<div class="marquee-item"><img src="https://arftk.com/imgs1/clients09.jpg"/></div>
+<div class="marquee-item"><img src="https://arftk.com/imgs1/trading11.jpg"/></div>
+<div class="marquee-item"><img src="https://arftk.com/imgs1/ctrader.jpg"/></div>
+<div class="marquee-item"><img src="https://arftk.com/imgs1/team00.jpg"/></div>
+</div>
+</div>
+<div class="marquee-glow-line"></div>
+</div>
+<div class="text-center" style="margin-bottom: 0px;">
+<span class="subtitle-en">INTRODUCING</span>
+<div class="hero-text-only">
+<h1>橫跨各大金融市場的全自動AI交易系統<br/>
+<span class="hero-number-block">NσK® SYSTEM</span>
+</h1>
+<p><strong>繼續下滑觀看系統真實監控畫面</strong></p>
+</div>
+<div class="arrow-scroll">
+<span></span>
+<span></span>
+<span></span>
+</div>
+</div>
+</div></header>
+<section class="parallax-section">
+<div class="parallax-bg"></div>
+</section>
+<section class="section-padding">
+<div class="container container-wide">
+<div class="text-center" style="margin-bottom: 20px;">
+<span class="subtitle-en" style="letter-spacing: 5px; font-size: 0.9rem;">REAL MEMBER RESULTS</span>
+<h2>任何人都能夠使用這套系統每個月平均賺進</h2><span class="hero-number-block">$100,000<span style="font-size: 0.4em; margin-left: 15px;">USD</span></span>
+<p>系統自動從STOCKS/FOREX/CFD/COMMODITIES/CRYPTO市場找尋最佳套利機會</p>
+<div class="arrow-scroll">
+<span></span>
+<span></span>
+<span></span>
+</div> </div>
+<div class="video-wrapper" style="max-width: 800px; margin: 40px auto;">
+<div class="video-block">
+<video loop="" muted="" playsinline="" src="https://arftk.com/imgs1/dash.mp4"></video>
+<button class="play-pause-btn">
+<img class="icon" decoding="async" src="https://arftk.com/imgs/play.svg"/>
+</button>
+</div>
+</div>
+<div class="text-center" style="margin-top: 50px;">
+<span class="subtitle-en">SUCCESS STORIES</span>
+<h2>早期的Beta-Testers已經獲利超過百萬美金</h2>
+<div class="divider"></div>
+</div>
+<div class="testimonials">
+<div class="testi-card reveal-up delay-1">
+<div class="video-wrapper" style="margin-top: 0; box-shadow: none; border: none; padding: 10px;">
 
-            <div class="arrow-scroll">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
-
-            <div class="video-wrapper">
-                <script src="https://fast.wistia.com/embed/b3q7co67ui.js" async type="module"></script>
-                <wistia-player media-id="b3q7co67ui" seo="false" aspect="1.7777777777777777"></wistia-player>
-            </div>
-
-            <div class="marquee-wrapper marquee-rect" style="margin-bottom: 80px;">
-                <div class="text-center" style="margin-bottom: 20px; padding: 0 15px;">
-                    <span class="subtitle-en" style="letter-spacing: 5px; font-size: 0.9rem;">REAL MEMBER RESULTS</span>
-                <h2>華爾街基金經理聯手頂尖量化交易團隊共同研發...</h2></div>
-                
-                <div class="marquee-glow-line"></div>
-                
-                <div class="marquee-viewport">
-                    <div class="marquee-track">
-                        <div class="marquee-item"><img src="https://arftk.com/imgs1/trading15.jpg"></div>
-                        <div class="marquee-item"><img src="https://arftk.com/imgs1/clients09.jpg"></div>
-                        <div class="marquee-item"><img src="https://arftk.com/imgs1/trading11.jpg"></div>
-                        <div class="marquee-item"><img src="https://arftk.com/imgs1/ctrader.jpg"></div>
-                        <div class="marquee-item"><img src="https://arftk.com/imgs1/team00.jpg"></div>
-                        <div class="marquee-item"><img src="https://arftk.com/imgs1/trading15.jpg"></div>
-                        <div class="marquee-item"><img src="https://arftk.com/imgs1/clients09.jpg"></div>
-                        <div class="marquee-item"><img src="https://arftk.com/imgs1/trading11.jpg"></div>
-                        <div class="marquee-item"><img src="https://arftk.com/imgs1/ctrader.jpg"></div>
-                        <div class="marquee-item"><img src="https://arftk.com/imgs1/team00.jpg"></div>
-                    </div>
-                </div>
-                
-                <div class="marquee-glow-line"></div>
-            </div>
-
-            <div class="text-center" style="margin-bottom: 0px;">
-                <span class="subtitle-en">INTRODUCING</span>
-                <div class="hero-text-only">
-                <h1>橫跨各大金融市場的全自動AI交易系統<br>
-                    <span class="hero-number-block">NσK® SYSTEM</span>
-                </h1>
-                <p><strong>繼續下滑觀看系統真實監控畫面</strong></p>
-            </div>
-                
-                <div class="arrow-scroll">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </div>
-            </div>
-   
-            
-    </div></header>
-
-    
-
-    <section class="parallax-section">
-    <div class="parallax-bg"></div>
-    
-    </section>
-
-
-
-    <section class="section-padding">
-        <div class="container container-wide">
-            <div class="text-center" style="margin-bottom: 20px;">
-                    <span class="subtitle-en" style="letter-spacing: 5px; font-size: 0.9rem;">REAL MEMBER RESULTS</span>
-                    
-                <h2>任何人都能夠使用這套系統每個月平均賺進</h2><span class="hero-number-block">$100,000<span style="font-size: 0.4em; margin-left: 15px;">USD</span></span>
-                <p>系統自動從STOCKS/FOREX/CFD/COMMODITIES/CRYPTO市場找尋最佳套利機會</p>
-                
-                <div class="arrow-scroll">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </div> </div>
-
-                <div class="video-wrapper" style="max-width: 800px; margin: 40px auto;">
-                    <div class="video-block">
-                        <video src="https://arftk.com/imgs1/dash.mp4" muted loop playsinline></video>
-                        <button class="play-pause-btn">
-                            <img decoding="async" class="icon" src="https://arftk.com/imgs/play.svg">
-                        </button>
-                    </div>
-                </div>
-
-                <div class="text-center" style="margin-top: 50px;">
-                <span class="subtitle-en">SUCCESS STORIES</span>
-                <h2>早期的Beta-Testers已經獲利超過百萬美金</h2>
-                <div class="divider"></div>
-            </div>
-
-
-            <div class="testimonials">
-    
-    <div class="testi-card">
-        <div class="video-wrapper" style="margin-top: 0; box-shadow: none; border: none; padding: 10px;">
-            <video class="plyr-video" playsinline controls data-poster="http://cf-ad6.pages.dev/imgs/tmb/wallst.jpg">
-                <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4" />
-            </video>
-        </div>
-        <div class="testi-content">
-            <div class="testi-badge">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+<video class="plyr-player" controls="" data-poster="https://arftk.com/thumb/matthew.jpg" playsinline="" preload="metadata"><source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4"/></video>
+</div>
+<div class="testi-content">
+<div class="testi-badge">
+<svg fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
                 最高月獲利
             </div>
-            <span class="testi-amount">$194,880<span style="font-size: 0.4em; margin-left: 15px;">USD</span></span>
-            
-            <p class="testi-quote">
+<span class="testi-amount">$194,880<span style="font-size: 0.4em; margin-left: 15px;">USD</span></span>
+<p class="testi-quote">
                 "我已經從系統提領了超過<strong>$1,463,347</strong>美金, 我很確定我的孩子們未來不必再擔心錢了"
             </p>
-            
-            <div class="testi-meta">
+<div class="testi-meta">
                 🇺🇸 Matthew W.
             </div>
-        </div>
-    </div><div class="testi-card">
-        <div class="video-wrapper" style="margin-top: 0; box-shadow: none; border: none; padding: 10px;">
-            <video class="plyr-video" playsinline controls data-poster="http://cf-ad6.pages.dev/imgs/tmb/wallst.jpg">
-                <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4" />
-            </video>
-        </div>
-        <div class="testi-content">
-            <div class="testi-badge">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+</div>
+</div><div class="testi-card reveal-up delay-2">
+<div class="video-wrapper" style="margin-top: 0; box-shadow: none; border: none; padding: 10px;">
+
+<video class="plyr-player" controls="" data-poster="https://arftk.com/thumb/daniel.jpg" playsinline="" preload="metadata"><source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4"/></video>
+</div>
+<div class="testi-content">
+<div class="testi-badge">
+<svg fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
                 最高月獲利
             </div>
-            <span class="testi-amount">$201,150<span style="font-size: 0.4em; margin-left: 15px;">USD</span></span>
-            
-            <p class="testi-quote">
+<span class="testi-amount">$201,150<span style="font-size: 0.4em; margin-left: 15px;">USD</span></span>
+<p class="testi-quote">
                 "系統幾乎每天都幫我賺進超過<strong>$3,000</strong>美金, 有時候甚至超過<strong>$10,000</strong>美金"
             </p>
-            
-            <div class="testi-meta">
+<div class="testi-meta">
                 🇬🇧 Daniel G.
             </div>
-        </div>
-    </div>
-    
 </div>
-
-
-            
-
-            <div class="text-center" style="margin-top: 50px;">
-                <span class="subtitle-en">SUCCESS STORIES</span>
-                <h2>會員真實的百萬美金提款紀錄</h2>
-                <div class="divider"></div>
-            </div>
-
-            <div class="testimonials-vertical-layout">
-
-    <div class="testi-card-vertical">
-        <div class="testi-content-top">
-            <div class="testi-badge">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+</div>
+</div>
+<div class="text-center" style="margin-top: 50px;">
+<span class="subtitle-en">SUCCESS STORIES</span>
+<h2>會員真實的百萬美金提款紀錄</h2>
+<div class="divider"></div>
+</div>
+<div class="testimonials-vertical-layout">
+<div class="testi-card-vertical reveal-up delay-1">
+<div class="testi-content-top">
+<div class="testi-badge">
+<svg fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
                 單月獲利
             </div>
-            
-            <div class="testi-amount-v">$178,013<span style="font-size: 0.5em; margin-left: 5px; color:#666;">USD</span></div>
-            
-            <div class="testi-meta-right">🇬🇧 SARA W.</div>
-        </div>
-
-        <div class="video-wrapper-vertical">
-            <div class="video-block">
-                <video src="https://arftk.com/imgs/money005.mp4" muted loop playsinline></video>
-                <button class="play-pause-btn">
-                    <img class="icon" src="https://arftk.com/imgs/play.svg">
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <div class="testi-card-vertical">
-        <div class="testi-content-top">
-            <div class="testi-badge">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+<div class="testi-amount-v">$178,013<span style="font-size: 0.5em; margin-left: 5px; color:#666;">USD</span></div>
+<div class="testi-meta-right">🇬🇧 SARA W.</div>
+</div>
+<div class="video-wrapper-vertical">
+<div class="video-block">
+<video loop="" muted="" playsinline="" src="https://arftk.com/imgs/money005.mp4"></video>
+<button class="play-pause-btn">
+<img class="icon" src="https://arftk.com/imgs/play.svg"/>
+</button>
+</div>
+</div>
+</div>
+<div class="testi-card-vertical reveal-up delay-2">
+<div class="testi-content-top">
+<div class="testi-badge">
+<svg fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
                 單月獲利
             </div>
-            
-            <div class="testi-amount-v">$205,110<span style="font-size: 0.5em; margin-left: 5px; color:#666;">USD</span></div>
-            
-            <div class="testi-meta-right">🇺🇸 PETER J.</div>
-        </div>
-
-        <div class="video-wrapper-vertical">
-            <div class="video-block">
-                <video src="https://arftk.com/imgs/money005.mp4" muted loop playsinline></video>
-                <button class="play-pause-btn">
-                    <img class="icon" src="https://arftk.com/imgs/play.svg">
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <div class="testi-card-vertical">
-        <div class="testi-content-top">
-            <div class="testi-badge">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+<div class="testi-amount-v">$205,110<span style="font-size: 0.5em; margin-left: 5px; color:#666;">USD</span></div>
+<div class="testi-meta-right">🇺🇸 PETER J.</div>
+</div>
+<div class="video-wrapper-vertical">
+<div class="video-block">
+<video loop="" muted="" playsinline="" src="https://arftk.com/imgs/money005.mp4"></video>
+<button class="play-pause-btn">
+<img class="icon" src="https://arftk.com/imgs/play.svg"/>
+</button>
+</div>
+</div>
+</div>
+<div class="testi-card-vertical reveal-up delay-3">
+<div class="testi-content-top">
+<div class="testi-badge">
+<svg fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
                 單月獲利
             </div>
-            
-            <div class="testi-amount-v">$192,550<span style="font-size: 0.5em; margin-left: 5px; color:#666;">USD</span></div>
-            
-            <div class="testi-meta-right">🇧🇪 JUSTIN R.</div>
-        </div>
-
-        <div class="video-wrapper-vertical">
-            <div class="video-block">
-                <video src="https://arftk.com/imgs/money005.mp4" muted loop playsinline></video>
-                <button class="play-pause-btn">
-                    <img class="icon" src="https://arftk.com/imgs/play.svg">
-                </button>
-            </div>
-        </div>
-    </div>
-
-    </div> 
-    <div class="mobile-swipe-indicator">
+<div class="testi-amount-v">$192,550<span style="font-size: 0.5em; margin-left: 5px; color:#666;">USD</span></div>
+<div class="testi-meta-right">🇧🇪 JUSTIN R.</div>
+</div>
+<div class="video-wrapper-vertical">
+<div class="video-block">
+<video loop="" muted="" playsinline="" src="https://arftk.com/imgs/money005.mp4"></video>
+<button class="play-pause-btn">
+<img class="icon" src="https://arftk.com/imgs/play.svg"/>
+</button>
+</div>
+</div>
+</div>
+</div>
+<div class="mobile-swipe-indicator">
     往右滑看更多
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <line x1="5" y1="12" x2="19" y2="12"></line>
-        <polyline points="12 5 19 12 12 19"></polyline>
-    </svg>
+    <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<line x1="5" x2="19" y1="12" y2="12"></line>
+<polyline points="12 5 19 12 12 19"></polyline>
+</svg>
 </div>
-
 </div>
-
-
-
-    </section>
-
-    <section class="parallax-section">
-    <div class="parallax-bg"></div>
-    
-    </section>
-
-    <section class="section-padding" style="background: #080808;">
-        <div class="container container-wide">
-            <div class="text-center" style="margin-bottom: 50px;">
-                <span class="subtitle-en">SYSTEM REVEALED</span>
-                <div class="hero-text-only">
-                <h1>
-                    <span class="hero-number-block">NσK® SYSTEM</span>
+</section>
+<section class="parallax-section">
+<div class="parallax-bg"></div>
+</section>
+<section class="section-padding" style="background: #080808;">
+<div class="container container-wide">
+<div class="text-center" style="margin-bottom: 50px;">
+<span class="subtitle-en">SYSTEM REVEALED</span>
+<div class="hero-text-only">
+<h1>
+<span class="hero-number-block">NσK® SYSTEM</span>
                     為何能夠替所有會員每個月獲利至少數萬美金?
                 </h1>
-                <p>請耐心看完以下所有影片,我們會深入講解</p>
-            </div>
-                
-                <div class="arrow-scroll">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </div>
-            </div>
+<p>請耐心看完以下所有影片,我們會深入講解</p>
+</div>
+<div class="arrow-scroll">
+<span></span>
+<span></span>
+<span></span>
+</div>
+</div>
+<div class="video-wrapper deep-dive-hero-video" style="max-width: 900px; margin: 0 auto 80px;">
 
-            <div class="video-wrapper deep-dive-hero-video" style="max-width: 900px; margin: 0 auto 80px;">
-                <script src="https://fast.wistia.com/embed/b3q7co67ui.js" async type="module"></script>
-                <wistia-player media-id="b3q7co67ui" seo="false" aspect="1.7777777777777777"></wistia-player>
-            </div>
+<video class="plyr-player" controls="" data-poster="https://arftk.com/thumb/intro.jpg" playsinline="" preload="metadata"><source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4"/></video>
+</div>
+<div class="text-center" style="margin-bottom: 30px;">
+<span class="subtitle-en">SYSTEM REVEALED</span>
+<h2>獨家揭密：系統實戰運作邏輯</h2>
+<p>為何系統能做到精準的自動化獲利？</p>
+<div class="arrow-scroll">
+<span></span>
+<span></span>
+<span></span>
+</div>
+</div>
+<div class="feature-row sticky-mode">
+<div class="sticky-video-col">
+<div class="video-wrapper">
+<div class="plyr-video-block">
 
-          
-            <div class="text-center" style="margin-bottom: 30px;">
-                <span class="subtitle-en">SYSTEM REVEALED</span>
-                <h2>獨家揭密：系統實戰運作邏輯</h2>
-                <p>為何系統能做到精準的自動化獲利？</p>
-                
-                <div class="arrow-scroll">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </div>
-            </div>
-
-
-            <div class="feature-row sticky-mode">
-    
-    <div class="sticky-video-col">
-        <div class="video-wrapper">
-            <div class="video-block">
-                <script src="https://fast.wistia.com/embed/b3q7co67ui.js" async type="module"></script>
-                <wistia-player media-id="b3q7co67ui" seo="false" aspect="1.7777777777777777"></wistia-player>
-            </div>
-        </div>
-        <p style="margin-top: 20px; font-size: 0.9rem; text-align: center; color: #666;">
+<video class="plyr-player" controls="" data-poster="https://arftk.com/thumb/intro.jpg" playsinline="" preload="metadata"><source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4"/></video>
+</div>
+</div>
+<p style="margin-top: 20px; font-size: 0.9rem; text-align: center; color: #666;">
             ▲ 系統實時運作監控畫面
         </p>
-    </div>
-
-    <div class="feature-content scrollable-content-col">
-
-        <div class="content-block">
-            <div class="feature-title-group">
-            <span class="feature-reason-tag">ABSOLUTE ADVANTAGE</span>
-            <h3 class="feature-heading-styled">
+</div>
+<div class="feature-content scrollable-content-col">
+<div class="content-block reveal-up delay-1">
+<div class="feature-title-group">
+<span class="feature-reason-tag">ABSOLUTE ADVANTAGE</span>
+<h3 class="feature-heading-styled">
                 系統真實獲利流程
                 <div class="feature-heading-line"></div>
-            </h3>
-        </div>
-
-        <ul class="feature-list" id="animated-feature-list" style="margin: 0; width: 100%;">
-            <li style="padding: 15px; font-size: 1.1rem;">
-                橋接上萬種assets,毫秒內抓取千筆交易&套利機會
+</h3>
+</div>
+<ul class="feature-list" id="animated-feature-list" style="margin: 0; width: 100%;">
+<li style="padding: 15px; font-size: 1.1rem;">
+                橋接上萬種assets,毫秒內抓取千筆交易&amp;套利機會
             </li>
-            <li style="padding: 15px; font-size: 1.1rem;">
+<li style="padding: 15px; font-size: 1.1rem;">
                 使用AXIS科技篩選出勝率最高的交易機會,並自動執行
             </li>
-            <li style="padding: 15px; font-size: 1.1rem;">
+<li style="padding: 15px; font-size: 1.1rem;">
                 實時監控風險,一旦偵測到虧損可能,立刻進行反向對沖
             </li>
-            <li style="padding: 15px; font-size: 1.1rem;">
+<li style="padding: 15px; font-size: 1.1rem;">
                 每週自動結算獲利,將利潤發送回用戶指定的銀行帳號
             </li>
-        </ul>
-
-
-        </div>
-
-
-        
-        <div class="content-block">
-            <span class="feature-reason-tag">STEP 01</span>
-            <h3 class="sticky-content-title">橋接上萬種assets,毫秒內抓取千筆交易&套利機會</h3>
-            <p>
+</ul>
+</div>
+<div class="content-block reveal-up delay-1">
+<span class="feature-reason-tag">STEP 01</span>
+<h3 class="sticky-content-title">橋接上萬種assets,毫秒內抓取千筆交易&amp;套利機會</h3>
+<p>
                 不再受限於單一市場.我們鋪設的 API 觸角深入全球各大交易所,任何資產類別的微小波動,都將成為我們擴大你資產的燃料.
             </p>
-            <div class="video-wrapper" style="margin-top: 20px;">
-                <div class="video-block">
-                    <video src="https://arftk.com/imgs1/abm.mp4" muted loop playsinline></video>
-                    <button class="play-pause-btn"><img class="icon" src="https://arftk.com/imgs/play.svg"></button>
-                </div>
-            </div>
-        </div>
-
-        <div class="content-block">
-            <span class="feature-reason-tag">STEP 02</span>
-            <h3 class="sticky-content-title">使用 AXIS 科技篩選出勝率最高的交易機會, 並自動執行</h3>
-            <p>
+<div class="video-wrapper" style="margin-top: 20px;">
+<div class="video-block">
+<video loop="" muted="" playsinline="" src="https://arftk.com/imgs1/abm.mp4"></video>
+<button class="play-pause-btn"><img class="icon" src="https://arftk.com/imgs/play.svg"/></button>
+</div>
+</div>
+</div>
+<div class="content-block reveal-up delay-1">
+<span class="feature-reason-tag">STEP 02</span>
+<h3 class="sticky-content-title">使用 AXIS 科技篩選出勝率最高的交易機會, 並自動執行</h3>
+<p>
                 人類會猶豫,但 AXIS 不會.演算法剔除所有情緒與雜訊,只鎖定數學上勝率超過 98.6% 的完美訊號,並在毫秒間扣下扳機.
             </p>
-            <div class="video-wrapper" style="margin-top: 20px;">
-                <div class="video-block">
-                    <video src="https://arftk.com/imgs1/axis.mp4" muted loop playsinline></video>
-                    <button class="play-pause-btn"><img class="icon" src="https://arftk.com/imgs/play.svg"></button>
-                </div>
-            </div>
-        </div>
-
-        <div class="content-block">
-            <span class="feature-reason-tag">STEP 03</span>
-            <h3 class="sticky-content-title">實時監控風險, 一旦偵測到虧損可能, 立刻進行反向對沖</h3>
-            <p>
+<div class="video-wrapper" style="margin-top: 20px;">
+<div class="video-block">
+<video loop="" muted="" playsinline="" src="https://arftk.com/imgs1/axis.mp4"></video>
+<button class="play-pause-btn"><img class="icon" src="https://arftk.com/imgs/play.svg"/></button>
+</div>
+</div>
+</div>
+<div class="content-block reveal-up delay-1">
+<span class="feature-reason-tag">STEP 03</span>
+<h3 class="sticky-content-title">實時監控風險, 一旦偵測到虧損可能, 立刻進行反向對沖</h3>
+<p>
                 在虧損發生之前,我們就已經將其扼殺.RRM 協議如同隱形的防護罩,利用衍生品市場進行反向操作,將市場波動帶來的衝擊完全中和.
             </p>
-            <div class="video-wrapper" style="margin-top: 20px;">
-                <div class="video-block">
-                    <video src="https://arftk.com/imgs1/rrm.mp4" muted loop playsinline></video>
-                    <button class="play-pause-btn"><img class="icon" src="https://arftk.com/imgs/play.svg"></button>
-                </div>
-            </div>
-        </div>
-
-        <div class="content-block">
-            <span class="feature-reason-tag">STEP 04</span>
-            <h3 class="sticky-content-title">每週自動結算獲利, 將利潤發送回用戶指定的銀行帳號</h3>
-            <p>
+<div class="video-wrapper" style="margin-top: 20px;">
+<div class="video-block">
+<video loop="" muted="" playsinline="" src="https://arftk.com/imgs1/rrm.mp4"></video>
+<button class="play-pause-btn"><img class="icon" src="https://arftk.com/imgs/play.svg"/></button>
+</div>
+</div>
+</div>
+<div class="content-block reveal-up delay-1">
+<span class="feature-reason-tag">STEP 04</span>
+<h3 class="sticky-content-title">每週自動結算獲利, 將利潤發送回用戶指定的銀行帳號</h3>
+<p>
                 無需手動申請,無需等待審核,獲利比你的薪水更準時入帳,你也不需要為此工作任何一秒鐘
             </p>
-            <div class="video-wrapper" style="margin-top: 20px;">
-                <div class="video-block">
-                    <video src="https://arftk.com/imgs1/wdrw.mp4" muted loop playsinline></video>
-                    <button class="play-pause-btn"><img class="icon" src="https://arftk.com/imgs/play.svg"></button>
-                </div>
-            </div>
-        </div>
-
-    </div>
+<div class="video-wrapper" style="margin-top: 20px;">
+<div class="video-block">
+<video loop="" muted="" playsinline="" src="https://arftk.com/imgs1/wdrw.mp4"></video>
+<button class="play-pause-btn"><img class="icon" src="https://arftk.com/imgs/play.svg"/></button>
 </div>
-
-
-            
-
+</div>
+</div>
+</div>
+</div>
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         // 設定偵測器：當列表進入畫面 30% 時觸發
@@ -2425,1057 +2393,889 @@
         });
     });
 </script>
-
-
 <div class="text-center" style="margin-bottom: 30px;">
-                <span class="subtitle-en">Bridging Mechanism</span>
-                <h2>重點科技：系統如何快速抓取上千個獲利&套利機會</h2>
-                <p>觀看關於NσK®的ABM專利科技介紹</p>
-                
-                <div class="arrow-scroll">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </div>
-            </div>
-
-
+<span class="subtitle-en">Bridging Mechanism</span>
+<h2>重點科技：系統如何快速抓取上千個獲利&amp;套利機會</h2>
+<p>觀看關於NσK®的ABM專利科技介紹</p>
+<div class="arrow-scroll">
+<span></span>
+<span></span>
+<span></span>
+</div>
+</div>
 <div class="feature-row sticky-mode">
-    
-    <div class="sticky-video-col">
-        <div class="video-wrapper">
-            <div class="video-block">
-                <script src="https://fast.wistia.com/embed/b3q7co67ui.js" async type="module"></script>
-                <wistia-player media-id="b3q7co67ui" seo="false" aspect="1.7777777777777777"></wistia-player>
-            </div>
-        </div>
-        <p style="margin-top: 20px; font-size: 0.9rem; text-align: center; color: #666;">
+<div class="sticky-video-col">
+<div class="video-wrapper">
+<div class="plyr-video-block">
+
+<video class="plyr-player" controls="" data-poster="https://arftk.com/thumb/abm.jpg" playsinline="" preload="metadata"><source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4"/></video>
+</div>
+</div>
+<p style="margin-top: 20px; font-size: 0.9rem; text-align: center; color: #666;">
             ▲ ABM 高頻傳輸架構演示
         </p>
-    </div>
-
-    <div class="feature-content scrollable-content-col">
-        <div class="content-block">
-            
-            <div class="feature-title-group">
-                <span class="feature-reason-tag">SPEED DOMINANCE</span>
-                <h3 class="feature-heading-styled">
+</div>
+<div class="feature-content scrollable-content-col">
+<div class="content-block reveal-up delay-1">
+<div class="feature-title-group">
+<span class="feature-reason-tag">SPEED DOMINANCE</span>
+<h3 class="feature-heading-styled">
                     毫秒之差,即是財富重分配
                     <div class="feature-heading-line"></div>
-                </h3>
+</h3>
+</div>
+<p>在金融世界裡,資訊的不對稱就是獲利的來源.NσK® 不只是交易系統,它是鋪設在全球光纖網絡上的掠食者.</p>
+<p>當一般投資人還在看著延遲的 K 線圖時,我們的系統已經完成了獲利出場.這就是科技帶來的絕對不公平優勢.</p>
+<div class="nk-hud-tag">
+<div class="nk-live-dot"></div> ABM® TECHNOLOGY
             </div>
-            
-            <p>在金融世界裡,資訊的不對稱就是獲利的來源.NσK® 不只是交易系統,它是鋪設在全球光纖網絡上的掠食者.</p>
-            <p>當一般投資人還在看著延遲的 K 線圖時,我們的系統已經完成了獲利出場.這就是科技帶來的絕對不公平優勢.</p>
-
-            <div class="nk-hud-tag">
-                <div class="nk-live-dot"></div> ABM® TECHNOLOGY
-            </div>
-
-            <h3 class="feature-heading-styled" style="font-size: 1.8rem; margin-bottom: 15px;">
+<h3 class="feature-heading-styled" style="font-size: 1.8rem; margin-bottom: 15px;">
                 毫秒級橋接 30,000+ 金融標的
             </h3>
-
-            <p style="font-size: 1.1rem; color: #ccc; line-height: 1.6;">
+<p style="font-size: 1.1rem; color: #ccc; line-height: 1.6;">
                 這不是交易,這是<strong>資訊掠奪</strong>.ABM 機制直連全球 12 大流動性供應商,比一般散戶快 0.02 秒取得報價.哪裡有價差,系統就在哪裡.
             </p>
-
-            <div class="nk-stat-panel">
-                <div>
-                    <span class="nk-stat-val" style="color: var(--nk-gold-rich);">30,000+</span>
-                    <span class="nk-stat-lbl">ASSETS CONNECTED</span>
-                </div>
-                <div>
-                    <span class="nk-stat-val">12ms</span>
-                    <span class="nk-stat-lbl">LATENCY SPEED</span>
-                </div>
-            </div>
-
-            <div class="nk-screen-frame">
-                <div class="nk-screen-label"><div class="nk-rec-dot"></div> LIVE FEED</div>
-                <div class="video-wrapper" style="margin-top: 0;">
-                    <div class="video-block">
-                        <video src="https://arftk.com/imgs1/abm.mp4" muted loop playsinline autoplay></video>
-                        <button class="play-pause-btn"><img class="icon" src="https://arftk.com/imgs/play.svg"></button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+<div class="nk-stat-panel">
+<div>
+<span class="nk-stat-val" style="color: var(--nk-gold-rich);">30,000+</span>
+<span class="nk-stat-lbl">ASSETS CONNECTED</span>
 </div>
-
-
+<div>
+<span class="nk-stat-val">12ms</span>
+<span class="nk-stat-lbl">LATENCY SPEED</span>
+</div>
+</div>
+<div class="nk-screen-frame">
+<div class="nk-screen-label"><div class="nk-rec-dot"></div> LIVE FEED</div>
+<div class="video-wrapper" style="margin-top: 0;">
+<div class="video-block">
+<video autoplay="" loop="" muted="" playsinline="" src="https://arftk.com/imgs1/abm.mp4"></video>
+<button class="play-pause-btn"><img class="icon" src="https://arftk.com/imgs/play.svg"/></button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
 <div class="text-center" style="margin-bottom: 30px;">
-                <span class="subtitle-en">Predictive Intelligence</span>
-                <h2>精準獵殺：使用AXIS科技精準執行勝率 85% 的黃金交易</h2>
-                <p>觀看關於 NσK® 的 AXIS 篩選與執行機制介紹</p>
-                
-                <div class="arrow-scroll">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </div>
-            </div>
-
-
-
+<span class="subtitle-en">Predictive Intelligence</span>
+<h2>精準獵殺：使用AXIS科技精準執行勝率 85% 的黃金交易</h2>
+<p>觀看關於 NσK® 的 AXIS 篩選與執行機制介紹</p>
+<div class="arrow-scroll">
+<span></span>
+<span></span>
+<span></span>
+</div>
+</div>
 <div class="feature-row sticky-mode">
-    
-    <div class="sticky-video-col">
-        <div class="video-wrapper">
-            <div class="video-block">
-                <script src="https://fast.wistia.com/embed/b3q7co67ui.js" async type="module"></script>
-                <wistia-player media-id="b3q7co67ui" seo="false" aspect="1.7777777777777777"></wistia-player>
-            </div>
-        </div>
-        <p style="margin-top: 20px; font-size: 0.9rem; text-align: center; color: #666;">
+<div class="sticky-video-col">
+<div class="video-wrapper">
+<div class="plyr-video-block">
+
+<video class="plyr-player" controls="" data-poster="https://arftk.com/thumb/axis.jpg" playsinline="" preload="metadata"><source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4"/></video>
+</div>
+</div>
+<p style="margin-top: 20px; font-size: 0.9rem; text-align: center; color: #666;">
             ▲ AXIS 系統實戰操作演示
         </p>
-    </div>
-
-    <div class="feature-content scrollable-content-col">
-        <div class="content-block">
-            <div class="feature-title-group">
-    <span class="feature-reason-tag">PREDICTIVE CORE</span>
-    <h3 class="feature-heading-styled">
+</div>
+<div class="feature-content scrollable-content-col">
+<div class="content-block reveal-up delay-1">
+<div class="feature-title-group">
+<span class="feature-reason-tag">PREDICTIVE CORE</span>
+<h3 class="feature-heading-styled">
         這不是預測,這是未來的劇本
         <div class="feature-heading-line"></div>
-    </h3>
+</h3>
 </div>
-
 <p>當華爾街的分析師還在試圖解讀昨日的新聞,NσK® AXIS 早已鎖定了明日的趨勢.在我們的演算法眼中,市場沒有混亂的雜訊,只有一條條清晰可見的獲利軌跡.</p>
 <p>不需要相信行銷話術,請相信你的眼睛.下方是系統即時運算的畫面——這就是將「不確定性」轉化為「絕對收益」的暴力美學.</p>
-
-            <div class="nk-hud-tag">
-                <div class="nk-live-dot"></div> AXIS® ANALYTICS
+<div class="nk-hud-tag">
+<div class="nk-live-dot"></div> AXIS® ANALYTICS
             </div>
-
-            <h3 class="feature-heading-styled" style="font-size: 1.8rem; margin-bottom: 15px;">
+<h3 class="feature-heading-styled" style="font-size: 1.8rem; margin-bottom: 15px;">
                 只狙擊「第一象限」的絕對暴利
             </h3>
-
-            <p style="font-size: 1.1rem; color: #ccc; line-height: 1.6;">
+<p style="font-size: 1.1rem; color: #ccc; line-height: 1.6;">
                 我們不猜測行情,我們計算行情.系統交叉分析 <span style="color:#fff">Y軸(趨勢強度)</span> 與 <span style="color:#fff">X軸(市場動能)</span>.只有當訊號落入高強度的<strong>「第一象限」</strong>,AXIS 才會扣下扳機.
             </p>
-
-            <div style="margin: 25px 0;">
-                <div style="display:flex; justify-content:space-between; font-size:0.8rem; color:var(--nk-gold-rich); margin-bottom:5px; font-family:var(--nk-font-en);">
-                    <span>AXIS CONFIDENCE SCORE</span>
-                    <span>CALCULATING... 98.6%</span>
-                </div>
-                <div class="nk-loading-track"><div class="nk-loading-bar"></div></div>
-            </div>
-
-            <div class="nk-screen-frame">
-                <div class="nk-screen-label"><div class="nk-rec-dot"></div> ANALYSIS MODE</div>
-            <div class="video-wrapper" style="margin-top: 0;">
-                <div class="video-block">
-                    <video src="https://arftk.com/imgs1/axis.mp4" muted loop playsinline autoplay></video>
-                    <button class="play-pause-btn"><img class="icon" src="https://arftk.com/imgs/play.svg"></button>
-                </div>
-            </div>
-            </div>
-
-            
-        </div>
-    </div>
+<div style="margin: 25px 0;">
+<div style="display:flex; justify-content:space-between; font-size:0.8rem; color:var(--nk-gold-rich); margin-bottom:5px; font-family:var(--nk-font-en);">
+<span>AXIS CONFIDENCE SCORE</span>
+<span>CALCULATING... 98.6%</span>
 </div>
-
-
+<div class="nk-loading-track"><div class="nk-loading-bar"></div></div>
+</div>
+<div class="nk-screen-frame">
+<div class="nk-screen-label"><div class="nk-rec-dot"></div> ANALYSIS MODE</div>
+<div class="video-wrapper" style="margin-top: 0;">
+<div class="video-block">
+<video autoplay="" loop="" muted="" playsinline="" src="https://arftk.com/imgs1/axis.mp4"></video>
+<button class="play-pause-btn"><img class="icon" src="https://arftk.com/imgs/play.svg"/></button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
 <div class="text-center" style="margin-bottom: 30px;">
-                <span class="subtitle-en">RISK REVERSE</span>
-                <h2>數學避險：系統如何在風險發生前自動計算並對沖</h2>
-                <p>觀看 NσK® 的 RRM 虧損應對機制介紹</p>
-                
-                <div class="arrow-scroll">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </div>
-            </div>
-
-
-
+<span class="subtitle-en">RISK REVERSE</span>
+<h2>數學避險：系統如何在風險發生前自動計算並對沖</h2>
+<p>觀看 NσK® 的 RRM 虧損應對機制介紹</p>
+<div class="arrow-scroll">
+<span></span>
+<span></span>
+<span></span>
+</div>
+</div>
 <div class="feature-row sticky-mode">
-    
-    <div class="sticky-video-col">
-        <div class="video-wrapper">
-            <div class="video-block">
-                <script src="https://fast.wistia.com/embed/b3q7co67ui.js" async type="module"></script>
-                <wistia-player media-id="b3q7co67ui" seo="false" aspect="1.7777777777777777"></wistia-player>
-            </div>
-        </div>
-        <p style="margin-top: 20px; font-size: 0.9rem; text-align: center; color: #666;">
+<div class="sticky-video-col">
+<div class="video-wrapper">
+<div class="plyr-video-block">
+
+<video class="plyr-player" controls="" data-poster="https://arftk.com/thumb/rrm.jpg" playsinline="" preload="metadata"><source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4"/></video>
+</div>
+</div>
+<p style="margin-top: 20px; font-size: 0.9rem; text-align: center; color: #666;">
             ▲ RRM 風險對沖機制演示
         </p>
-    </div>
-
-    <div class="feature-content scrollable-content-col">
-        <div class="content-block">
-            
-            <div class="feature-title-group">
-                <span class="feature-reason-tag">CAPITAL SHIELD</span>
-                <h3 class="feature-heading-styled">
+</div>
+<div class="feature-content scrollable-content-col">
+<div class="content-block reveal-up delay-1">
+<div class="feature-title-group">
+<span class="feature-reason-tag">CAPITAL SHIELD</span>
+<h3 class="feature-heading-styled">
                     數學算力構築的資金堡壘
                     <div class="feature-heading-line"></div>
-                </h3>
+</h3>
+</div>
+<p>進攻決定你能賺多少,但防守決定你能活多久.在 NσK® 的字典裡,沒有「爆倉」這個詞.</p>
+<p>我們不依賴運氣來避開風險,我們依賴數學.全天候的監控機制,確保你的資產在黑天鵝事件面前,依然穩如泰山.</p>
+<div class="nk-hud-tag" style="border-color: rgba(255,0,60,0.4); background: rgba(255,0,60,0.05);">
+<div class="nk-live-dot red"></div> RRM® PROTECTION
             </div>
-            
-            <p>進攻決定你能賺多少,但防守決定你能活多久.在 NσK® 的字典裡,沒有「爆倉」這個詞.</p>
-            <p>我們不依賴運氣來避開風險,我們依賴數學.全天候的監控機制,確保你的資產在黑天鵝事件面前,依然穩如泰山.</p>
-
-            <div class="nk-hud-tag" style="border-color: rgba(255,0,60,0.4); background: rgba(255,0,60,0.05);">
-                <div class="nk-live-dot red"></div> RRM® PROTECTION
-            </div>
-
-            <h3 class="feature-heading-styled" style="font-size: 1.8rem; margin-bottom: 15px;">
+<h3 class="feature-heading-styled" style="font-size: 1.8rem; margin-bottom: 15px;">
                 讓虧損在數學上「幾乎不可能」
             </h3>
-
-            <p style="font-size: 1.1rem; color: #ccc; line-height: 1.6;">
+<p style="font-size: 1.1rem; color: #ccc; line-height: 1.6;">
                 這是你的資金堡壘.RRM 監控 2,000+ 風險 KPI.一旦偵測到反轉,系統毫秒內在衍生品市場執行 <span style="color:#ff003c; border-bottom:1px solid #ff003c;">REVERSE HEDGING (反向對沖)</span>.
             </p>
-
-            <div class="nk-stat-panel" style="border-color: rgba(255,0,60,0.3);">
-                <div>
-                    <span class="nk-stat-val" style="color: #ff003c; -webkit-text-fill-color: #ff003c;">2,000+</span>
-                    <span class="nk-stat-lbl">RISK KPIs</span>
-                </div>
-                <div>
-                    <span class="nk-stat-val">97%</span>
-                    <span class="nk-stat-lbl">LOSS NEUTRALIZED</span>
-                </div>
-            </div>
-
-            <div class="nk-screen-frame" style="border-color: rgba(255,0,60,0.3);">
-                <div class="nk-screen-label" style="color:#ff003c;"><div class="nk-rec-dot"></div> PROTECTION ACTIVE</div>
-                <div class="video-wrapper" style="margin-top: 0;">
-                    <div class="video-block">
-                        <video src="https://arftk.com/imgs1/rrm.mp4" muted loop playsinline autoplay></video>
-                        <button class="play-pause-btn"><img class="icon" src="https://arftk.com/imgs/play.svg"></button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+<div class="nk-stat-panel" style="border-color: rgba(255,0,60,0.3);">
+<div>
+<span class="nk-stat-val" style="color: #ff003c; -webkit-text-fill-color: #ff003c;">2,000+</span>
+<span class="nk-stat-lbl">RISK KPIs</span>
 </div>
-
-
+<div>
+<span class="nk-stat-val">97%</span>
+<span class="nk-stat-lbl">LOSS NEUTRALIZED</span>
+</div>
+</div>
+<div class="nk-screen-frame" style="border-color: rgba(255,0,60,0.3);">
+<div class="nk-screen-label" style="color:#ff003c;"><div class="nk-rec-dot"></div> PROTECTION ACTIVE</div>
+<div class="video-wrapper" style="margin-top: 0;">
+<div class="video-block">
+<video autoplay="" loop="" muted="" playsinline="" src="https://arftk.com/imgs1/rrm.mp4"></video>
+<button class="play-pause-btn"><img class="icon" src="https://arftk.com/imgs/play.svg"/></button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
 <div class="text-center" style="margin-bottom: 30px;">
-                <span class="subtitle-en">ELITE MANAGEMENT</span>
-                <h2>戰情室監控：頂尖操盤團隊如何 24/7 為你守護資產</h2>
-                <p>觀看關於 NσK® 頂集團隊介紹</p>
-                
-                <div class="arrow-scroll">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </div>
-            </div>
-
-
+<span class="subtitle-en">ELITE MANAGEMENT</span>
+<h2>戰情室監控：頂尖操盤團隊如何 24/7 為你守護資產</h2>
+<p>觀看關於 NσK® 頂集團隊介紹</p>
+<div class="arrow-scroll">
+<span></span>
+<span></span>
+<span></span>
+</div>
+</div>
 <div class="feature-row sticky-mode">
-    
-    <div class="sticky-video-col">
-        <div class="video-wrapper">
-            <div class="video-block">
-                <script src="https://fast.wistia.com/embed/b3q7co67ui.js" async type="module"></script>
-                <wistia-player media-id="b3q7co67ui" seo="false" aspect="1.7777777777777777"></wistia-player>
-            </div>
-        </div>
-        <p style="margin-top: 20px; font-size: 0.9rem; text-align: center; color: #666;">
+<div class="sticky-video-col">
+<div class="video-wrapper">
+<div class="plyr-video-block">
+
+<video class="plyr-player" controls="" data-poster="https://arftk.com/thumb/team.jpg" playsinline="" preload="metadata"><source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4"/></video>
+</div>
+</div>
+<p style="margin-top: 20px; font-size: 0.9rem; text-align: center; color: #666;">
             ▲ 系統實戰操作演示
         </p>
-    </div>
-
-    <div class="feature-content scrollable-content-col">
-
-        <div class="content-block">
-            <div class="feature-title-group">
-                <span class="feature-reason-tag">ELITE MANAGEMENT</span>
-                <h3 class="feature-heading-styled">
+</div>
+<div class="feature-content scrollable-content-col">
+<div class="content-block reveal-up delay-1">
+<div class="feature-title-group">
+<span class="feature-reason-tag">ELITE MANAGEMENT</span>
+<h3 class="feature-heading-styled">
                     專業團隊替你全程操作
                     <div class="feature-heading-line"></div>
-                </h3>
-            </div>
-            
-            <p>雖然 NσK® 擁有世界最先進的 AI 運算核心,但我們深知「人」才是風險控管的最後一道防線.</p>
+</h3>
+</div>
+<p>雖然 NσK® 擁有世界最先進的 AI 運算核心,但我們深知「人」才是風險控管的最後一道防線.</p>
 <p>我們的交易戰情室採取軍事級別的三班制輪替.每一筆由 AI 發出的交易訊號,背後都有專業分析師進行即時的「邏輯覆核」.這確保了系統在極端行情下,依然能展現出如外科手術般的精準與冷靜.</p>
 <div class="nk-zigzag-gallery">
-
-            <div class="zigzag-item">
-                <img src="https://arftk.com/imgs1/rrm.jpg" alt="Profit Secured">
-                <div class="zigzag-overlay">
-                    <div class="zigzag-text">
-                        <span class="zigzag-title">交易團隊</span>
-                        <span class="zigzag-desc">交易室內多組團隊24小時輪流待命, 不錯過任何獲利機會</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="zigzag-item">
-                <img src="https://arftk.com/imgs1/team00.jpg" alt="Entry Point">
-                <div class="zigzag-overlay">
-                    <div class="zigzag-text">
-                        <span class="zigzag-title">策略團隊</span>
-                        <span class="zigzag-desc">針對市場情況和系統數據, 制定最新策略, 並根據當下市場狀況進行即時調整</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="zigzag-item">
-                <img src="https://arftk.com/imgs1/trading11.jpg" alt="Risk Control">
-                <div class="zigzag-overlay">
-                    <div class="zigzag-text">
-                        <span class="zigzag-title">工程團隊</span>
-                        <span class="zigzag-desc">即時將最新策略編程到系統內,確保系統執行最符合市場情況的策略</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="zigzag-item">
-                <img src="https://arftk.com/imgs1/clients05.jpg" alt="Final Result">
-                <div class="zigzag-overlay">
-                    <div class="zigzag-text">
-                        <span class="zigzag-title">後勤團隊</span>
-                        <span class="zigzag-desc">直接管理客戶們的系統帳號, 確保交易和提款順利完成</span>
-                    </div>
-                </div>
-            </div>
-            <p style="margin-bottom: 0px;">系統執行的每一筆交易,都是由我們的團隊經過嚴格策略和模型篩選過後的結果</p>
-
-            <div class="video-wrapper" style="margin-top: 0;">
-                    <div class="video-block">
-                        <video src="https://arftk.com/imgs1/team.mp4" muted loop playsinline autoplay></video>
-                        <button class="play-pause-btn"><img class="icon" src="https://arftk.com/imgs/play.svg"></button>
-                    </div>
-                </div>
-
-
-
-        </div>
-        </div>
-
-
-    </div>
+<div class="zigzag-item">
+<img alt="Profit Secured" src="https://arftk.com/imgs1/rrm.jpg"/>
+<div class="zigzag-overlay">
+<div class="zigzag-text">
+<span class="zigzag-title">交易團隊</span>
+<span class="zigzag-desc">交易室內多組團隊24小時輪流待命, 不錯過任何獲利機會</span>
 </div>
-
-            
-            
-        </div>
-    </section>
-
-    <section class="parallax-section">
-    <div class="parallax-bg" style="background-image: url('https://arftk.com/imgs1/sys0001.jpg')"></div>
-    
-    </section>
-
+</div>
+</div>
+<div class="zigzag-item">
+<img alt="Entry Point" src="https://arftk.com/imgs1/team00.jpg"/>
+<div class="zigzag-overlay">
+<div class="zigzag-text">
+<span class="zigzag-title">策略團隊</span>
+<span class="zigzag-desc">針對市場情況和系統數據, 制定最新策略, 並根據當下市場狀況進行即時調整</span>
+</div>
+</div>
+</div>
+<div class="zigzag-item">
+<img alt="Risk Control" src="https://arftk.com/imgs1/trading11.jpg"/>
+<div class="zigzag-overlay">
+<div class="zigzag-text">
+<span class="zigzag-title">工程團隊</span>
+<span class="zigzag-desc">即時將最新策略編程到系統內,確保系統執行最符合市場情況的策略</span>
+</div>
+</div>
+</div>
+<div class="zigzag-item">
+<img alt="Final Result" src="https://arftk.com/imgs1/clients05.jpg"/>
+<div class="zigzag-overlay">
+<div class="zigzag-text">
+<span class="zigzag-title">後勤團隊</span>
+<span class="zigzag-desc">直接管理客戶們的系統帳號, 確保交易和提款順利完成</span>
+</div>
+</div>
+</div>
+<p style="margin-bottom: 0px;">系統執行的每一筆交易,都是由我們的團隊經過嚴格策略和模型篩選過後的結果</p>
+<div class="video-wrapper" style="margin-top: 0;">
+<div class="video-block">
+<video autoplay="" loop="" muted="" playsinline="" src="https://arftk.com/imgs1/team.mp4"></video>
+<button class="play-pause-btn"><img class="icon" src="https://arftk.com/imgs/play.svg"/></button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="parallax-section">
+<div class="parallax-bg" style="background-image: url('https://arftk.com/imgs1/sys0001.jpg')"></div>
+</section>
 <section class="section-padding">
-        <div class="container container-wide">
-            <div class="text-center" style="margin-bottom: 50px;">
-                <span class="subtitle-en">SYSTEM REVEALED</span>
-                <div class="hero-text-only">
-                <h1>不論你的年齡與職業, 必定能在未來30天內賺進至少<br>
-                    <span class="hero-number-block">$3,291,684</span>
-                </h1>
-            </div>
-                
-                <div class="arrow-scroll">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </div>
-            </div>
+<div class="container container-wide">
+<div class="text-center" style="margin-bottom: 50px;">
+<span class="subtitle-en">SYSTEM REVEALED</span>
+<div class="hero-text-only">
+<h1>不論你的年齡與職業, 必定能在未來30天內賺進至少<br/>
+<span class="hero-number-block">$3,291,684</span>
+</h1>
+</div>
+<div class="arrow-scroll">
+<span></span>
+<span></span>
+<span></span>
+</div>
+</div>
+<div class="video-wrapper deep-dive-hero-video" style="max-width: 900px; margin: 0 auto 80px;">
 
-            <div class="video-wrapper deep-dive-hero-video" style="max-width: 900px; margin: 0 auto 80px;">
-                <script src="https://fast.wistia.com/embed/b3q7co67ui.js" async type="module"></script>
-                <wistia-player media-id="b3q7co67ui" seo="false" aspect="1.7777777777777777"></wistia-player>
-            </div>
+<video class="plyr-player" controls="" data-poster="https://arftk.com/thumb/partner.jpg" playsinline="" preload="metadata"><source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4"/></video>
+</div>
+<div class="text-center">
+<span class="subtitle-en">REAL STORIES</span>
+<h2>以下所有影片當中的人/事/言論皆為真實, 絕非特殊個案</h2>
+<div class="divider"></div>
+<div class="text-center" style="margin-top: 50px;">
+<p>所有分享經驗的會員都是實名露面,不僅對自己的承諾負責,也代表系統的獲利絕對真實</p>
+</div>
+</div>
+<div class="testimonials">
+<div class="testi-card reveal-up delay-1">
+<div class="video-wrapper" style="margin-top: 0; box-shadow: none; border: none; padding: 10px;">
 
-
-            <div class="text-center">
-                <span class="subtitle-en">REAL STORIES</span>
-                <h2>以下所有影片當中的人/事/言論皆為真實, 絕非特殊個案</h2>
-
-                <div class="divider"></div>
-                <div class="text-center" style="margin-top: 50px;">
-                <p>所有分享經驗的會員都是實名露面,不僅對自己的承諾負責,也代表系統的獲利絕對真實</p>
-            </div>
-            </div>
-
-
-            <div class="testimonials">
-    
-    <div class="testi-card">
-        <div class="video-wrapper" style="margin-top: 0; box-shadow: none; border: none; padding: 10px;">
-            <video class="plyr-video" playsinline controls data-poster="http://cf-ad6.pages.dev/imgs/tmb/wallst.jpg">
-                <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4" />
-            </video>
-        </div>
-        <div class="testi-content">
-            <div class="testi-badge">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+<video class="plyr-player" controls="" data-poster="https://arftk.com/thumb/nancy.jpg" playsinline="" preload="metadata"><source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4"/></video>
+</div>
+<div class="testi-content">
+<div class="testi-badge">
+<svg fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
                 最高月獲利
             </div>
-            <span class="testi-amount">$168,420<span style="font-size: 0.4em; margin-left: 15px;">USD</span></span>
-            
-            <p class="testi-quote">
+<span class="testi-amount">$168,420<span style="font-size: 0.4em; margin-left: 15px;">USD</span></span>
+<p class="testi-quote">
                 "原本我非常擔心受騙,但系統才開通24小時我就成功提領到第一筆收益!"
             </p>
-            
-            <div class="testi-meta">
+<div class="testi-meta">
                 🇸🇪 Nancy P.
             </div>
-        </div>
-    </div>
+</div>
+</div>
+<div class="testi-card reveal-up delay-2">
+<div class="video-wrapper" style="margin-top: 0; box-shadow: none; border: none; padding: 10px;">
 
-    <div class="testi-card">
-        <div class="video-wrapper" style="margin-top: 0; box-shadow: none; border: none; padding: 10px;">
-            <video class="plyr-video" playsinline controls data-poster="http://cf-ad6.pages.dev/imgs/tmb/wallst.jpg">
-                <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4" />
-            </video>
-        </div>
-        <div class="testi-content">
-            <div class="testi-badge">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+<video class="plyr-player" controls="" data-poster="https://arftk.com/thumb/justin.jpg" playsinline="" preload="metadata"><source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4"/></video>
+</div>
+<div class="testi-content">
+<div class="testi-badge">
+<svg fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
                 最高月獲利
             </div>
-            <span class="testi-amount">$192,550<span style="font-size: 0.4em; margin-left: 15px;">USD</span></span>
-            
-            <p class="testi-quote">
+<span class="testi-amount">$192,550<span style="font-size: 0.4em; margin-left: 15px;">USD</span></span>
+<p class="testi-quote">
                 "系統帶來的穩定收入,讓我享受優渥的物質生活,並且在女性眼裡更具有魅力"
             </p>
-            
-            <div class="testi-meta">
+<div class="testi-meta">
                 🇧🇪 Justin R.
             </div>
-        </div>
-    </div>
+</div>
+</div>
+<div class="testi-card reveal-up delay-1">
+<div class="video-wrapper" style="margin-top: 0; box-shadow: none; border: none; padding: 10px;">
 
-    <div class="testi-card">
-        <div class="video-wrapper" style="margin-top: 0; box-shadow: none; border: none; padding: 10px;">
-            <video class="plyr-video" playsinline controls data-poster="http://cf-ad6.pages.dev/imgs/tmb/wallst.jpg">
-                <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4" />
-            </video>
-        </div>
-        <div class="testi-content">
-            <div class="testi-badge">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+<video class="plyr-player" controls="" data-poster="https://arftk.com/thumb/peter.jpg" playsinline="" preload="metadata"><source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4"/></video>
+</div>
+<div class="testi-content">
+<div class="testi-badge">
+<svg fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
                 最高月獲利
             </div>
-            <span class="testi-amount">$205,110<span style="font-size: 0.4em; margin-left: 15px;">USD</span></span>
-            
-            <p class="testi-quote">
+<span class="testi-amount">$205,110<span style="font-size: 0.4em; margin-left: 15px;">USD</span></span>
+<p class="testi-quote">
                 "儘管我在華爾街工作多年,我從沒見過如此精準的全自動獲利系統"
             </p>
-            
-            <div class="testi-meta">
+<div class="testi-meta">
                 🇺🇸 Peter J.
             </div>
-        </div>
-    </div>
+</div>
+</div>
+<div class="testi-card reveal-up delay-2">
+<div class="video-wrapper" style="margin-top: 0; box-shadow: none; border: none; padding: 10px;">
 
-    <div class="testi-card">
-        <div class="video-wrapper" style="margin-top: 0; box-shadow: none; border: none; padding: 10px;">
-            <video class="plyr-video" playsinline controls data-poster="http://cf-ad6.pages.dev/imgs/tmb/wallst.jpg">
-                <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4" />
-            </video>
-        </div>
-        <div class="testi-content">
-            <div class="testi-badge">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+<video class="plyr-player" controls="" data-poster="https://arftk.com/thumb/morgan.jpg" playsinline="" preload="metadata"><source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4"/></video>
+</div>
+<div class="testi-content">
+<div class="testi-badge">
+<svg fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
                 最高月獲利
             </div>
-            <span class="testi-amount">$155,890<span style="font-size: 0.4em; margin-left: 15px;">USD</span></span>
-            
-            <p class="testi-quote">
+<span class="testi-amount">$155,890<span style="font-size: 0.4em; margin-left: 15px;">USD</span></span>
+<p class="testi-quote">
                 "我原本只是想擁有一個額外的收入來源,系統竟然在30天內獲利<strong>$118,729</strong>美金"
             </p>
-            
-            <div class="testi-meta">
+<div class="testi-meta">
                 🇺🇸 Morgan K.
             </div>
-        </div>
-    </div>
+</div>
+</div>
+<div class="testi-card reveal-up delay-1">
+<div class="video-wrapper" style="margin-top: 0; box-shadow: none; border: none; padding: 10px;">
 
-    <div class="testi-card">
-        <div class="video-wrapper" style="margin-top: 0; box-shadow: none; border: none; padding: 10px;">
-            <video class="plyr-video" playsinline controls data-poster="http://cf-ad6.pages.dev/imgs/tmb/wallst.jpg">
-                <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4" />
-            </video>
-        </div>
-        <div class="testi-content">
-            <div class="testi-badge">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+<video class="plyr-player" controls="" data-poster="https://arftk.com/thumb/oscar.jpg" playsinline="" preload="metadata"><source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4"/></video>
+</div>
+<div class="testi-content">
+<div class="testi-badge">
+<svg fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
                 最高月獲利
             </div>
-            <span class="testi-amount">$188,340<span style="font-size: 0.4em; margin-left: 15px;">USD</span></span>
-            
-            <p class="testi-quote">
+<span class="testi-amount">$188,340<span style="font-size: 0.4em; margin-left: 15px;">USD</span></span>
+<p class="testi-quote">
                 "我的帳戶經理十分專業,不論我要提領多大的金額,他們從來不會拖延任何一筆提款"
             </p>
-            
-            <div class="testi-meta">
+<div class="testi-meta">
                 🇺🇸 Oscar E.
             </div>
-        </div>
-    </div>
+</div>
+</div>
+<div class="testi-card reveal-up delay-2">
+<div class="video-wrapper" style="margin-top: 0; box-shadow: none; border: none; padding: 10px;">
 
-    <div class="testi-card">
-        <div class="video-wrapper" style="margin-top: 0; box-shadow: none; border: none; padding: 10px;">
-            <video class="plyr-video" playsinline controls data-poster="http://cf-ad6.pages.dev/imgs/tmb/wallst.jpg">
-                <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4" />
-            </video>
-        </div>
-        <div class="testi-content">
-            <div class="testi-badge">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+<video class="plyr-player" controls="" data-poster="https://arftk.com/thumb/hubert.jpg" playsinline="" preload="metadata"><source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4"/></video>
+</div>
+<div class="testi-content">
+<div class="testi-badge">
+<svg fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
                 最高月獲利
             </div>
-            <span class="testi-amount">$172,600<span style="font-size: 0.4em; margin-left: 15px;">USD</span></span>
-            
-            <p class="testi-quote">
+<span class="testi-amount">$172,600<span style="font-size: 0.4em; margin-left: 15px;">USD</span></span>
+<p class="testi-quote">
                 "系統才開通兩天就獲利將近快<strong>$8,000</strong>美金,足足是我兩個月的薪水!"
             </p>
-            
-            <div class="testi-meta">
+<div class="testi-meta">
                 🇺🇸 Hubert M.
             </div>
-        </div>
-    </div>
+</div>
+</div>
+<div class="testi-card reveal-up delay-1">
+<div class="video-wrapper" style="margin-top: 0; box-shadow: none; border: none; padding: 10px;">
 
-    <div class="testi-card">
-        <div class="video-wrapper" style="margin-top: 0; box-shadow: none; border: none; padding: 10px;">
-            <video class="plyr-video" playsinline controls data-poster="http://cf-ad6.pages.dev/imgs/tmb/wallst.jpg">
-                <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4" />
-            </video>
-        </div>
-        <div class="testi-content">
-            <div class="testi-badge">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+<video class="plyr-player" controls="" data-poster="https://arftk.com/thumb/ryan.jpg" playsinline="" preload="metadata"><source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4"/></video>
+</div>
+<div class="testi-content">
+<div class="testi-badge">
+<svg fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
                 最高月獲利
             </div>
-            <span class="testi-amount">$199,230<span style="font-size: 0.4em; margin-left: 15px;">USD</span></span>
-            
-            <p class="testi-quote">
+<span class="testi-amount">$199,230<span style="font-size: 0.4em; margin-left: 15px;">USD</span></span>
+<p class="testi-quote">
                 "系統的獲利替我補足事業上的資金缺口,同時帶給我另一個穩定可靠的收入來源"
             </p>
-            
-            <div class="testi-meta">
+<div class="testi-meta">
                 🇺🇸 Ryan D.
             </div>
-        </div>
-    </div>
+</div>
+</div>
+<div class="testi-card reveal-up delay-2">
+<div class="video-wrapper" style="margin-top: 0; box-shadow: none; border: none; padding: 10px;">
 
-    <div class="testi-card">
-        <div class="video-wrapper" style="margin-top: 0; box-shadow: none; border: none; padding: 10px;">
-            <video class="plyr-video" playsinline controls data-poster="http://cf-ad6.pages.dev/imgs/tmb/wallst.jpg">
-                <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4" />
-            </video>
-        </div>
-        <div class="testi-content">
-            <div class="testi-badge">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+<video class="plyr-player" controls="" data-poster="https://arftk.com/thumb/steve.jpg" playsinline="" preload="metadata"><source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4"/></video>
+</div>
+<div class="testi-content">
+<div class="testi-badge">
+<svg fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
                 最高月獲利
             </div>
-            <span class="testi-amount">$164,750<span style="font-size: 0.4em; margin-left: 15px;">USD</span></span>
-            
-            <p class="testi-quote">
+<span class="testi-amount">$164,750<span style="font-size: 0.4em; margin-left: 15px;">USD</span></span>
+<p class="testi-quote">
                 "當我發現自己已經提領超過百萬美金時,我感動到直接在大街上哭了出來"
             </p>
-            
-            <div class="testi-meta">
+<div class="testi-meta">
                 🇺🇸 Steve L.
             </div>
-        </div>
-    </div>
+</div>
+</div>
+<div class="testi-card reveal-up delay-1">
+<div class="video-wrapper" style="margin-top: 0; box-shadow: none; border: none; padding: 10px;">
 
-    <div class="testi-card">
-        <div class="video-wrapper" style="margin-top: 0; box-shadow: none; border: none; padding: 10px;">
-            <video class="plyr-video" playsinline controls data-poster="http://cf-ad6.pages.dev/imgs/tmb/wallst.jpg">
-                <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4" />
-            </video>
-        </div>
-        <div class="testi-content">
-            <div class="testi-badge">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+<video class="plyr-player" controls="" data-poster="https://arftk.com/thumb/nurse.jpg" playsinline="" preload="metadata"><source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4"/></video>
+</div>
+<div class="testi-content">
+<div class="testi-badge">
+<svg fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
                 最高月獲利
             </div>
-            <span class="testi-amount">$181,900<span style="font-size: 0.4em; margin-left: 15px;">USD</span></span>
-            
-            <p class="testi-quote">
+<span class="testi-amount">$181,900<span style="font-size: 0.4em; margin-left: 15px;">USD</span></span>
+<p class="testi-quote">
                 "除了能夠盡情旅遊,購物,系統更給了我寶貴的自由時間,讓我妥善照顧自己"
             </p>
-            
-            <div class="testi-meta">
+<div class="testi-meta">
                 🇵🇱 Emilia R.
             </div>
-        </div>
-    </div>
+</div>
+</div>
+<div class="testi-card reveal-up delay-2">
+<div class="video-wrapper" style="margin-top: 0; box-shadow: none; border: none; padding: 10px;">
 
-    <div class="testi-card">
-        <div class="video-wrapper" style="margin-top: 0; box-shadow: none; border: none; padding: 10px;">
-            <video class="plyr-video" playsinline controls data-poster="http://cf-ad6.pages.dev/imgs/tmb/wallst.jpg">
-                <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4" />
-            </video>
-        </div>
-        <div class="testi-content">
-            <div class="testi-badge">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+<video class="plyr-player" controls="" data-poster="https://arftk.com/thumb/lisa.jpg" playsinline="" preload="metadata"><source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4"/></video>
+</div>
+<div class="testi-content">
+<div class="testi-badge">
+<svg fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
                 最高月獲利
             </div>
-            <span class="testi-amount">$208,440<span style="font-size: 0.4em; margin-left: 15px;">USD</span></span>
-            
-            <p class="testi-quote">
+<span class="testi-amount">$208,440<span style="font-size: 0.4em; margin-left: 15px;">USD</span></span>
+<p class="testi-quote">
                 "系統在一個禮拜內為我獲利<strong>$54,580</strong>美金,真的別在浪費時間在其他投資工具上了!"
             </p>
-            
-            <div class="testi-meta">
+<div class="testi-meta">
                 🇺🇸 Lisa N.
             </div>
-        </div>
-    </div>
+</div>
+</div>
+<div class="testi-card reveal-up delay-1">
+<div class="video-wrapper" style="margin-top: 0; box-shadow: none; border: none; padding: 10px;">
 
-    <div class="testi-card">
-        <div class="video-wrapper" style="margin-top: 0; box-shadow: none; border: none; padding: 10px;">
-            <video class="plyr-video" playsinline controls data-poster="http://cf-ad6.pages.dev/imgs/tmb/wallst.jpg">
-                <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4" />
-            </video>
-        </div>
-        <div class="testi-content">
-            <div class="testi-badge">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+<video class="plyr-player" controls="" data-poster="https://arftk.com/thumb/albert.jpg" playsinline="" preload="metadata"><source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4"/></video>
+</div>
+<div class="testi-content">
+<div class="testi-badge">
+<svg fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
                 最高月獲利
             </div>
-            <span class="testi-amount">$159,330<span style="font-size: 0.4em; margin-left: 15px;">USD</span></span>
-            
-            <p class="testi-quote">
+<span class="testi-amount">$159,330<span style="font-size: 0.4em; margin-left: 15px;">USD</span></span>
+<p class="testi-quote">
                 "不僅是每月帶來穩定收益,系統全自動化的模式給了我很多時間去享受這些獲利"
             </p>
-            
-            <div class="testi-meta">
+<div class="testi-meta">
                 🇺🇸 Albert S.
             </div>
-        </div>
-    </div>
+</div>
+</div>
+<div class="testi-card reveal-up delay-2">
+<div class="video-wrapper" style="margin-top: 0; box-shadow: none; border: none; padding: 10px;">
 
-    <div class="testi-card">
-        <div class="video-wrapper" style="margin-top: 0; box-shadow: none; border: none; padding: 10px;">
-            <video class="plyr-video" playsinline controls data-poster="http://cf-ad6.pages.dev/imgs/tmb/wallst.jpg">
-                <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4" />
-            </video>
-        </div>
-        <div class="testi-content">
-            <div class="testi-badge">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+<video class="plyr-player" controls="" data-poster="https://arftk.com/thumb/gary.jpg" playsinline="" preload="metadata"><source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4"/></video>
+</div>
+<div class="testi-content">
+<div class="testi-badge">
+<svg fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
                 最高月獲利
             </div>
-            <span class="testi-amount">$175,210<span style="font-size: 0.4em; margin-left: 15px;">USD</span></span>
-            
-            <p class="testi-quote">
+<span class="testi-amount">$175,210<span style="font-size: 0.4em; margin-left: 15px;">USD</span></span>
+<p class="testi-quote">
                 "在80歲之後要致富根本就是不可能的, 是這套系統給了我享受人生的機會"
             </p>
-            
-            <div class="testi-meta">
+<div class="testi-meta">
                 🇺🇸 Gary S.
             </div>
-        </div>
-    </div>
+</div>
+</div>
+<div class="testi-card reveal-up delay-1">
+<div class="video-wrapper" style="margin-top: 0; box-shadow: none; border: none; padding: 10px;">
 
-    <div class="testi-card">
-        <div class="video-wrapper" style="margin-top: 0; box-shadow: none; border: none; padding: 10px;">
-            <video class="plyr-video" playsinline controls data-poster="http://cf-ad6.pages.dev/imgs/tmb/wallst.jpg">
-                <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4" />
-            </video>
-        </div>
-        <div class="testi-content">
-            <div class="testi-badge">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+<video class="plyr-player" controls="" data-poster="https://arftk.com/thumb/matthew.jpg" playsinline="" preload="metadata"><source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4"/></video>
+</div>
+<div class="testi-content">
+<div class="testi-badge">
+<svg fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
                 最高月獲利
             </div>
-            <span class="testi-amount">$194,880<span style="font-size: 0.4em; margin-left: 15px;">USD</span></span>
-            
-            <p class="testi-quote">
+<span class="testi-amount">$194,880<span style="font-size: 0.4em; margin-left: 15px;">USD</span></span>
+<p class="testi-quote">
                 "我已經從系統提領了超過<strong>$1,463,347</strong>美金, 我很確定我的孩子們未來不必再擔心錢了"
             </p>
-            
-            <div class="testi-meta">
+<div class="testi-meta">
                 🇺🇸 Matthew W.
             </div>
-        </div>
-    </div>
+</div>
+</div>
+<div class="testi-card reveal-up delay-2">
+<div class="video-wrapper" style="margin-top: 0; box-shadow: none; border: none; padding: 10px;">
 
-    <div class="testi-card">
-        <div class="video-wrapper" style="margin-top: 0; box-shadow: none; border: none; padding: 10px;">
-            <video class="plyr-video" playsinline controls data-poster="http://cf-ad6.pages.dev/imgs/tmb/wallst.jpg">
-                <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4" />
-            </video>
-        </div>
-        <div class="testi-content">
-            <div class="testi-badge">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+<video class="plyr-player" controls="" data-poster="https://arftk.com/thumb/daniel.jpg" playsinline="" preload="metadata"><source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4"/></video>
+</div>
+<div class="testi-content">
+<div class="testi-badge">
+<svg fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
                 最高月獲利
             </div>
-            <span class="testi-amount">$201,150<span style="font-size: 0.4em; margin-left: 15px;">USD</span></span>
-            
-            <p class="testi-quote">
+<span class="testi-amount">$201,150<span style="font-size: 0.4em; margin-left: 15px;">USD</span></span>
+<p class="testi-quote">
                 "系統幾乎每天都幫我賺進超過<strong>$3,000</strong>美金, 有時候甚至超過<strong>$10,000</strong>美金"
             </p>
-            
-            <div class="testi-meta">
+<div class="testi-meta">
                 🇬🇧 Daniel G.
             </div>
-        </div>
-    </div>
-
 </div>
+</div>
+<div class="testi-card reveal-up delay-1">
+<div class="video-wrapper" style="margin-top: 0; box-shadow: none; border: none; padding: 10px;">
 
-
-        </div>
-    </section>
-
-    
-
-    <section class="parallax-section">
-    <div class="parallax-bg"></div>
-    
-    </section>
-
-
-    <section class="section-padding" style="background: #000;">
-        <div class="container">
-            <div class="text-center" style="margin-bottom: 50px;">
-                <span class="subtitle-en">THE TRUTH BEHIND</span>
-                <div class="hero-text-only">
-                    <span class="hero-number-block">NσK® SYSTEM</span>
-                <h1>既然系統這麼好賺,為何你們還要公開?<br>
-                    
-                </h1>
+<video class="plyr-player" controls="" data-poster="https://arftk.com/thumb/tyrone.jpg" playsinline="" preload="metadata"><source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4"/></video>
+</div>
+<div class="testi-content">
+<div class="testi-badge">
+<svg fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+                最高月獲利
             </div>
-                
-                <div class="arrow-scroll">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </div>
+<span class="testi-amount">$194,880<span style="font-size: 0.4em; margin-left: 15px;">USD</span></span>
+<p class="testi-quote">
+                "我已經從系統提領了超過<strong>$1,463,347</strong>美金, 我很確定我的孩子們未來不必再擔心錢了"
+            </p>
+<div class="testi-meta">
+                🇺🇸 Tyrone K.
             </div>
+</div>
+</div>
+<div class="testi-card reveal-up delay-2">
+<div class="video-wrapper" style="margin-top: 0; box-shadow: none; border: none; padding: 10px;">
 
-            <div class="video-wrapper deep-dive-hero-video" style="max-width: 900px; margin: 0 auto 80px;">
-                <script src="https://fast.wistia.com/embed/b3q7co67ui.js" async type="module"></script>
-                <wistia-player media-id="b3q7co67ui" seo="false" aspect="1.7777777777777777"></wistia-player>
+<video class="plyr-player" controls="" data-poster="https://arftk.com/thumb/zack.jpg" playsinline="" preload="metadata"><source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4"/></video>
+</div>
+<div class="testi-content">
+<div class="testi-badge">
+<svg fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+                最高月獲利
             </div>
-
-            <div class="text-center">
-                <span class="subtitle-en">MACHINE LEARNING</span>
-                <h2>若會員加入對我們沒有「極大的好處」, 我們也不可能開放系統</h2>
-                <div class="divider"></div>
-                <p><strong>※ 會員們的交易數據與紀錄, 就是系統優化的根據</strong></p>
+<span class="testi-amount">$201,150<span style="font-size: 0.4em; margin-left: 15px;">USD</span></span>
+<p class="testi-quote">
+                "系統幾乎每天都幫我賺進超過<strong>$3,000</strong>美金, 有時候甚至超過<strong>$10,000</strong>美金"
+            </p>
+<div class="testi-meta">
+                🇬🇧 Zack M.
             </div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="parallax-section">
+<div class="parallax-bg"></div>
+</section>
+<section class="section-padding" style="background: #000;">
+<div class="container">
+<div class="text-center" style="margin-bottom: 50px;">
+<span class="subtitle-en">THE TRUTH BEHIND</span>
+<div class="hero-text-only">
+<span class="hero-number-block">NσK® SYSTEM</span>
+<h1>既然系統這麼好賺,為何你們還要公開?<br/>
+</h1>
+</div>
+<div class="arrow-scroll">
+<span></span>
+<span></span>
+<span></span>
+</div>
+</div>
+<div class="video-wrapper deep-dive-hero-video" style="max-width: 900px; margin: 0 auto 80px;">
 
-            <div class="split-section">
-                <div class="img-zoom-container">
-                    <img src="https://arftk.com/imgs1/clients03.jpg" alt="Optimization Data">
-                </div>
-                
-                <div class="feature-text-block">
-                    <div class="feature-title-group">
-                        <span class="feature-reason-tag">AGGREGATION</span>
-                        <h3 class="feature-heading-styled">
+<video class="plyr-player" controls="" data-poster="https://arftk.com/thumb/why.jpg" playsinline="" preload="metadata"><source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4"/></video>
+</div>
+<div class="text-center">
+<span class="subtitle-en">MACHINE LEARNING</span>
+<h2>若會員加入對我們沒有「極大的好處」, 我們也不可能開放系統</h2>
+<div class="divider"></div>
+<p><strong>※ 會員們的交易數據與紀錄, 就是系統優化的根據</strong></p>
+</div>
+<div class="split-section">
+<div class="img-zoom-container">
+<img alt="Optimization Data" src="https://arftk.com/imgs1/clients03.jpg"/>
+</div>
+<div class="feature-text-block">
+<div class="feature-title-group">
+<span class="feature-reason-tag">AGGREGATION</span>
+<h3 class="feature-heading-styled">
                             整合用戶交易數據
                             <div class="feature-heading-line"></div>
-                        </h3>
-                    </div>
-                    <p>我們近年來在亞洲架設了幾部全新硬體伺服器, 這也是為何 Mike 這次選擇在亞洲開放的主因</p>
-                    <p>透過亞洲區會員的連線與使用累積的教交易數據, 我們得以了解如何調整我們的伺服器, 以達最佳化效能</p>
-                </div>
-            </div>
-
-            <div class="split-section reverse">
-                <div class="img-zoom-container">
-                    <img src="https://arftk.com/imgs1/trading11.jpg" alt="Server Optimization">
-                </div>
-                
-                <div class="feature-text-block">
-                    <div class="feature-title-group">
-                        <span class="feature-reason-tag">OPTIMIZATION</span>
-                        <h3 class="feature-heading-styled">
+</h3>
+</div>
+<p>我們近年來在亞洲架設了幾部全新硬體伺服器, 這也是為何 Mike 這次選擇在亞洲開放的主因</p>
+<p>透過亞洲區會員的連線與使用累積的教交易數據, 我們得以了解如何調整我們的伺服器, 以達最佳化效能</p>
+</div>
+</div>
+<div class="split-section reverse">
+<div class="img-zoom-container">
+<img alt="Server Optimization" src="https://arftk.com/imgs1/trading11.jpg"/>
+</div>
+<div class="feature-text-block">
+<div class="feature-title-group">
+<span class="feature-reason-tag">OPTIMIZATION</span>
+<h3 class="feature-heading-styled">
                             測試與改良系統策略
                             <div class="feature-heading-line"></div>
-                        </h3>
-                    </div>
-                    <p>透過分析你的每一筆交易數據, 系統的演算法與交易策略能透過 Machine Learning 的方式不斷優化</p>
-                    <p>在交易策略、資金分配、獲利能力等不斷提升的情況之下, 會員的平均獲利一樣會不斷提升, 對雙方都只有好處</p>
-                </div>
-            </div>
-
-            <div class="split-section" style="margin-bottom: 85px;">
-    
-    <div class="video-wrapper" style="margin-top: 0;">
-        <div class="video-block">
-            <video src="https://arftk.com/imgs1/wdrw.mp4" muted loop playsinline></video>
-            <button class="play-pause-btn">
-                <img decoding="async" class="icon" src="https://arftk.com/imgs/play.svg">
-            </button>
-        </div>
-    </div>
-    
-    <div class="feature-text-block">
-        <div class="feature-title-group">
-            <span class="feature-reason-tag">85% WIN RATE</span>
-            <h3 class="feature-heading-styled">
+</h3>
+</div>
+<p>透過分析你的每一筆交易數據, 系統的演算法與交易策略能透過 Machine Learning 的方式不斷優化</p>
+<p>在交易策略、資金分配、獲利能力等不斷提升的情況之下, 會員的平均獲利一樣會不斷提升, 對雙方都只有好處</p>
+</div>
+</div>
+<div class="split-section" style="margin-bottom: 85px;">
+<div class="video-wrapper" style="margin-top: 0;">
+<div class="video-block">
+<video loop="" muted="" playsinline="" src="https://arftk.com/imgs1/wdrw.mp4"></video>
+<button class="play-pause-btn">
+<img class="icon" decoding="async" src="https://arftk.com/imgs/play.svg"/>
+</button>
+</div>
+</div>
+<div class="feature-text-block">
+<div class="feature-title-group">
+<span class="feature-reason-tag">85% WIN RATE</span>
+<h3 class="feature-heading-styled">
                 突破85%交易勝率
                 <div class="feature-heading-line"></div>
-            </h3>
-        </div>
-        
-        <p>經過數據餵養與策略優化的最終結果,就是一個不僅永有85%以上勝率且能夠針對少數虧損做出即時風險對沖的自動化獲利機器.系統勝率被數學強制鎖定在 85% 以上,會員們的資產增長不再是運氣,而是一種無可避免的必然</p>
-    </div>
-
+</h3>
+</div>
+<p>經過數據餵養與策略優化的最終結果,就是一個不僅永有85%以上勝率且能夠針對少數虧損做出即時風險對沖的自動化獲利機器.系統勝率被數學強制鎖定在 85% 以上,會員們的資產增長不再是運氣,而是一種無可避免的必然</p>
+</div>
 </div>
 <div class="text-center" style="margin-bottom: 30px;">
-                <span class="subtitle-en">OUR REPUTATION</span>
-                <h2>憑什麼相信NσK® 系統能夠替你每個月獲利數萬美金以上?!</h2>
-                <p>我們用最現實的方式告訴你,為何我們的承諾舉足輕重</p>
-                
-                <div class="arrow-scroll">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </div>
-            </div>
-        </div>
+<span class="subtitle-en">OUR REPUTATION</span>
+<h2>憑什麼相信NσK® 系統能夠替你每個月獲利數萬美金以上?!</h2>
+<p>我們用最現實的方式告訴你,為何我們的承諾舉足輕重</p>
+<div class="arrow-scroll">
+<span></span>
+<span></span>
+<span></span>
+</div>
+</div>
+</div>
+<div class="feature-row sticky-mode" style="margin: 0 10px;">
+<div class="sticky-video-col">
+<div class="video-wrapper">
+<div class="plyr-video-block">
 
-        <div class="feature-row sticky-mode" style="margin: 0 10px;">
-    
-    <div class="sticky-video-col">
-        <div class="video-wrapper">
-            <div class="video-block">
-                <script src="https://fast.wistia.com/embed/b3q7co67ui.js" async type="module"></script>
-                <wistia-player media-id="b3q7co67ui" seo="false" aspect="1.7777777777777777"></wistia-player>
-            </div>
-        </div>
-        <p style="margin-top: 20px; font-size: 0.9rem; text-align: center; color: #666;">
+<video class="plyr-player" controls="" data-poster="https://arftk.com/thumb/trustus.jpg" playsinline="" preload="metadata"><source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4"/></video>
+</div>
+</div>
+<p style="margin-top: 20px; font-size: 0.9rem; text-align: center; color: #666;">
             ▲ 系統實時運作監控畫面
         </p>
-    </div>
-
-    <div class="feature-content scrollable-content-col">
-
-        <div class="content-block">
-            <span class="feature-reason-tag">STEP 01</span>
-            <h3 class="sticky-content-title">華爾街頂層機構背後的「隱形操盤手」</h3>
-            <p>
+</div>
+<div class="feature-content scrollable-content-col">
+<div class="content-block reveal-up delay-1">
+<span class="feature-reason-tag">KEY 01</span>
+<h3 class="sticky-content-title">我們是華爾街頂層機構背後的「隱形操盤手」</h3>
+<p>
                 我們不只是開發者,我們是市場的造局者.NσK® 核心成員集結了前高盛 (Goldman Sachs) 的量化分析師與資深算法工程師.我們將過去僅服務於對沖基金的「軍事級策略」,下放給像你這樣的個人投資者.在機構交易圈,「NσK®」這個名字就代表著絕對的勝率.
             </p>
-            <div class="video-wrapper" style="margin-top: 20px;">
-                <div class="video-block">
-                    <video src="https://arftk.com/imgs1/team.mp4" muted loop playsinline></video>
-                    <button class="play-pause-btn"><img class="icon" src="https://arftk.com/imgs/play.svg"></button>
-                </div>
-            </div>
-            <p style="margin-top: 50px;">
-                因為掌握了超越市場的技術,NσK® 經常受邀出席全球金融科技高峰會,定義未來的交易標準.我們不只是參與者,更是各大頂尖券商爭相合作的戰略夥伴.當別人在討論趨勢時,我們正在創造趨勢.
+<div class="video-wrapper" style="margin-top: 20px;">
+<div class="video-block">
+<video loop="" muted="" playsinline="" src="https://arftk.com/imgs1/team.mp4"></video>
+<button class="play-pause-btn"><img class="icon" src="https://arftk.com/imgs/play.svg"/></button>
+</div>
+</div>
+<p style="margin-top: 50px;">
+                因為掌握了超越市場的技術,我們經常受邀出席全球金融科技高峰會,分析未來的交易標準.我們不只是參與者,更是各大頂尖券商爭相合作的戰略夥伴.當別人在討論趨勢時,我們正在創造趨勢.
             </p>
-            <div class="video-wrapper" style="margin-top: 20px;">
-                <div class="video-block">
-                    <video src="https://arftk.com/imgs1/partner.mp4" muted loop playsinline></video>
-                    <button class="play-pause-btn"><img class="icon" src="https://arftk.com/imgs/play.svg"></button>
-                </div>
-            </div>
-        </div>
-
-        <div class="content-block">
-            <span class="feature-reason-tag">STEP 02</span>
-            <h3 class="sticky-content-title">不要聽我們說什麼,看看我們大量的實名,露面的獲利見證影片</h3>
-            <p>
+<div class="video-wrapper" style="margin-top: 20px;">
+<div class="video-block">
+<video loop="" muted="" playsinline="" src="https://arftk.com/imgs1/partner.mp4"></video>
+<button class="play-pause-btn"><img class="icon" src="https://arftk.com/imgs/play.svg"/></button>
+</div>
+</div>
+</div>
+<div class="content-block reveal-up delay-1">
+<span class="feature-reason-tag">KEY 02</span>
+<h3 class="sticky-content-title">不要聽我們說什麼,看看我們大量的實名,露面的獲利見證影片</h3>
+<p>
                 劇本可以杜撰,但這些發自內心的震撼與銀行帳戶的入帳金額沒人敢偽造
 這不只是見證,這是人生徹底反轉.從家庭主婦到退休高管,我們好幾位會員們願意透過鏡頭,分享他們人生中「財富自由」的轉捩點
             </p>
-            <div class="video-wrapper" style="margin-top: 20px;">
-                <div class="video-block">
-                <script src="https://fast.wistia.com/embed/b3q7co67ui.js" async type="module"></script>
-                <wistia-player media-id="b3q7co67ui" seo="false" aspect="1.7777777777777777"></wistia-player>
-            </div>
-            </div>
-        </div>
+<div class="video-wrapper" style="margin-top: 20px;">
+<div class="plyr-video-block">
 
-
-        <div class="content-block">
-            <span class="feature-reason-tag">STEP 04</span>
-            <h3 class="sticky-content-title">一切交給最頂尖的團隊&最先進的科技,你只須負責提款享受</h3>
-            <p>
+<video class="plyr-player" controls="" data-poster="https://arftk.com/thumb/pricing.jpg" playsinline="" preload="metadata"><source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4"/></video>
+</div>
+</div>
+</div>
+<div class="content-block reveal-up delay-1">
+<span class="feature-reason-tag">KEY 03</span>
+<h3 class="sticky-content-title">一切交給最頂尖的團隊&amp;最先進的科技,你只須負責提款享受</h3>
+<p>
                 無需手動申請,無需等待審核,獲利比你的薪水更準時入帳,你也不需要為此工作任何一秒鐘.
             </p>
-            <div class="video-wrapper" style="margin-top: 20px;">
-                <div class="video-block">
-                    <video src="https://arftk.com/imgs1/wdrw.mp4" muted loop playsinline></video>
-                    <button class="play-pause-btn"><img class="icon" src="https://arftk.com/imgs/play.svg"></button>
-                </div>
-            </div>
-        </div>
-
-    </div>
+<div class="video-wrapper" style="margin-top: 20px;">
+<div class="video-block">
+<video loop="" muted="" playsinline="" src="https://arftk.com/imgs1/wdrw.mp4"></video>
+<button class="play-pause-btn"><img class="icon" src="https://arftk.com/imgs/play.svg"/></button>
 </div>
-
-
-    </section>
-
-
+</div>
+</div>
+</div>
+</div>
+</section>
 <section class="parallax-section">
-    <div class="parallax-bg"></div>
-    
-    </section>
-
-    
-
-    
-    <section class="pricing-section section-padding">
-        <div class="container">
-
-            <div class="text-center">
-                <span class="subtitle-en">TAKE ACTION</span>
-                <div class="hero-text-only">
-                <h1>
+<div class="parallax-bg"></div>
+</section>
+<section class="pricing-section section-padding">
+<div class="container">
+<div class="text-center">
+<span class="subtitle-en">TAKE ACTION</span>
+<div class="hero-text-only">
+<h1>
                     立刻搶下亞洲區剩餘的最後席次, 
-                    在未來30天內賺進至少 <br>
-                    <span class="hero-number-block">$3,291,684</span>
-                </h1>
-                
-                <div class="arrow-scroll">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </div>
-            </div>
-                
-                
-                
-            </div>
-
-            <div class="optin-gold-card">
-    
-    <div class="video-wrapper" style="margin-top: 0; border: none; border-bottom: 1px solid var(--nk-gold-dark);">
-        <div class="video-block">
-            <video src="https://arftk.com/imgs1/dash.mp4" muted loop playsinline></video>
-            <button class="play-pause-btn">
-                <img decoding="async" class="icon" src="https://arftk.com/imgs/play.svg">
-            </button>
-        </div>
-    </div>
-
-    <div class="optin-header">
-        <span class="subtitle-en">LIMITED ACCESS</span>
-        <h2 style="margin-bottom: 10px;">立即獲取系統權限</h2>
-        <p style="font-size: 1rem; margin: 0; color: #ccc;">名額有限,請填寫下方資料以鎖定你的席位</p>
-        <div class="arrow-scroll">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </div>
-
-    </div>
-
-    <div class="optin-body">
-        
-        <div class="optin-highlight-box">
-            <form id="sib-form" method="POST" action="https://xxxxxxxx">
-                
-                <div class="nk-input-group">
-    <label for="full_name" class="nk-input-label">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                    在未來30天內賺進至少 <br/>
+<span class="hero-number-block">$3,291,684</span>
+</h1>
+<div class="arrow-scroll">
+<span></span>
+<span></span>
+<span></span>
+</div>
+</div>
+</div>
+<div class="optin-gold-card reveal-up delay-1">
+<div class="video-wrapper" style="margin-top: 0; border: none; border-bottom: 1px solid var(--nk-gold-dark);">
+<div class="video-block">
+<video loop="" muted="" playsinline="" src="https://arftk.com/imgs1/dash.mp4"></video>
+<button class="play-pause-btn">
+<img class="icon" decoding="async" src="https://arftk.com/imgs/play.svg"/>
+</button>
+</div>
+</div>
+<div class="optin-header">
+<span class="subtitle-en">LIMITED ACCESS</span>
+<h2 style="margin-bottom: 10px;">立即獲取系統權限</h2>
+<p style="font-size: 1rem; margin: 0; color: #ccc;">名額有限,請填寫下方資料以鎖定你的席位</p>
+<div class="arrow-scroll">
+<span></span>
+<span></span>
+<span></span>
+</div>
+</div>
+<div class="optin-body">
+<div class="optin-highlight-box">
+<form action="https://xxxxxxxx" id="sib-form" method="POST">
+<div class="nk-input-group">
+<label class="nk-input-label" for="full_name">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"></path></svg>
         FULL NAME
     </label>
-    <input type="text" id="full_name" name="full_name" class="nk-input-field" placeholder="請輸入你的真實姓名" required>
+<input class="nk-input-field" id="full_name" name="full_name" placeholder="請輸入你的真實姓名" required="" type="text"/>
 </div>
-
 <div class="nk-input-group">
-    <label for="email" class="nk-input-label">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+<label class="nk-input-label" for="email">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"></path></svg>
         EMAIL ADDRESS
     </label>
-    <input type="email" id="email" name="email" class="nk-input-field" placeholder="請輸入你最常用的 Email 信箱" required>
+<input class="nk-input-field" id="email" name="email" placeholder="請輸入你最常用的 Email 信箱" required="" type="email"/>
 </div>
-
-                <button type="submit" class="nk-btn" style="width: 100%; margin-top: 15px;">
+<button class="nk-btn" style="width: 100%; margin-top: 15px;" type="submit">
                     GET INSTANT ACCESS
                     <span style="font-size: 0.8rem; display: block; font-weight: 300; margin-top: 5px; opacity: 0.7;">Secure 256-bit SSL Payment</span>
-                </button>
-                
-                <p style="text-align: center; font-size: 0.85rem; color: #666; margin-top: 20px; margin-bottom: 0;">
-                    <span style="color: var(--nk-gold-dark);">🔒 100% Secure.</span> We never share your info.
+</button>
+<p style="text-align: center; font-size: 0.85rem; color: #666; margin-top: 20px; margin-bottom: 0;">
+<span style="color: var(--nk-gold-dark);">🔒 100% Secure.</span> We never share your info.
                 </p>
-
-            </form>
-        </div>
-        
-    </div>
+</form>
 </div>
+</div>
+</div>
+<div class="pricing-unified-card reveal-up delay-1">
+<div class="video-wrapper" style="max-width: 900px; margin: 0 auto;">
 
-
-            <div class="pricing-unified-card">
-
-                <div class="video-wrapper" style="max-width: 900px; margin: 0 auto;">
-                <script src="https://fast.wistia.com/embed/b3q7co67ui.js" async type="module"></script>
-                <wistia-player media-id="b3q7co67ui" seo="false" aspect="1.7777777777777777"></wistia-player>
-            </div>
-                
-
-                <div class="pricing-header">
-                    <span class="subtitle-en" style="margin-bottom: 5px;">LIMITED TIME OFFER</span>
-                    <h2>成為 NσK® 亞洲區會員沒有高昂的費用</h2>
-                    <p style="margin-bottom: 0; font-size: 1.2rem;">只要你把握住極少的會員名額, 就能成為會員</p>
-                </div>
-                
-                <div class="pricing-body">
-                    
-                    <div class="price-row pricing-anim-row">
-                        <span class="row-label">系統使用月費</span>
-                        <span class="row-value">$6,500 USD</span>
-                    </div>
-                    
-                    <div class="price-row pricing-anim-row">
-                        <span class="row-label">伺服器維護費</span>
-                        <span class="row-value">$2,500 USD</span>
-                    </div>
-
-                    <h3>成為 NσK® 亞洲區會員,你只需支付</h3>
-                    
-                    <div class="arrow-scroll">
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                    </div>
-                
-                <div class="final-price-box final-price-anim">
-                        <span class="deposit-label">一次性會員保證金</span>
-                        <div class="final-price">$199<span style="font-size: 0.4em; margin-left: 5px;">USD</span></div>
-                        <p style="font-size: 0.9rem; color: #888; margin-bottom: 0;">(Fully Refundable 90-Day Guarantee)</p>
-                    </div>
-
-                    <a href="https://tinyurl.com/get1122" target="_blank" class="nk-btn">
+<video class="plyr-player" controls="" data-poster="http://arftk.com/thumb/pricing.jpg" playsinline="" preload="metadata"><source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4"/></video>
+</div>
+<div class="pricing-header">
+<span class="subtitle-en" style="margin-bottom: 5px;">LIMITED TIME OFFER</span>
+<h2>成為 NσK® 亞洲區會員沒有高昂的費用</h2>
+<p style="margin-bottom: 0; font-size: 1.2rem;">只要你把握住極少的會員名額, 就能成為會員</p>
+</div>
+<div class="pricing-body">
+<div class="price-row pricing-anim-row">
+<span class="row-label">系統使用月費</span>
+<span class="row-value">$6,500 USD</span>
+</div>
+<div class="price-row pricing-anim-row">
+<span class="row-label">伺服器維護費</span>
+<span class="row-value">$2,500 USD</span>
+</div>
+<h3>成為 NσK® 亞洲區會員,你只需支付</h3>
+<div class="arrow-scroll">
+<span></span>
+<span></span>
+<span></span>
+</div>
+<div class="final-price-box final-price-anim">
+<span class="deposit-label">一次性會員保證金</span>
+<div class="final-price">$199<span style="font-size: 0.4em; margin-left: 5px;">USD</span></div>
+<p style="font-size: 0.9rem; color: #888; margin-bottom: 0;">ONE-TIME PAYMENT</p>
+</div>
+<a class="nk-btn" href="https://tinyurl.com/get1122" target="_blank">
                         立即開通系統權限
                         <span style="font-size: 0.8rem; display: block; font-weight: 300; margin-top: 5px; opacity: 0.7;">Secure 256-bit SSL Payment</span>
-                    </a>
-                </div>
-
-                <div class="pricing-footer">
-                    <span>90天無條件退費保證</span>
-                    <span style="color: #333;">|</span>
-                    <span>最低獲利承諾</span>
-                </div>
-            </div>
-
-        </div>
-    </section>
-
-    <footer>
-        <div class="container">
-            <img src="https://arftk.com/imgs1/logo1.png" alt="Logo" style="width: 100px; margin: 0 auto 20px; filter: grayscale(1);">
-            <p style="font-size: 0.75rem;">© 2026 NσK® INVESTMENT GROUP. All rights reserved.</p>
-        </div>
-    </footer>
-
-    <script>
+</a>
+</div>
+<div class="pricing-footer">
+<span>90天無條件退費保證</span>
+<span style="color: #333;">|</span>
+<span>最低獲利承諾</span>
+</div>
+</div>
+</div>
+</section>
+<footer>
+<div class="container">
+<img alt="Logo" src="https://arftk.com/imgs1/logo1.png" style="width: 100px; margin: 0 auto 20px; filter: grayscale(1);"/>
+<p style="font-size: 0.75rem;">© 2026 NσK® INVESTMENT GROUP. All rights reserved.</p>
+</div>
+</footer>
+<script>
     document.addEventListener("DOMContentLoaded", function() {
         
         /* =========================================
@@ -3665,18 +3465,12 @@
         }
     });
 </script>
-
-    <script src="https://cdn.plyr.io/3.7.8/plyr.polyfilled.js"></script>
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            // 只針對我們替換的 .plyr-video 進行初始化，完全避開背景自動播放區塊
-            const plyrVideos = document.querySelectorAll('.plyr-video');
-            plyrVideos.forEach(function(video) {
-                new Plyr(video, {
-                    controls: ['play-large', 'play', 'progress', 'current-time', 'mute', 'volume']
-                });
-            });
-        });
-    </script>
-</body>
+<script src="https://cdn.plyr.io/3.7.8/plyr.polyfilled.js"></script><script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // 抓取剛剛替換生成的所有 .plyr-player 並初始化
+        const players = Array.from(document.querySelectorAll('.plyr-player')).map(p => new Plyr(p, {
+            controls: ['play-large', 'play', 'progress', 'current-time', 'mute', 'volume'],
+        }));
+    });
+    </script></body>
 </html>
