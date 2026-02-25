@@ -2052,14 +2052,168 @@
     .plyr--video .plyr__control--overlaid::after { border-width: 12px 0 12px 16px; margin-left: 6px; }
 }
 .plyr__video-wrapper, .plyr__video-wrapper video, .plyr__poster { width: 100% !important; height: 100% !important; object-fit: cover !important; background-size: cover !important; }
-</style>
+
+        /* --- NEW NAVBAR & MENU STYLES (INJECTED) --- */
+        .main-header { overflow: visible !important; } 
+        .nav-container {
+            display: flex !important;
+            justify-content: space-between !important;
+            align-items: center !important;
+            padding: 0 20px;
+            position: relative;
+            height: 100%;
+            max-width: 1400px !important;
+        }
+        .nav-left, .nav-right {
+            display: flex; flex: 1; align-items: center; gap: 40px !important;
+        }
+        .nav-left { justify-content: flex-end; padding-right: 60px !important; }
+        .nav-right { justify-content: flex-start; padding-left: 60px !important; }
+        .nav-logo-wrapper { flex-shrink: 0; display: flex; justify-content: center; align-items: center; }
+        .nav-link {
+            font-family: var(--nk-font-tc); color: #ddd; font-size: 1.05rem !important;
+            letter-spacing: 1px !important; position: relative; transition: 0.3s;
+            cursor: pointer; font-weight: 500; white-space: nowrap !important;
+            display: inline-flex; align-items: center;
+        }
+        .nav-link:hover { color: var(--nk-gold-rich); }
+        .nav-dropdown-wrapper { position: relative; padding: 25px 0; display: flex; align-items: center; }
+        .nav-dropdown {
+            position: absolute; top: 100%; left: 50%; transform: translateX(-50%) translateY(15px);
+            background: rgba(10, 10, 10, 0.95); border: 1px solid var(--nk-gold-dark);
+            padding: 10px 0; min-width: 220px; opacity: 0; visibility: hidden;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            backdrop-filter: blur(10px); box-shadow: 0 15px 35px rgba(0,0,0,0.9); border-radius: 4px;
+        }
+        .nav-dropdown::before { content: ''; position: absolute; top: -20px; left: 0; width: 100%; height: 20px; }
+        .nav-dropdown-wrapper:hover .nav-dropdown {
+            opacity: 1; visibility: visible; transform: translateX(-50%) translateY(-5px);
+        }
+        .nav-drop-link {
+            display: block; padding: 15px 20px; color: #ccc; font-family: var(--nk-font-tc);
+            font-size: 0.95rem; letter-spacing: 1px; transition: 0.3s; text-align: center; white-space: nowrap;
+        }
+        .nav-drop-link:hover { 
+            background: linear-gradient(90deg, transparent, rgba(197, 160, 89, 0.15), transparent); 
+            color: var(--nk-gold-rich); 
+        }
+        .hamburger {
+            display: none; cursor: pointer; flex-direction: column; justify-content: space-between;
+            position: absolute; right: 20px; top: 50%; transform: translateY(-50%);
+            z-index: 10000; width: 30px; height: 18px;
+        }
+        .hamburger .line {
+            height: 2px; background: var(--nk-gold-rich); 
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94); border-radius: 2px; transform-origin: center;
+        }
+        .line1 { width: 30px; align-self: flex-end; }
+        .line2 { width: 20px; align-self: flex-end; }
+        .line3 { width: 25px; align-self: flex-end; }
+        @media (hover: hover) and (pointer: fine) {
+            .hamburger:hover .line { width: 30px; background: #fff; box-shadow: 0 0 10px var(--nk-gold-rich); }
+        }
+        .hamburger.active .line1 { transform: translateY(8px) rotate(-45deg); width: 30px; background: var(--nk-gold-rich); box-shadow: 0 0 10px rgba(197,160,89,0.5); }
+        .hamburger.active .line2 { opacity: 0; transform: translateX(20px); }
+        .hamburger.active .line3 { transform: translateY(-8px) rotate(45deg); width: 30px; background: var(--nk-gold-rich); box-shadow: 0 0 10px rgba(197,160,89,0.5); }
+        .mobile-menu {
+            position: fixed; top: var(--header-h-mb); left: 0; width: 100%;
+            background: rgba(5,5,5,0.98); backdrop-filter: blur(15px); border-bottom: 1px solid var(--nk-gold-dark);
+            transform: translateY(-120%); opacity: 0; visibility: hidden;
+            transition: all 0.6s cubic-bezier(0.77, 0, 0.175, 1);
+            z-index: 9998; box-shadow: 0 20px 50px rgba(0,0,0,0.9);
+            max-height: calc(100vh - var(--header-h-mb)); overflow-y: auto;
+        }
+        .mobile-menu.active { transform: translateY(0); opacity: 1; visibility: visible; }
+        .mobile-nav-items { display: flex; flex-direction: column; padding: 20px 0 40px; }
+        .mobile-nav-link {
+            padding: 20px 30px; color: #fff; font-family: var(--nk-font-tc); font-size: 1.1rem; letter-spacing: 2px;
+            border-bottom: 1px solid rgba(255,255,255,0.05); text-align: center; transition: 0.3s; cursor: pointer;
+        }
+        .mobile-nav-link:active { background: rgba(197, 160, 89, 0.1); }
+        .mobile-nav-link.highlight-link { 
+            color: #000; background: linear-gradient(135deg, var(--nk-gold-dark) 0%, var(--nk-gold-rich) 100%); 
+            font-weight: 700; border-bottom: none; margin: 20px 20px 0; border-radius: 4px;
+        }
+        .mobile-dropdown-container { display: flex; flex-direction: column; }
+        .dropdown-toggle { display: flex; justify-content: center; align-items: center; gap: 10px; cursor: pointer; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .dropdown-toggle .arrow { transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94); font-size: 0.8rem; color: var(--nk-gold-rich); }
+        .mobile-dropdown-container.open .arrow { transform: rotate(180deg); }
+        .mobile-sub-menu {
+            display: none; flex-direction: column; background: #000; border-bottom: 1px solid rgba(255,255,255,0.05);
+            box-shadow: inset 0 5px 10px rgba(0,0,0,0.5);
+        }
+        .mobile-dropdown-container.open .mobile-sub-menu { display: flex; animation: subMenuReveal 0.4s ease forwards; }
+        .mobile-sub-link {
+            padding: 15px 30px; color: #888; font-family: var(--nk-font-tc); font-size: 0.95rem; text-align: center; transition: 0.3s; letter-spacing: 1px;
+        }
+        .mobile-sub-link:active { color: var(--nk-gold-rich); background: rgba(255,255,255,0.02); }
+        @keyframes subMenuReveal { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        @media (max-width: 900px) {
+            .nav-left, .nav-right { display: none !important; }
+            .hamburger { display: flex !important; }
+            .nav-logo-wrapper { flex: 1; display: flex; justify-content: flex-start; padding-left: 10px; }
+            .nav-container { padding: 0 10px; }
+        }
+        
+        /* 錨點偏移修正，避免跳轉時被頂部 Menu 擋住 */
+        html { scroll-behavior: smooth; }
+        #intro, #system-revealed, #abm-tech, #axis-tech, #rrm-tech, #real-stories, #the-truth, #our-reputation, #take-action {
+            scroll-margin-top: 100px;
+        }
+    </style>
 <link href="https://cdn.plyr.io/3.7.8/plyr.css" rel="stylesheet"/></head>
 <body>
+
 <nav class="main-header scrolled" id="navbar">
-<div class="container text-center">
-<img alt="NσK Logo" class="header-logo" src="https://arftk.com/imgs1/logo1.png"/>
+<div class="container container-wide nav-container">
+<div class="nav-left">
+<a class="nav-link" href="#intro">系統簡介</a>
+<div class="nav-dropdown-wrapper">
+<span class="nav-link">系統深入解析 <span style="font-size: 0.7em; margin-left: 3px;">▼</span></span>
+<div class="nav-dropdown">
+<a class="nav-drop-link" href="#system-revealed">每月數十萬美金的獲利流程</a>
+<a class="nav-drop-link" href="#abm-tech">ABM|掠奪全球獲利機會</a>
+<a class="nav-drop-link" href="#axis-tech">AXIS|執行85％精準交易</a>
+<a class="nav-drop-link" href="#rrm-tech">RRM|降低97％虧損</a>
+</div>
+</div>
+<a class="nav-link" href="#real-stories">實名制客戶獲利影片</a>
+</div>
+<div class="nav-logo-wrapper">
+<a href="#"><img alt="NσK Logo" class="header-logo" src="https://arftk.com/imgs1/logo1.png"/></a>
+</div>
+<div class="nav-right">
+<a class="nav-link" href="#the-truth">系統開放的真相</a>
+<a class="nav-link" href="#our-reputation">憑什麼相信你們</a>
+<a class="nav-link highlight-link" href="#take-action" style="background: linear-gradient(135deg, var(--nk-gold-dark) 0%, var(--nk-gold-rich) 100%); color: #000; padding: 6px 16px; border-radius: 4px; font-weight: 700; font-size: 1rem;">立刻成為會員</a>
+</div>
+<div class="hamburger" id="hamburger">
+<span class="line line1"></span>
+<span class="line line2"></span>
+<span class="line line3"></span>
+</div>
 </div>
 </nav>
+<div class="mobile-menu" id="mobile-menu">
+<div class="mobile-nav-items">
+<a class="mobile-nav-link" href="#intro">系統簡介</a>
+<div class="mobile-dropdown-container">
+<div class="mobile-nav-link dropdown-toggle">系統深入解析 <span class="arrow">▼</span></div>
+<div class="mobile-sub-menu">
+<a class="mobile-sub-link" href="#system-revealed">每月數十萬美金的獲利流程</a>
+<a class="mobile-sub-link" href="#abm-tech">ABM|掠奪全球獲利機會</a>
+<a class="mobile-sub-link" href="#axis-tech">AXIS|執行85％精準交易</a>
+<a class="mobile-sub-link" href="#rrm-tech">RRM|降低97％虧損</a>
+</div>
+</div>
+<a class="mobile-nav-link" href="#real-stories">實名制客戶獲利影片</a>
+<a class="mobile-nav-link" href="#the-truth">系統開放的真相</a>
+<a class="mobile-nav-link" href="#our-reputation">憑什麼相信你們</a>
+<a class="mobile-nav-link highlight-link" href="#take-action">立刻成為會員</a>
+</div>
+</div>
+
 <header class="hero">
 <div class="container">
 <h1 class="text-center">
@@ -2098,7 +2252,7 @@
 </div>
 <div class="marquee-glow-line"></div>
 </div>
-<div class="text-center" style="margin-bottom: 0px;">
+<div class="text-center" id="intro" style="margin-bottom: 0px;">
 <span class="subtitle-en">INTRODUCING</span>
 <div class="hero-text-only">
 <h1>橫跨各大金融市場的全自動AI交易系統<br/>
@@ -2143,7 +2297,6 @@
 <div class="testimonials">
 <div class="testi-card reveal-up delay-1">
 <div class="video-wrapper" style="margin-top: 0; box-shadow: none; border: none; padding: 10px;">
-
 <video class="plyr-player" controls="" data-poster="https://arftk.com/thumb/matthew.jpg" playsinline="" preload="metadata"><source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4"/></video>
 </div>
 <div class="testi-content">
@@ -2161,7 +2314,6 @@
 </div>
 </div><div class="testi-card reveal-up delay-2">
 <div class="video-wrapper" style="margin-top: 0; box-shadow: none; border: none; padding: 10px;">
-
 <video class="plyr-player" controls="" data-poster="https://arftk.com/thumb/daniel.jpg" playsinline="" preload="metadata"><source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4"/></video>
 </div>
 <div class="testi-content">
@@ -2254,7 +2406,7 @@
 </section>
 <section class="section-padding" style="background: #080808;">
 <div class="container container-wide">
-<div class="text-center" style="margin-bottom: 50px;">
+<div class="text-center" id="system-revealed" style="margin-bottom: 50px;">
 <span class="subtitle-en">SYSTEM REVEALED</span>
 <div class="hero-text-only">
 <h1>
@@ -2270,7 +2422,6 @@
 </div>
 </div>
 <div class="video-wrapper deep-dive-hero-video" style="max-width: 900px; margin: 0 auto 80px;">
-
 <video class="plyr-player" controls="" data-poster="https://arftk.com/thumb/intro.jpg" playsinline="" preload="metadata"><source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4"/></video>
 </div>
 <div class="text-center" style="margin-bottom: 30px;">
@@ -2287,7 +2438,6 @@
 <div class="sticky-video-col">
 <div class="video-wrapper">
 <div class="plyr-video-block">
-
 <video class="plyr-player" controls="" data-poster="https://arftk.com/thumb/intro.jpg" playsinline="" preload="metadata"><source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4"/></video>
 </div>
 </div>
@@ -2393,7 +2543,7 @@
         });
     });
 </script>
-<div class="text-center" style="margin-bottom: 30px;">
+<div class="text-center" id="abm-tech" style="margin-bottom: 30px;">
 <span class="subtitle-en">Bridging Mechanism</span>
 <h2>重點科技：系統如何快速抓取上千個獲利&amp;套利機會</h2>
 <p>觀看關於NσK®的ABM專利科技介紹</p>
@@ -2407,7 +2557,6 @@
 <div class="sticky-video-col">
 <div class="video-wrapper">
 <div class="plyr-video-block">
-
 <video class="plyr-player" controls="" data-poster="https://arftk.com/thumb/abm.jpg" playsinline="" preload="metadata"><source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4"/></video>
 </div>
 </div>
@@ -2457,7 +2606,7 @@
 </div>
 </div>
 </div>
-<div class="text-center" style="margin-bottom: 30px;">
+<div class="text-center" id="axis-tech" style="margin-bottom: 30px;">
 <span class="subtitle-en">Predictive Intelligence</span>
 <h2>精準獵殺：使用AXIS科技精準執行勝率 85% 的黃金交易</h2>
 <p>觀看關於 NσK® 的 AXIS 篩選與執行機制介紹</p>
@@ -2471,7 +2620,6 @@
 <div class="sticky-video-col">
 <div class="video-wrapper">
 <div class="plyr-video-block">
-
 <video class="plyr-player" controls="" data-poster="https://arftk.com/thumb/axis.jpg" playsinline="" preload="metadata"><source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4"/></video>
 </div>
 </div>
@@ -2518,7 +2666,7 @@
 </div>
 </div>
 </div>
-<div class="text-center" style="margin-bottom: 30px;">
+<div class="text-center" id="rrm-tech" style="margin-bottom: 30px;">
 <span class="subtitle-en">RISK REVERSE</span>
 <h2>數學避險：系統如何在風險發生前自動計算並對沖</h2>
 <p>觀看 NσK® 的 RRM 虧損應對機制介紹</p>
@@ -2532,7 +2680,6 @@
 <div class="sticky-video-col">
 <div class="video-wrapper">
 <div class="plyr-video-block">
-
 <video class="plyr-player" controls="" data-poster="https://arftk.com/thumb/rrm.jpg" playsinline="" preload="metadata"><source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4"/></video>
 </div>
 </div>
@@ -2596,7 +2743,6 @@
 <div class="sticky-video-col">
 <div class="video-wrapper">
 <div class="plyr-video-block">
-
 <video class="plyr-player" controls="" data-poster="https://arftk.com/thumb/team.jpg" playsinline="" preload="metadata"><source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4"/></video>
 </div>
 </div>
@@ -2684,10 +2830,9 @@
 </div>
 </div>
 <div class="video-wrapper deep-dive-hero-video" style="max-width: 900px; margin: 0 auto 80px;">
-
 <video class="plyr-player" controls="" data-poster="https://arftk.com/thumb/partner.jpg" playsinline="" preload="metadata"><source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4"/></video>
 </div>
-<div class="text-center">
+<div class="text-center" id="real-stories">
 <span class="subtitle-en">REAL STORIES</span>
 <h2>以下所有影片當中的人/事/言論皆為真實, 絕非特殊個案</h2>
 <div class="divider"></div>
@@ -2698,7 +2843,6 @@
 <div class="testimonials">
 <div class="testi-card reveal-up delay-1">
 <div class="video-wrapper" style="margin-top: 0; box-shadow: none; border: none; padding: 10px;">
-
 <video class="plyr-player" controls="" data-poster="https://arftk.com/thumb/nancy.jpg" playsinline="" preload="metadata"><source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4"/></video>
 </div>
 <div class="testi-content">
@@ -2717,7 +2861,6 @@
 </div>
 <div class="testi-card reveal-up delay-2">
 <div class="video-wrapper" style="margin-top: 0; box-shadow: none; border: none; padding: 10px;">
-
 <video class="plyr-player" controls="" data-poster="https://arftk.com/thumb/justin.jpg" playsinline="" preload="metadata"><source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4"/></video>
 </div>
 <div class="testi-content">
@@ -2736,7 +2879,6 @@
 </div>
 <div class="testi-card reveal-up delay-1">
 <div class="video-wrapper" style="margin-top: 0; box-shadow: none; border: none; padding: 10px;">
-
 <video class="plyr-player" controls="" data-poster="https://arftk.com/thumb/peter.jpg" playsinline="" preload="metadata"><source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4"/></video>
 </div>
 <div class="testi-content">
@@ -2755,7 +2897,6 @@
 </div>
 <div class="testi-card reveal-up delay-2">
 <div class="video-wrapper" style="margin-top: 0; box-shadow: none; border: none; padding: 10px;">
-
 <video class="plyr-player" controls="" data-poster="https://arftk.com/thumb/morgan.jpg" playsinline="" preload="metadata"><source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4"/></video>
 </div>
 <div class="testi-content">
@@ -2774,7 +2915,6 @@
 </div>
 <div class="testi-card reveal-up delay-1">
 <div class="video-wrapper" style="margin-top: 0; box-shadow: none; border: none; padding: 10px;">
-
 <video class="plyr-player" controls="" data-poster="https://arftk.com/thumb/oscar.jpg" playsinline="" preload="metadata"><source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4"/></video>
 </div>
 <div class="testi-content">
@@ -2793,7 +2933,6 @@
 </div>
 <div class="testi-card reveal-up delay-2">
 <div class="video-wrapper" style="margin-top: 0; box-shadow: none; border: none; padding: 10px;">
-
 <video class="plyr-player" controls="" data-poster="https://arftk.com/thumb/hubert.jpg" playsinline="" preload="metadata"><source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4"/></video>
 </div>
 <div class="testi-content">
@@ -2812,7 +2951,6 @@
 </div>
 <div class="testi-card reveal-up delay-1">
 <div class="video-wrapper" style="margin-top: 0; box-shadow: none; border: none; padding: 10px;">
-
 <video class="plyr-player" controls="" data-poster="https://arftk.com/thumb/ryan.jpg" playsinline="" preload="metadata"><source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4"/></video>
 </div>
 <div class="testi-content">
@@ -2831,7 +2969,6 @@
 </div>
 <div class="testi-card reveal-up delay-2">
 <div class="video-wrapper" style="margin-top: 0; box-shadow: none; border: none; padding: 10px;">
-
 <video class="plyr-player" controls="" data-poster="https://arftk.com/thumb/steve.jpg" playsinline="" preload="metadata"><source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4"/></video>
 </div>
 <div class="testi-content">
@@ -2850,7 +2987,6 @@
 </div>
 <div class="testi-card reveal-up delay-1">
 <div class="video-wrapper" style="margin-top: 0; box-shadow: none; border: none; padding: 10px;">
-
 <video class="plyr-player" controls="" data-poster="https://arftk.com/thumb/nurse.jpg" playsinline="" preload="metadata"><source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4"/></video>
 </div>
 <div class="testi-content">
@@ -2869,7 +3005,6 @@
 </div>
 <div class="testi-card reveal-up delay-2">
 <div class="video-wrapper" style="margin-top: 0; box-shadow: none; border: none; padding: 10px;">
-
 <video class="plyr-player" controls="" data-poster="https://arftk.com/thumb/lisa.jpg" playsinline="" preload="metadata"><source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4"/></video>
 </div>
 <div class="testi-content">
@@ -2888,7 +3023,6 @@
 </div>
 <div class="testi-card reveal-up delay-1">
 <div class="video-wrapper" style="margin-top: 0; box-shadow: none; border: none; padding: 10px;">
-
 <video class="plyr-player" controls="" data-poster="https://arftk.com/thumb/albert.jpg" playsinline="" preload="metadata"><source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4"/></video>
 </div>
 <div class="testi-content">
@@ -2907,7 +3041,6 @@
 </div>
 <div class="testi-card reveal-up delay-2">
 <div class="video-wrapper" style="margin-top: 0; box-shadow: none; border: none; padding: 10px;">
-
 <video class="plyr-player" controls="" data-poster="https://arftk.com/thumb/gary.jpg" playsinline="" preload="metadata"><source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4"/></video>
 </div>
 <div class="testi-content">
@@ -2926,7 +3059,6 @@
 </div>
 <div class="testi-card reveal-up delay-1">
 <div class="video-wrapper" style="margin-top: 0; box-shadow: none; border: none; padding: 10px;">
-
 <video class="plyr-player" controls="" data-poster="https://arftk.com/thumb/matthew.jpg" playsinline="" preload="metadata"><source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4"/></video>
 </div>
 <div class="testi-content">
@@ -2945,7 +3077,6 @@
 </div>
 <div class="testi-card reveal-up delay-2">
 <div class="video-wrapper" style="margin-top: 0; box-shadow: none; border: none; padding: 10px;">
-
 <video class="plyr-player" controls="" data-poster="https://arftk.com/thumb/daniel.jpg" playsinline="" preload="metadata"><source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4"/></video>
 </div>
 <div class="testi-content">
@@ -2964,7 +3095,6 @@
 </div>
 <div class="testi-card reveal-up delay-1">
 <div class="video-wrapper" style="margin-top: 0; box-shadow: none; border: none; padding: 10px;">
-
 <video class="plyr-player" controls="" data-poster="https://arftk.com/thumb/tyrone.jpg" playsinline="" preload="metadata"><source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4"/></video>
 </div>
 <div class="testi-content">
@@ -2983,7 +3113,6 @@
 </div>
 <div class="testi-card reveal-up delay-2">
 <div class="video-wrapper" style="margin-top: 0; box-shadow: none; border: none; padding: 10px;">
-
 <video class="plyr-player" controls="" data-poster="https://arftk.com/thumb/zack.jpg" playsinline="" preload="metadata"><source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4"/></video>
 </div>
 <div class="testi-content">
@@ -3008,7 +3137,7 @@
 </section>
 <section class="section-padding" style="background: #000;">
 <div class="container">
-<div class="text-center" style="margin-bottom: 50px;">
+<div class="text-center" id="the-truth" style="margin-bottom: 50px;">
 <span class="subtitle-en">THE TRUTH BEHIND</span>
 <div class="hero-text-only">
 <span class="hero-number-block">NσK® SYSTEM</span>
@@ -3022,7 +3151,6 @@
 </div>
 </div>
 <div class="video-wrapper deep-dive-hero-video" style="max-width: 900px; margin: 0 auto 80px;">
-
 <video class="plyr-player" controls="" data-poster="https://arftk.com/thumb/why.jpg" playsinline="" preload="metadata"><source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4"/></video>
 </div>
 <div class="text-center">
@@ -3083,7 +3211,7 @@
 <p>經過數據餵養與策略優化的最終結果,就是一個不僅永有85%以上勝率且能夠針對少數虧損做出即時風險對沖的自動化獲利機器.系統勝率被數學強制鎖定在 85% 以上,會員們的資產增長不再是運氣,而是一種無可避免的必然</p>
 </div>
 </div>
-<div class="text-center" style="margin-bottom: 30px;">
+<div class="text-center" id="our-reputation" style="margin-bottom: 30px;">
 <span class="subtitle-en">OUR REPUTATION</span>
 <h2>憑什麼相信NσK® 系統能夠替你每個月獲利數萬美金以上?!</h2>
 <p>我們用最現實的方式告訴你,為何我們的承諾舉足輕重</p>
@@ -3098,7 +3226,6 @@
 <div class="sticky-video-col">
 <div class="video-wrapper">
 <div class="plyr-video-block">
-
 <video class="plyr-player" controls="" data-poster="https://arftk.com/thumb/trustus.jpg" playsinline="" preload="metadata"><source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4"/></video>
 </div>
 </div>
@@ -3138,7 +3265,6 @@
             </p>
 <div class="video-wrapper" style="margin-top: 20px;">
 <div class="plyr-video-block">
-
 <video class="plyr-player" controls="" data-poster="https://arftk.com/thumb/pricing.jpg" playsinline="" preload="metadata"><source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4"/></video>
 </div>
 </div>
@@ -3164,7 +3290,7 @@
 </section>
 <section class="pricing-section section-padding">
 <div class="container">
-<div class="text-center">
+<div class="text-center" id="take-action">
 <span class="subtitle-en">TAKE ACTION</span>
 <div class="hero-text-only">
 <h1>
@@ -3179,56 +3305,8 @@
 </div>
 </div>
 </div>
-<div class="optin-gold-card reveal-up delay-1">
-<div class="video-wrapper" style="margin-top: 0; border: none; border-bottom: 1px solid var(--nk-gold-dark);">
-<div class="video-block">
-<video loop="" muted="" playsinline="" src="https://arftk.com/imgs1/dash.mp4"></video>
-<button class="play-pause-btn">
-<img class="icon" decoding="async" src="https://arftk.com/imgs/play.svg"/>
-</button>
-</div>
-</div>
-<div class="optin-header">
-<span class="subtitle-en">LIMITED ACCESS</span>
-<h2 style="margin-bottom: 10px;">立即獲取系統權限</h2>
-<p style="font-size: 1rem; margin: 0; color: #ccc;">名額有限,請填寫下方資料以鎖定你的席位</p>
-<div class="arrow-scroll">
-<span></span>
-<span></span>
-<span></span>
-</div>
-</div>
-<div class="optin-body">
-<div class="optin-highlight-box">
-<form action="https://xxxxxxxx" id="sib-form" method="POST">
-<div class="nk-input-group">
-<label class="nk-input-label" for="full_name">
-<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"></path></svg>
-        FULL NAME
-    </label>
-<input class="nk-input-field" id="full_name" name="full_name" placeholder="請輸入你的真實姓名" required="" type="text"/>
-</div>
-<div class="nk-input-group">
-<label class="nk-input-label" for="email">
-<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"></path></svg>
-        EMAIL ADDRESS
-    </label>
-<input class="nk-input-field" id="email" name="email" placeholder="請輸入你最常用的 Email 信箱" required="" type="email"/>
-</div>
-<button class="nk-btn" style="width: 100%; margin-top: 15px;" type="submit">
-                    GET INSTANT ACCESS
-                    <span style="font-size: 0.8rem; display: block; font-weight: 300; margin-top: 5px; opacity: 0.7;">Secure 256-bit SSL Payment</span>
-</button>
-<p style="text-align: center; font-size: 0.85rem; color: #666; margin-top: 20px; margin-bottom: 0;">
-<span style="color: var(--nk-gold-dark);">🔒 100% Secure.</span> We never share your info.
-                </p>
-</form>
-</div>
-</div>
-</div>
 <div class="pricing-unified-card reveal-up delay-1">
 <div class="video-wrapper" style="max-width: 900px; margin: 0 auto;">
-
 <video class="plyr-player" controls="" data-poster="http://arftk.com/thumb/pricing.jpg" playsinline="" preload="metadata"><source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4"/></video>
 </div>
 <div class="pricing-header">
@@ -3472,5 +3550,40 @@
             controls: ['play-large', 'play', 'progress', 'current-time', 'mute', 'volume'],
         }));
     });
-    </script></body>
+    </script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const hamburger = document.getElementById('hamburger');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const dropdownToggles = document.querySelectorAll('.dropdown-toggle');
+        const mobileLinks = document.querySelectorAll('.mobile-nav-link:not(.dropdown-toggle), .mobile-sub-link');
+
+        if (hamburger && mobileMenu) {
+            hamburger.addEventListener('click', () => {
+                hamburger.classList.toggle('active');
+                mobileMenu.classList.toggle('active');
+            });
+        }
+
+        dropdownToggles.forEach(toggle => {
+            toggle.addEventListener('click', function() {
+                this.parentElement.classList.toggle('open');
+            });
+        });
+
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                if (hamburger && hamburger.classList.contains('active')) {
+                    hamburger.classList.remove('active');
+                    mobileMenu.classList.remove('active');
+                    
+                    document.querySelectorAll('.mobile-dropdown-container.open').forEach(container => {
+                        container.classList.remove('open');
+                    });
+                }
+            });
+        });
+    });
+    </script>
+</body>
 </html>
