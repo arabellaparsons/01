@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NσK® SYSTEM - 官方邀請申請</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Infant:wght@400;500;600;700&family=Noto+Serif+TC:wght@300;400;500;600;700&family=Inter:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- CORE: Black Gold Luxury Variables --- */
+        :root {
+            --nk-bg-darkest: #050505;
+            --nk-bg-card: #0c0c0c; 
+            --nk-gold-rich: #C5A059;      
+            --nk-gold-dark: #8a6d3b;      
+            --nk-gold-light: #e6d8be;     
+            --nk-text-main: #e0e0e0;
+            --nk-text-muted: #999; 
+            --nk-warning: #FF4D4D; 
+            
+            --nk-font-en: 'Cormorant Infant', serif;
+            --nk-font-tc: 'Noto Serif TC', serif;
+            --nk-font-sans: 'Inter', sans-serif;
+            
+            --header-h-pc: 70px;
+            --header-h-mb: 55px;
+        }
+
+        /* --- RESET & BASE --- */
+        * { box-sizing: border-box; margin: 0; padding: 0; outline: none; }
+        
+        body {
+            background-color: var(--nk-bg-darkest);
+            color: var(--nk-text-main);
+            font-family: var(--nk-font-tc);
+            font-weight: 300;
+            line-height: 1.6;
+            overflow-x: hidden;
+            padding-top: var(--header-h-pc); 
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-image: radial-gradient(circle at 50% 0%, rgba(197, 160, 89, 0.08) 0%, transparent 60%);
+        }
+
+        /* --- FIXED HEADER --- */
+        .main-header {
+            position: fixed; 
+            top: 0; left: 0; width: 100%; height: var(--header-h-pc);
+            z-index: 9999; display: flex; justify-content: center; align-items: center;    
+            background: rgba(5, 5, 5, 0.95); backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(197, 160, 89, 0.2);
+        }
+        .header-logo {
+            height: 38px; width: auto;
+            filter: brightness(0.9) contrast(1.1) sepia(1) hue-rotate(5deg) saturate(1.4);
+        }
+
+        /* --- TYPOGRAPHY --- */
+        h1, h2, h3 { font-family: var(--nk-font-tc); font-weight: 600; letter-spacing: 1px; color: #fff; line-height: 1.4; }
+        h1 { font-size: 2.2rem; margin-bottom: 10px; }
+        h2 { font-size: 1.6rem; margin-bottom: 15px; }
+
+        .subtitle-en {
+            font-family: var(--nk-font-en); color: var(--nk-gold-rich); font-size: 1.1rem;
+            letter-spacing: 4px; text-transform: uppercase; display: block; margin-bottom: 10px; font-weight: 600;
+        }
+        
+        strong { color: var(--nk-gold-rich); font-weight: 700; }
+        .divider { width: 40px; height: 2px; background: var(--nk-gold-rich); margin: 30px auto; }
+
+        /* --- UTILITIES --- */
+        .container { width: 100%; max-width: 800px; margin: 0 auto; padding: 40px 20px 60px; text-align: center; }
+        .container-wide { max-width: 1200px; }
+
+        /* --- VIDEO BLOCK STYLES --- */
+        .video-wrapper {
+            position: relative; margin-bottom: 0; padding: 0; 
+            border-bottom: 1px solid #222;
+            width: 100%;
+        }
+        .video-block {
+            width: 100%; position: relative; overflow: hidden; line-height: 0; 
+        }
+        .video-block video { width: 100%; display: block; object-fit: cover; }
+        .play-pause-btn {
+            position: absolute; bottom: 20px; left: 20px;
+            background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(5px);
+            border: 1px solid rgba(197, 160, 89, 0.4); border-radius: 50%;
+            cursor: pointer; z-index: 10; width: 44px; height: 44px;
+            transition: 0.3s; display: flex; align-items: center; justify-content: center;
+        }
+        .play-pause-btn:hover { background: var(--nk-gold-rich); transform: scale(1.1); }
+        .play-pause-btn .icon { width: 18px; height: 18px; display: block; margin-left: 2px; }
+
+        /* --- GOLD BTN --- */
+        .nk-btn {
+            display: flex; flex-direction: column; justify-content: center; align-items: center; 
+            padding: 18px 40px; margin-top: 20px;
+            background: linear-gradient(135deg, var(--nk-gold-dark) 0%, var(--nk-gold-rich) 50%, var(--nk-gold-dark) 100%);
+            color: #000; border: none; cursor: pointer; transition: all 0.4s ease;
+            box-shadow: 0 10px 30px rgba(197, 160, 89, 0.3); 
+            width: 100%; border-radius: 6px; position: relative; overflow: hidden;
+            background-size: 200% auto;
+        }
+        .nk-btn:hover {
+            transform: translateY(-3px); box-shadow: 0 15px 40px rgba(197, 160, 89, 0.5);
+            background-position: right center;
+        }
+        .nk-btn .btn-text { font-family: var(--nk-font-en); font-size: 1.4rem; font-weight: 700; letter-spacing: 2px; line-height: 1.2;}
+        .nk-btn .btn-subtext { font-family: var(--nk-font-sans); font-size: 0.75rem; font-weight: 500; opacity: 0.7; letter-spacing: 1px;}
+
+        /* --- OPTIN GOLD CARD (MAIN FOCUS) --- */
+        .optin-gold-card {
+            max-width: 650px; width: 100%; margin: 0 auto;
+            background: var(--nk-bg-card);
+            border: 1px solid #222;
+            border-top: 3px solid var(--nk-gold-rich); 
+            box-shadow: 0 40px 80px rgba(0,0,0,0.8), inset 0 0 50px rgba(197, 160, 89, 0.03);
+            border-radius: 12px;
+            overflow: hidden;
+            animation: cardFloat 3s ease-in-out infinite alternate;
+            margin-bottom: 60px;
+        }
+
+        @keyframes cardFloat {
+            0% { transform: translateY(0px); box-shadow: 0 30px 60px rgba(0,0,0,0.6), inset 0 0 30px rgba(197, 160, 89, 0.02); }
+            100% { transform: translateY(-8px); box-shadow: 0 40px 80px rgba(0,0,0,0.9), inset 0 0 50px rgba(197, 160, 89, 0.05); }
+        }
+
+        .optin-header {
+            background: linear-gradient(180deg, #181818 0%, #111 100%);
+            padding: 35px 30px 25px;
+            border-bottom: 1px solid #222;
+            position: relative;
+        }
+
+        /* --- URGENCY ELEMENTS --- */
+        .urgency-banner {
+            background: rgba(255, 77, 77, 0.1);
+            border: 1px solid rgba(255, 77, 77, 0.3);
+            border-radius: 6px;
+            padding: 12px 15px;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .urgency-banner svg { width: 20px; height: 20px; fill: var(--nk-warning); animation: pulseAlert 2s infinite; }
+        .urgency-text { color: var(--nk-warning); font-size: 0.95rem; font-weight: 600; letter-spacing: 1px;}
+        
+        @keyframes pulseAlert {
+            0% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.1); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        /* Progress Bar */
+        .spots-container { margin: 20px 0 10px; text-align: left; }
+        .spots-text {
+            display: flex; justify-content: space-between;
+            font-family: var(--nk-font-en); font-size: 0.9rem; color: #aaa; margin-bottom: 8px; letter-spacing: 1px;
+        }
+        .progress-track {
+            width: 100%; height: 6px; background: #222; border-radius: 3px; overflow: hidden;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.8);
+        }
+        .progress-fill {
+            height: 100%; width: 95%; 
+            background: linear-gradient(90deg, var(--nk-warning) 0%, #ff7676 100%);
+            border-radius: 3px;
+            position: relative;
+            animation: fillPulse 2s infinite linear;
+            background-size: 200% 100%;
+        }
+        @keyframes fillPulse {
+            0% { background-position: 100% 0; }
+            100% { background-position: -100% 0; }
+        }
+
+        /* --- FORM STYLES --- */
+        .optin-body { padding: 35px 40px; background: #0c0c0c; }
+        
+        .nk-input-group { margin-bottom: 20px; text-align: left; }
+        .nk-input-label {
+            display: flex; align-items: center; gap: 8px;
+            color: var(--nk-gold-rich); font-family: var(--nk-font-en); font-size: 1rem;
+            margin-bottom: 8px; letter-spacing: 1px; font-weight: 600;
+        }
+        .nk-input-label svg { width: 14px; height: 14px; fill: var(--nk-gold-rich); }
+        
+        .nk-input-field {
+            width: 100%; padding: 16px 18px;
+            background-color: #050505; border: 1px solid #333;
+            color: #fff; font-size: 1.05rem; font-family: var(--nk-font-sans);
+            border-radius: 4px; transition: 0.3s;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.5);
+        }
+        .nk-input-field::placeholder { color: #666; font-family: var(--nk-font-tc); font-weight: 300; font-size: 0.95rem;}
+        .nk-input-field:focus { border-color: var(--nk-gold-rich); background-color: #000; box-shadow: 0 0 15px rgba(197, 160, 89, 0.2); }
+
+        .privacy-note {
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            font-family: var(--nk-font-sans); font-size: 0.8rem; color: #777; margin-top: 20px;
+        }
+        .privacy-note svg { width: 12px; height: 12px; fill: #777; }
+
+        /* =========================================
+           TESTIMONIALS STYLES (Emotion Section)
+           ========================================= */
+        .testimonials-section {
+            background: #080808;
+            padding: 80px 0;
+            border-top: 1px solid #1a1a1a;
+        }
+
+        .testi-badge {
+            display: inline-flex; align-items: center; justify-content: center; padding: 4px 18px;
+            border-radius: 50px; background: linear-gradient(135deg, rgba(197, 160, 89, 0.15) 0%, rgba(5, 5, 5, 0.8) 100%);
+            border: 1px solid rgba(197, 160, 89, 0.4); box-shadow: 0 5px 15px rgba(0,0,0,0.3), inset 0 0 10px rgba(197, 160, 89, 0.1);
+            color: var(--nk-gold-rich); font-size: 0.9rem; font-weight: 500; letter-spacing: 1px; margin-bottom: 10px;
+        }
+        .testi-badge svg { width: 16px; height: 16px; margin-right: 8px; stroke: var(--nk-gold-rich); filter: drop-shadow(0 0 5px rgba(197, 160, 89, 0.5)); }
+
+        /* 直式卡片排列 */
+        .testimonials-vertical-layout {
+            display: flex; flex-wrap: wrap; justify-content: center; gap: 30px;
+            width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 10px;
+        }
+        .testi-card-vertical {
+            width: 320px; background: var(--nk-bg-card); border: 1px solid var(--nk-gold-dark);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.6); display: flex; flex-direction: column; overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease; border-radius: 8px;
+        }
+        .testi-card-vertical:hover { transform: translateY(-10px); box-shadow: 0 30px 60px rgba(197, 160, 89, 0.15); border-color: var(--nk-gold-rich); }
+        .testi-content-top { padding: 30px 20px 15px; text-align: center; flex-shrink: 0; }
+        .testi-amount-v {
+            font-family: var(--nk-font-en); font-size: 2.5rem; font-weight: 700; line-height: 1.1; margin: 15px 0 5px;
+            background: linear-gradient(to bottom, #fff 10%, var(--nk-gold-rich) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 2px 10px rgba(197, 160, 89, 0.2));
+        }
+        .testi-meta-right {
+            display: block; text-align: right; font-family: var(--nk-font-en); color: var(--nk-gold-rich);
+            font-size: 0.95rem; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;
+            margin-top: 5px; border-top: 1px solid #333; padding-top: 10px;
+        }
+        .video-wrapper-vertical {
+            width: 100%; height: 568px; margin-top: auto; position: relative; background: #000; border-top: 1px solid #333;
+        }
+        .video-wrapper-vertical .video-block { width: 100%; height: 100%; }
+        .video-wrapper-vertical video { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+        /* --- MOBILE RWD --- */
+        @media (max-width: 768px) {
+            body { padding-top: var(--header-h-mb); }
+            .main-header { height: var(--header-h-mb); }
+            .container { padding: 30px 15px 40px; }
+            h1 { font-size: 1.8rem; }
+            h2 { font-size: 1.4rem; }
+            .optin-header { padding: 25px 20px; }
+            .optin-body { padding: 25px 20px; }
+            .urgency-text { font-size: 0.85rem; }
+            .nk-btn .btn-text { font-size: 1.2rem; }
+
+            /* 直式卡片橫向滑動 */
+            .testimonials-vertical-layout {
+                flex-direction: row; flex-wrap: nowrap; justify-content: flex-start;
+                overflow-x: auto; overflow-y: hidden; gap: 20px; padding: 20px 15px 40px; margin-top: 10px;
+                scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; scrollbar-width: none;
+            }
+            .testimonials-vertical-layout::-webkit-scrollbar { display: none; }
+            .testi-card-vertical { flex: 0 0 auto; width: 280px; scroll-snap-align: center; }
+            .video-wrapper-vertical { height: 497px; }
+            .testi-amount-v { font-size: 2.2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="main-header">
+        <div class="container" style="padding: 0; height: 100%; display: flex; align-items: center; justify-content: center;">
+            <img src="https://arftk.com/imgs1/logo1.png" alt="NσK Logo" class="header-logo">
+        </div>
+    </nav>
+
+    <div class="container">
+        
+        <span class="subtitle-en">OFFICIAL INVITATION</span>
+        <h1>取得 NσK® 系統亞洲區官方邀請</h1>
+        <p style="max-width: 600px; margin: 0 auto 30px; font-size: 1rem; color: #bbb;">
+            為了確保系統算力與獲利品質，我們嚴格限制亞洲區的系統接入數量。<br>請填寫下方資料，若審核通過，系統將為您保留專屬席次。
+        </p>
+
+        <div class="optin-gold-card">
+            
+            <div class="video-wrapper">
+                <div class="video-block">
+                    <video id="main-hero-video" muted autoplay loop playsinline preload="metadata">
+                        <source src="https://arftk.com/imgs1/clients.mp4" type="video/mp4">
+                    </video>
+                    <button class="play-pause-btn">
+                        <img decoding="async" class="icon" src="https://arftk.com/imgs/pause.svg">
+                    </button>
+                </div>
+            </div>
+
+            <div class="optin-header">
+                <div class="urgency-banner">
+                    <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+                    <span class="urgency-text">此通道將於 <span id="dynamic-date" style="border-bottom: 1px solid var(--nk-warning);"></span> 關閉</span>
+                </div>
+                
+                <h2>填寫資料鎖定您的席次</h2>
+                <p style="font-size: 0.95rem; margin: 0; color: #888;">請確保資料正確，我們將發送專屬開通連結至您的信箱</p>
+
+                <div class="spots-container">
+                    <div class="spots-text">
+                        <span>亞洲區開放名額</span>
+                        <span style="color: var(--nk-warning); font-weight: 700; letter-spacing: 2px;">即將額滿</span>
+                    </div>
+                    <div class="progress-track">
+                        <div class="progress-fill"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="optin-body">
+                <form action="YOUR_WEBHOOK_OR_ACTION_URL" id="sib-form" method="POST">
+                    
+                    <div class="nk-input-group">
+                        <label class="nk-input-label" for="full_name">
+                            <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"></path></svg>
+                            真實姓名 FULL NAME
+                        </label>
+                        <input class="nk-input-field" id="full_name" name="full_name" placeholder="請輸入您的真實姓名" required type="text">
+                    </div>
+                    
+                    <div class="nk-input-group">
+                        <label class="nk-input-label" for="email">
+                            <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"></path></svg>
+                            電子信箱 EMAIL ADDRESS
+                        </label>
+                        <input class="nk-input-field" id="email" name="email" placeholder="請輸入您最常用的 Email 信箱" required type="email">
+                    </div>
+
+                    <button class="nk-btn" type="submit">
+                        <span class="btn-text">立即獲取系統權限</span>
+                        <span class="btn-subtext">GET INSTANT ACCESS</span>
+                    </button>
+                    
+                    <div class="privacy-note">
+                        <svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"></path></svg>
+                        Fully Encrypted with 256-bit SSL.
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <section class="testimonials-section">
+        <div class="container container-wide">
+            <div class="text-center" style="margin-bottom: 40px;">
+                <span class="subtitle-en">REAL STORIES</span>
+                <h2>成功會員的真實獲利見證</h2>
+                <div class="divider"></div>
+                <p>以下所有提款紀錄皆為真實，絕非特殊個案</p>
+            </div>
+
+            <div class="testimonials-vertical-layout">
+                <div class="testi-card-vertical">
+                    <div class="testi-content-top">
+                        <div class="testi-badge">
+                            <svg fill="none" viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+                            單月獲利
+                        </div>
+                        <div class="testi-amount-v">$178,013<span style="font-size: 0.5em; margin-left: 5px; color:#666;">USD</span></div>
+                        <div class="testi-meta-right">🇬🇧 SARA W.</div>
+                    </div>
+                    <div class="video-wrapper-vertical">
+                        <div class="video-block">
+                            <video loop muted playsinline preload="metadata">
+                                <source src="https://arftk.com/imgs/money005.mp4" type="video/mp4">
+                            </video>
+                            <button class="play-pause-btn"><img class="icon" src="https://arftk.com/imgs/play.svg"></button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="testi-card-vertical">
+                    <div class="testi-content-top">
+                        <div class="testi-badge">
+                            <svg fill="none" viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+                            單月獲利
+                        </div>
+                        <div class="testi-amount-v">$205,110<span style="font-size: 0.5em; margin-left: 5px; color:#666;">USD</span></div>
+                        <div class="testi-meta-right">🇺🇸 PETER J.</div>
+                    </div>
+                    <div class="video-wrapper-vertical">
+                        <div class="video-block">
+                            <video loop muted playsinline preload="metadata">
+                                <source src="https://arftk.com/imgs/money005.mp4" type="video/mp4">
+                            </video>
+                            <button class="play-pause-btn"><img class="icon" src="https://arftk.com/imgs/play.svg"></button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="testi-card-vertical">
+                    <div class="testi-content-top">
+                        <div class="testi-badge">
+                            <svg fill="none" viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+                            單月獲利
+                        </div>
+                        <div class="testi-amount-v">$192,550<span style="font-size: 0.5em; margin-left: 5px; color:#666;">USD</span></div>
+                        <div class="testi-meta-right">🇧🇪 JUSTIN R.</div>
+                    </div>
+                    <div class="video-wrapper-vertical">
+                        <div class="video-block">
+                            <video loop muted playsinline preload="metadata">
+                                <source src="https://arftk.com/imgs/money005.mp4" type="video/mp4">
+                            </video>
+                            <button class="play-pause-btn"><img class="icon" src="https://arftk.com/imgs/play.svg"></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <footer style="padding: 30px 0; text-align: center; font-size: 0.8rem; color: #555; letter-spacing: 1px; background: #050505;">
+        © 2026 NσK® INVESTMENT GROUP. All rights reserved.
+    </footer>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // 1. 動態日期生成邏輯 (設定為今日起算 +2 天)
+            const dateElement = document.getElementById('dynamic-date');
+            if (dateElement) {
+                const today = new Date();
+                today.setDate(today.getDate() + 2); 
+                
+                const yyyy = today.getFullYear();
+                const mm = String(today.getMonth() + 1).padStart(2, '0');
+                const dd = String(today.getDate()).padStart(2, '0');
+                
+                dateElement.textContent = `${yyyy}/${mm}/${dd} 23:59`;
+            }
+
+            // 2. ★ 絕對強制影片自動播放與按鈕邏輯 ★
+            // 使用 IntersectionObserver 確保影片滑到畫面內時 100% 觸發 play()
+            const videoBlocks = document.querySelectorAll('.video-block');
+            
+            const videoObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    const video = entry.target.querySelector('video');
+                    const icon = entry.target.querySelector('.icon');
+                    
+                    if (video && entry.isIntersecting) {
+                        // 進入畫面：強制播放並改為暫停圖示
+                        let playPromise = video.play();
+                        if (playPromise !== undefined) {
+                            playPromise.then(_ => {
+                                if(icon) icon.src = "https://arftk.com/imgs/pause.svg";
+                            }).catch(error => {
+                                console.log("Auto-play was prevented. Click required.");
+                                if(icon) icon.src = "https://arftk.com/imgs/play.svg";
+                            });
+                        }
+                    } else if (video && !entry.isIntersecting) {
+                        // 離開畫面：暫停影片節省資源
+                        video.pause();
+                        if(icon) icon.src = "https://arftk.com/imgs/play.svg";
+                    }
+                });
+            }, { threshold: 0.3 }); // 影片露出 30% 就開始播放
+
+            videoBlocks.forEach(block => {
+                videoObserver.observe(block);
+                
+                const video = block.querySelector('video');
+                const btn = block.querySelector('.play-pause-btn');
+                const icon = btn ? btn.querySelector('.icon') : null;
+
+                if(video) {
+                    // 同步播放狀態與 Icon
+                    video.addEventListener('play', () => {
+                        if(icon) icon.src = "https://arftk.com/imgs/pause.svg";
+                    });
+                    video.addEventListener('pause', () => {
+                        if(icon) icon.src = "https://arftk.com/imgs/play.svg";
+                    });
+                    
+                    // 手動點擊控制
+                    if(btn) {
+                        btn.addEventListener('click', () => {
+                            if(video.paused) {
+                                video.play();
+                            } else {
+                                video.pause();
+                            }
+                        });
+                    }
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NσK® SYSTEM - Telegram Access</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Infant:wght@400;500;600;700&family=Noto+Serif+TC:wght@300;400;500;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- CORE: Black Gold Luxury Variables --- */
+        :root {
+            --nk-bg-darkest: #050505;
+            --nk-bg-card: #0c0c0c; 
+            --nk-gold-rich: #C5A059;      
+            --nk-gold-dark: #8a6d3b;      
+            --nk-gold-light: #e6d8be;     
+            --nk-text-main: #e0e0e0;
+            --nk-text-muted: #999; 
+            
+            --nk-warning: #FF9F43; /* 琥珀橘，在黑金中極醒目 */
+            
+            --nk-font-en: 'Cormorant Infant', serif;
+            --nk-font-tc: 'Noto Serif TC', serif;
+            --nk-font-sans: 'Inter', sans-serif;
+
+            --header-h-pc: 70px;
+            --header-h-mb: 55px;
+        }
+
+        /* --- RESET & BASE --- */
+        * { box-sizing: border-box; margin: 0; padding: 0; outline: none; }
+        
+        body {
+            background-color: var(--nk-bg-darkest);
+            color: var(--nk-text-main);
+            font-family: var(--nk-font-tc);
+            font-weight: 300;
+            line-height: 1.8;
+            overflow-x: hidden;
+            padding-top: var(--header-h-pc); 
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            background-image: radial-gradient(circle at 50% 0%, rgba(197, 160, 89, 0.08) 0%, transparent 60%);
+        }
+
+        /* --- FIXED HEADER (NAVBAR) --- */
+        .main-header {
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%;
+            height: var(--header-h-pc);
+            z-index: 9999;
+            display: flex;
+            justify-content: center; 
+            align-items: center;    
+            background: rgba(8, 8, 8, 0.9);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(197, 160, 89, 0.15);
+        }
+
+        .header-logo {
+            height: 38px;
+            width: auto;
+            filter: brightness(0.9) contrast(1.1) sepia(1) hue-rotate(5deg) saturate(1.4);
+        }
+
+        /* --- TYPOGRAPHY --- */
+        h1, h2, h3 { 
+            font-family: var(--nk-font-tc); 
+            font-weight: 600; 
+            letter-spacing: 1px; 
+            color: #fff;
+            line-height: 1.4;
+        }
+
+        h1 { font-size: 2.2rem; margin-bottom: 15px; text-shadow: 0 0 15px rgba(255,255,255,0.1); }
+        h2 { font-size: 1.8rem; margin-bottom: 10px; }
+
+        .subtitle-en {
+            font-family: var(--nk-font-en); color: var(--nk-gold-rich); font-size: 1rem;
+            letter-spacing: 4px; text-transform: uppercase; display: block; margin-bottom: 15px; font-weight: 600;
+        }
+        p { margin-bottom: 20px; color: var(--nk-text-muted); font-size: 1.05rem; }
+        
+        /* GLOBAL IMG */
+        img { max-width: 100%; height: auto; display: block; }
+        a { text-decoration: none; color: inherit; transition: 0.3s; }
+        
+        /* --- UTILITIES --- */
+        .container { width: 100%; max-width: 800px; margin: 0 auto; padding: 60px 20px; text-align: center; }
+
+        /* --- GOLD BTN WITH ICON (MAIN CTA) --- */
+        .nk-btn {
+            display: inline-flex; justify-content: center; align-items: center; gap: 12px;
+            padding: 22px 40px;
+            background: linear-gradient(135deg, #a6854b 0%, var(--nk-gold-rich) 50%, #a6854b 100%);
+            color: #000; font-family: var(--nk-font-tc); font-size: 1.25rem; font-weight: 700;
+            border: none; cursor: pointer; transition: all 0.4s ease;
+            box-shadow: 0 10px 30px rgba(197, 160, 89, 0.25); letter-spacing: 2px;
+            width: 100%; max-width: 100%;
+            border-radius: 8px; 
+            position: relative; overflow: hidden;
+            margin-top: 10px;
+        }
+        .nk-btn::after {
+            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: 0.6s;
+        }
+        .nk-btn:hover::after { left: 100%; }
+        .nk-btn:hover { transform: translateY(-3px); box-shadow: 0 15px 40px rgba(197, 160, 89, 0.4); filter: brightness(1.05); }
+        .nk-btn svg { width: 22px; height: 22px; fill: #000; }
+
+        /* --- VIDEO BLOCK STYLES --- */
+        .video-wrapper {
+            position: relative; margin-bottom: 0; padding: 0; 
+            border-bottom: 1px solid rgba(197, 160, 89, 0.15);
+            width: 100%;
+        }
+        .video-block {
+            width: 100%; position: relative; overflow: hidden; line-height: 0; 
+        }
+        .video-block video { width: 100%; display: block; }
+        .play-pause-btn {
+            position: absolute; bottom: 20px; left: 20px;
+            background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(5px);
+            border: 1px solid rgba(197, 160, 89, 0.4); border-radius: 50%;
+            cursor: pointer; z-index: 10; width: 44px; height: 44px;
+            transition: 0.3s; display: flex; align-items: center; justify-content: center;
+        }
+        .play-pause-btn:hover { background: var(--nk-gold-rich); transform: scale(1.1); }
+        .play-pause-btn .icon { width: 18px; height: 18px; display: block; margin-left: 2px; }
+
+        /* --- OPTIN GOLD CARD --- */
+        .optin-gold-card {
+            max-width: 700px; width: 100%; margin: 0 auto;
+            background: var(--nk-bg-card);
+            border: 1px solid #1a1a1a;
+            border-top: 3px solid var(--nk-gold-dark);
+            box-shadow: 0 40px 80px rgba(0,0,0,0.8), inset 0 0 50px rgba(197, 160, 89, 0.02);
+            overflow: hidden; border-radius: 12px;
+        }
+        
+        .optin-content { padding: 55px 45px; }
+
+        /* --- HIGH PRIORITY WARNING SECTION --- */
+        .priority-warning-box {
+            display: flex; align-items: center; justify-content: center; gap: 15px;
+            background: rgba(255, 159, 67, 0.08); 
+            border: 1px solid rgba(255, 159, 67, 0.3); 
+            padding: 20px; border-radius: 8px;
+            margin: 50px 0 10px 0; 
+            box-shadow: 0 0 20px rgba(255, 159, 67, 0.1);
+        }
+        
+        .warning-icon {
+            width: 32px; height: 32px; flex-shrink: 0;
+            fill: var(--nk-warning); 
+            filter: drop-shadow(0 0 5px rgba(255, 159, 67, 0.5));
+        }
+        
+        .warning-text {
+            color: var(--nk-warning); font-size: 1.2rem; font-weight: 600;
+            letter-spacing: 1px; font-family: var(--nk-font-tc); text-align: left;
+        }
+
+        /* --- 進化版樹狀線 --- */
+        .tree-connector-v2 {
+            display: flex; flex-direction: column; align-items: center;
+            margin: 0 auto;
+        }
+        
+        .tree-stem-v2 {
+            width: 4px; 
+            height: 40px;
+            background: linear-gradient(to bottom, transparent 0%, var(--nk-gold-dark) 15%, var(--nk-gold-rich) 50%, var(--nk-gold-dark) 85%, transparent 100%);
+            border-radius: 2px;
+            box-shadow: 0 0 10px rgba(197, 160, 89, 0.3);
+        }
+        
+        .tree-branch-v2 {
+            width: 180px; height: 15px;
+            position: relative;
+            margin-top: -5px; 
+        }
+        
+        .tree-branch-v2::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 2px;
+            background: linear-gradient(90deg, transparent 0%, var(--nk-gold-rich) 50%, transparent 100%);
+            border-radius: 1px;
+        }
+        
+        .tree-branch-v2::after {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 15px;
+            background: 
+                linear-gradient(to bottom, var(--nk-gold-rich), transparent) 0 0 / 2px 100% no-repeat, 
+                linear-gradient(to bottom, var(--nk-gold-rich), transparent) 100% 0 / 2px 100% no-repeat; 
+        }
+
+        /* --- APP DOWNLOAD SECTION --- */
+        .app-download-panel {
+            background: rgba(255, 255, 255, 0.01); 
+            border: 1px solid #1a1a1a; border-radius: 8px;
+            padding: 35px 25px; margin-top: 5px; 
+        }
+
+        .app-download-row {
+            display: flex; justify-content: center; align-items: flex-end; 
+            gap: 30px; margin-bottom: 30px;
+        }
+
+        /* 新增：手機系統提示標籤 */
+        .app-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .app-os-label {
+            font-size: 0.85rem;
+            color: var(--nk-gold-light);
+            background: rgba(197, 160, 89, 0.1);
+            border: 1px solid rgba(197, 160, 89, 0.3);
+            padding: 4px 14px;
+            border-radius: 20px;
+            letter-spacing: 1px;
+            font-weight: 500;
+        }
+
+        .app-btn-link {
+            transition: 0.3s ease;
+            position: relative; display: block;
+        }
+        
+        .app-btn-img {
+            height: 52px; width: auto; display: block;
+            border-radius: 7px;
+            border: 2px solid #222; 
+            box-shadow: 0 5px 15px rgba(0,0,0,0.6);
+            transition: 0.3s ease;
+            background: linear-gradient(135deg, #111 0%, #222 100%);
+        }
+
+        .app-btn-link:hover .app-btn-img {
+            border-color: var(--nk-gold-rich);
+            transform: translateY(-3px) scale(1.03);
+            box-shadow: 0 10px 25px rgba(197, 160, 89, 0.3);
+            filter: brightness(1.1);
+        }
+        
+        .app-btn-link::after {
+            content: ''; position: absolute; bottom: -5px; left: 10%; width: 80%; height: 10px;
+            background: rgba(197, 160, 89, 0.5); border-radius: 50%;
+            filter: blur(10px); opacity: 0; transition: 0.3s; z-index: -1;
+        }
+        .app-btn-link:hover::after { opacity: 1; bottom: -8px; }
+
+        /* 教學動圖修正：加寬並保持手機質感 */
+        .tutorial-gif-wrapper {
+            max-width: 380px; /* 將寬度加寬到 380px */
+            width: 100%; margin: 10px auto 0;
+            background: #fff; 
+            border: 6px solid #fff; 
+            border-radius: 20px; 
+            box-shadow: 0 15px 40px rgba(0,0,0,0.6), 0 0 20px rgba(255,255,255,0.1);
+            overflow: hidden; 
+            transition: 0.3s;
+            position: relative;
+        }
+        
+        .tutorial-gif-wrapper:hover {
+            transform: scale(1.02);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.7), 0 0 30px rgba(197, 160, 89, 0.1);
+        }
+        
+        .tutorial-gif-wrapper::before {
+            content: ''; position: absolute; top: 8px; left: 50%; transform: translateX(-50%);
+            width: 50px; height: 4px; background: #e0e0e0; border-radius: 2px; z-index: 2;
+        }
+
+        .tutorial-gif {
+            width: 100%; display: block;
+        }
+
+        /* --- MOBILE RWD --- */
+        @media (max-width: 768px) {
+            body { padding-top: var(--header-h-mb); }
+            .main-header { height: var(--header-h-mb); }
+            .container { padding: 40px 15px; }
+            h1 { font-size: 1.7rem; }
+            h2 { font-size: 1.4rem; }
+            .optin-content { padding: 35px 20px; }
+            .nk-btn { font-size: 1.1rem; padding: 18px; gap: 8px; }
+            .app-download-panel { padding: 30px 15px; }
+            
+            .app-download-row { gap: 15px; flex-wrap: wrap; }
+            .app-item { width: 45%; gap: 8px; } /* 手機版並排 */
+            .app-os-label { font-size: 0.75rem; padding: 4px 10px; width: 100%; text-align: center; }
+            .app-btn-img { height: 45px; width: 100%; object-fit: contain; }
+            
+            .tree-branch-v2 { width: 140px; } 
+            .warning-text { font-size: 1.1rem; }
+        }
+
+    </style>
+</head>
+<body>
+
+    <nav class="main-header">
+        <div class="container" style="padding: 0; height: 100%; display: flex; align-items: center; justify-content: center;">
+            <img src="https://arftk.com/imgs1/logo1.png" alt="NσK Logo" class="header-logo">
+        </div>
+    </nav>
+
+    <div class="container">
+        
+        <span class="subtitle-en">EXCLUSIVE ACCESS</span>
+        <h1>請進入 NσK® 系統 Telegram</h1>
+        <p style="max-width: 520px; margin: 0 auto 40px;">我們開發了串接至主系統的 Telegram BOT，會員們可直接安全連接系統，無需安裝任何第三方高風險程式。</p>
+
+        <div class="optin-gold-card">
+            
+            <div class="video-wrapper">
+                <div class="video-block">
+                    <video src="https://arftk.com/imgs1/team.mp4" muted autoplay loop playsinline></video>
+                    <button class="play-pause-btn">
+                        <img decoding="async" class="icon" src="https://arftk.com/imgs/play.svg">
+                    </button>
+                </div>
+            </div>
+
+            <div class="optin-content">
+                <span class="subtitle-en" style="font-size: 0.85rem; letter-spacing: 3px;">STEP 1</span>
+                <h2>立即進入系統專屬頻道</h2>
+                <p style="font-size: 0.95rem; margin-bottom: 25px; color: #bbb;">若您已安裝 App，請點擊下方按鈕自動開啟對話</p>
+
+                <a href="https://t.me/YOUR_LINK_HERE" target="_blank" class="nk-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M9.78 18.65l.28-4.23 7.68-6.92c.34-.31-.07-.47-.52-.19L7.74 13.3 3.64 12c-.88-.25-.89-.86.2-1.3l15.97-6.16c.73-.33 1.43.18 1.15 1.3l-2.72 12.81c-.19.91-.74 1.13-1.5.71L12.6 16.3l-1.99 1.93c-.23.23-.42.42-.83.42z"/>
+                    </svg>
+                    進入系統 Telegram
+                </a>
+
+                <div class="priority-warning-box">
+                    <svg class="warning-icon" viewBox="0 0 24 24">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+                    </svg>
+                    <div class="warning-text">如果您尚未安裝 Telegram (大部分用戶)</div>
+                </div>
+
+                <div class="tree-connector-v2">
+                    <div class="tree-stem-v2"></div> 
+                    <div class="tree-branch-v2"></div> 
+                </div>
+
+                <div class="app-download-panel">
+                    <p style="font-size: 0.95rem; color: #fff; margin-bottom: 25px; font-weight: 400;">請「務必先」依據您的手機系統安裝應用程式，安裝後註冊帳號即可使用。</p>
+                    
+                    <div class="app-download-row">
+                        <div class="app-item">
+                            <span class="app-os-label">Android 安卓手機</span>
+                            <a href="https://play.google.com/store/apps/details?id=org.telegram.messenger" target="_blank" class="app-btn-link">
+                                <img src="https://arftk.com/imgs1/play.webp" alt="Google Play" class="app-btn-img">
+                            </a>
+                        </div>
+                        
+                        <div class="app-item">
+                            <span class="app-os-label">iOS 蘋果手機</span>
+                            <a href="https://apps.apple.com/app/telegram-messenger/id686449807" target="_blank" class="app-btn-link">
+                                <img src="https://arftk.com/imgs1/ap.webp" alt="App Store" class="app-btn-img">
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="tutorial-gif-wrapper">
+                        <img src="https://arftk.com/imgs/adtg1.gif" alt="Tutorial" class="tutorial-gif">
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        
+        <footer style="margin-top: 50px; font-size: 0.8rem; color: #555; letter-spacing: 1px;">
+            © 2026 NσK® INVESTMENT GROUP.
+        </footer>
+
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const videoBlocks = document.querySelectorAll('.video-block');
+            
+            videoBlocks.forEach(block => {
+                const video = block.querySelector('video');
+                const btn = block.querySelector('.play-pause-btn');
+                const icon = btn.querySelector('.icon');
+
+                if(video) {
+                    if(icon) icon.src = "https://arftk.com/imgs/play.svg";
+
+                    video.addEventListener('play', () => {
+                        if(icon) icon.src = "https://arftk.com/imgs/pause.svg";
+                    });
+                    video.addEventListener('pause', () => {
+                        if(icon) icon.src = "https://arftk.com/imgs/play.svg";
+                    });
+                    
+                    if(btn) {
+                        btn.addEventListener('click', () => {
+                            if(video.paused) {
+                                video.play();
+                            } else {
+                                video.pause();
+                            }
+                        });
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
