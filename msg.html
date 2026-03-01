@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>N&sigma;K&reg; 文案管理與複製系統</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Infant:wght@600;700&family=Noto+Serif+TC:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --nk-bg-darkest: #050505;
+            --nk-bg-panel: #0f0f0f;
+            --nk-gold-rich: #C5A059;
+            --nk-gold-dark: #8a6d3b;
+            --nk-text-main: #e0e0e0;
+            --nk-font-tc: 'Noto Serif TC', serif;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { background-color: var(--nk-bg-darkest); color: var(--nk-text-main); font-family: var(--nk-font-tc); padding: 40px 20px; }
+        .header-title { text-align: center; margin-bottom: 40px; }
+        .header-title h1 { color: #fff; font-size: 2.5rem; letter-spacing: 2px; margin-bottom: 10px; }
+        .header-title span { color: var(--nk-gold-rich); font-family: monospace; font-size: 1.2rem; }
+        
+        .global-settings {
+            max-width: 1200px; margin: 0 auto 40px; background: #141414;
+            border: 1px dashed var(--nk-gold-dark); padding: 20px; border-radius: 8px;
+            display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px;
+        }
+        .url-group { display: flex; align-items: center; gap: 15px; flex-grow: 1; }
+        .url-group label { color: var(--nk-gold-rich); font-weight: bold; white-space: nowrap; }
+        .url-group input { flex-grow: 1; background: #000; border: 1px solid #333; color: #fff; padding: 10px 15px; font-family: monospace; font-size: 1.1rem; }
+        .url-group input:focus { border-color: var(--nk-gold-rich); outline: none; }
+
+        .btn-group { display: flex; gap: 10px; }
+        
+        .grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(450px, 1fr)); gap: 30px; max-width: 1600px; margin: 0 auto; }
+        .msg-card { background: var(--nk-bg-panel); border: 1px solid #222; border-top: 3px solid var(--nk-gold-dark); border-radius: 8px; padding: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); transition: 0.3s; }
+        .msg-card:hover { border-color: var(--nk-gold-rich); box-shadow: 0 10px 40px rgba(197, 160, 89, 0.15); }
+        .msg-title { color: #fff; font-size: 1.3rem; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid #222; line-height: 1.4; }
+        .sub-box { background: #0a0a0a; border: 1px solid #1a1a1a; border-radius: 6px; padding: 15px; margin-bottom: 15px; }
+        .sub-box-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .sub-box-title { color: var(--nk-gold-rich); font-size: 0.95rem; letter-spacing: 1px; font-weight: bold; }
+        textarea, input[type="text"] { width: 100%; background: #000; border: 1px solid #333; color: #ddd; padding: 12px; font-family: monospace; font-size: 14px; line-height: 1.6; border-radius: 4px; transition: 0.3s; }
+        textarea { height: 600px; resize: vertical; }
+        textarea:focus, input[type="text"]:focus { border-color: var(--nk-gold-rich); outline: none; color: #fff; box-shadow: inset 0 0 10px rgba(197, 160, 89, 0.1); }
+        .copy-btn { background: #1a1a1a; color: var(--nk-gold-rich); border: 1px solid var(--nk-gold-dark); padding: 8px 15px; cursor: pointer; font-size: 0.9rem; font-weight: bold; border-radius: 4px; transition: 0.3s; }
+        .copy-btn:hover { background: var(--nk-gold-dark); color: #000; }
+        .copy-btn.success { background: #00ff41 !important; border-color: #00ff41 !important; color: #000 !important; box-shadow: 0 0 15px rgba(0, 255, 65, 0.4); }
+        .tag-badge { display: inline-block; background: rgba(197, 160, 89, 0.1); color: var(--nk-gold-rich); padding: 3px 8px; font-size: 0.75rem; border-radius: 4px; margin-bottom: 10px; font-family: sans-serif; border: 1px solid var(--nk-gold-dark); }
+        .anchor-badge { float: right; font-size: 0.75rem; background: #222; color: #aaa; padding: 2px 6px; border-radius: 4px; font-family: monospace; }
+        
+        .export-btn { background: linear-gradient(135deg, #1f1f1f, #0a0a0a); color: #fff; border: 1px solid #444; }
+        .export-btn:hover { background: #333; border-color: #666; color: #fff; }
+    </style>
+</head>
+<body>
+
+    <div class="header-title">
+        <h1>N&sigma;K&reg; 終極文案庫</h1>
+        <span>網頁上可直接編輯微調，點擊複製。若需永久保存，點擊右上方匯出 txt。</span>
+    </div>
+
+    <div class="global-settings">
+        <div class="url-group">
+            <label for="global-url">🌐 替換網址：</label>
+            <input type="text" id="global-url" value="https://replaceurl.com/pagename" placeholder="輸入你的基礎網址">
+        </div>
+        <div class="btn-group">
+            <button class="copy-btn" onclick="updateAllLinks()">🔄 替換所有連結</button>
+            <button class="copy-btn export-btn" onclick="exportToTxt()">📥 匯出更新版 TXT</button>
+        </div>
+    </div>
+
+    <div class="grid-container" id="cards-container"></div>
+
+    <script>
+        // === Python 自動注入的 JSON 資料 ===
+        const msgData = [
+    {
+        "tag": "系統授權",
+        "title": "Msg 1: 【系統授權】跨越階級的最後一道閘門",
+        "content": "🚀 恭喜你通過初步篩選,進入 NσK® 系統的預備席次.\n\n<blockquote><b>🚨《系統權限開通：最後確認》</b></blockquote>\n\n傳統社會的遊戲規則是設計來困住多數人的,但你現在已站在出口邊緣.距離啟動每月數萬美金的自動獲利引擎,只剩最後一個指令.這不是供散戶取暖的社群,這是通往金字塔頂端的絕對通行證.\n\n<blockquote><b>🤯 授權啟動後,系統將以機構級別的算力,為你執行 24/7 高頻套利</b></blockquote>\n<blockquote><b>✅ 你的唯一任務：每週登入、確認數據,並抽走市場的流動性（提款）</b></blockquote>\n\n我們已為你預留了伺服器資源.請立刻點擊下方按鈕,完成最後的開通程序：\n\n<blockquote><b>📁 系統開通指令</b>\n┣ 📄 <b>Step 1:</b> 注入交易燃料 (USDT)\n┣ 📄 <b>Step 2:</b> 完成線上安保與權限開通\n┗ 📄 <b>Step 3:</b> 綁定私人冷錢包,開始抽血市場</blockquote>\n\n<b>請立刻點擊按鈕,啟動你的專屬印鈔權限👇🏻</b>",
+        "btnText": "⚡️ 獲取系統開通步驟",
+        "anchor": "activation-steps"
+    },
+    {
+        "tag": "獲利試算",
+        "title": "Msg 2: 【獲利試算】拋棄線性思維,見證指數級的暴力",
+        "content": "📊 永遠不要用傳統銀行的微薄利息,來衡量真正的金融科技.\n\n<blockquote><b>🧮《NσK® 階級獲利與 Tier 試算引擎》</b></blockquote>\n\n資本市場的真相很殘酷：本金決定你的話語權.我們不玩華爾街那套「長期持有」的洗腦話術,我們直接把純粹的數學攤在你面前.拉動下方的試算拉桿,看看你的資產在 AXIS 演算法下,30 天後會膨脹到什麼地步：\n\n<blockquote><b>🤯 TIER 4 頂級帳戶,每月由系統強制鎖定 350%~375% 基準獲利</b></blockquote>\n<blockquote><b>🔥 這不是預測,這是降維打擊後必然產生的數學結果</b></blockquote>\n\n進入控制面板,啟動內建的獲利試算器：\n\n<blockquote><b>📁 演算收益分級結構</b>\n┣ 🥉 <b>TIER 1 ($5.5k):</b> 月底線獲利 200% 起\n┣ 🥈 <b>TIER 2 ($10k):</b> 月底線獲利 250% 起\n┗ 💎 <b>TIER 4 ($50k):</b> 月底線獲利 375% (啟動指數級爆發)</blockquote>\n\n<b>點擊下方按鈕,親眼見證機構級別的財富裂變👇🏻</b>",
+        "btnText": "💰 啟動高頻獲利試算器",
+        "anchor": "tier-calculator"
+    },
+    {
+        "tag": "資金倍增",
+        "title": "Msg 3: 【資金倍增】散戶的資金是劣勢,我們將它化為武器",
+        "content": "📈 散戶之所以是散戶,是因為他們永遠在用 1:1 的微小資金對抗整個市場.\n\n<blockquote><b>🚀《Fractional Shares (FS) 機構級資金倍增協議》</b></blockquote>\n\n為什麼 NσK® 的獲利能呈現暴力的指數級成長？核心在於 **FS 輔助池機制**.你的本金只是一把鑰匙,一旦插入,系統將自動從深層資金池中調動最高百倍的儲備金,為你的每一筆交易進行槓桿放大.\n\n<blockquote><b>🤯 當你投入 $10,000 美金,系統將挾帶數十萬美金的火力替你進場掠奪</b></blockquote>\n<blockquote><b>✅ 你的本金量級,決定了系統為你配置的火力上限</b></blockquote>\n\n別讓傳統的資金局限,限制了你收割市場的速度.點擊按鈕,解密這套機構專屬的機制：\n\n<blockquote><b>📁 NσK® 資金倍增邏輯</b>\n┣ 🔑 <b>你的本金：</b> 啟動倍增引擎的授權金\n┣ 🌊 <b>系統資金池：</b> 強制注入龐大的機構級輔助資金\n┗ 🚀 <b>終極結果：</b> 以散戶無法企及的體量,進行獲利結算</blockquote>\n\n<b>點擊下方按鈕,了解為何擴大本金是你極大化獲利的唯一捷徑👇🏻</b>",
+        "btnText": "🔥 揭密 FS 資金倍增機制",
+        "anchor": "tier-hero-video"
+    },
+    {
+        "tag": "資金安全",
+        "title": "Msg 4: 【資金安全】拒絕法幣：我們不與落後的傳統銀行妥協",
+        "content": "🛡️ 為什麼 NσK® 全面拒絕法幣入金？因為傳統銀行的效率,根本配不上我們的運算速度.\n\n<blockquote><b>🔒《USDT 結算：頂級資本的效率與避稅天堂》</b></blockquote>\n\n傳統銀行審核一筆匯款需要 3-5 天,還要面對無止盡的資金盤問.而在 NσK®,獲利是以毫秒計算的.我們全面採用 USDT (泰達幣) 結算,秒級到帳,徹底粉碎外匯管制與傳統銀行的傲慢.\n\n<blockquote><b>🤯 採用頂級流動性供應商,資金執行軍事級隔離 (Segregated Accounts)</b></blockquote>\n<blockquote><b>✅ 隨時隨地,獲利秒級穿透國界,直接入帳至你的私人冷錢包</b></blockquote>\n\n這是新世代富人的基礎設施,請盡快習慣它：\n\n<blockquote><b>📁 絕對自由的資金架構</b>\n┣ ⚡ <b>秒級到帳：</b> 拒絕傳統金融體系的冗長與無能\n┣ 🌍 <b>全球流通：</b> 無視任何國家機器的外匯管制\n┗ 🕵️ <b>資產隱私：</b> 你的財富神聖不可侵犯,無人可查</blockquote>\n\n<b>點擊下方按鈕,了解為何 USDT 是保護你資產的最佳護城河👇🏻</b>",
+        "btnText": "🛡️ 進入資金安全架構解析",
+        "anchor": "usdt-advantage"
+    },
+    {
+        "tag": "流程解密",
+        "title": "Msg 5: 【流程解密】15 分鐘的連線,只為確立你的提款權限",
+        "content": "🤝 我們沒有興趣浪費時間推銷,科技本身就是最好的證明.\n\n<blockquote><b>📞《15 分鐘系統開通與安保會議》</b></blockquote>\n\n這 15 分鐘的連線,我們只執行三項硬性任務：身分驗證、系統通道對接、綁定你的專屬提款地址.這是為了符合全球頂級反洗錢法規的必要程序.\n\n<blockquote><b>✅ 會議結束並切斷連線的那一刻,就是機器開始為你印鈔的起點</b></blockquote>\n<blockquote><b>🚫 我們的工程師只負責幫你打造武器,不負責任何推銷</b></blockquote>\n\n了解會議的嚴謹細節,準備迎接你的第一次獲利：\n\n<blockquote><b>📁 權限開通執行項目</b>\n┣ 🆔 <b>KYC 驗證：</b> 確立資產合法性 (阻絕黑錢污染資金池)\n┣ ⚙️ <b>系統對接：</b> 工程團隊遠端為你架設專屬演算節點\n┗ 🏦 <b>綁定提款：</b> 測試並鎖定你的 USDT 收款錢包地址</blockquote>\n\n<b>點擊下方按鈕,查看開通會議的標準作業程序👇🏻</b>",
+        "btnText": "📞 查閱線上會議流程",
+        "anchor": "activation-steps"
+    },
+    {
+        "tag": "未來樣貌",
+        "title": "Msg 6: 【未來樣貌】全託管運算：把時間還給生命,把交易交給機器",
+        "content": "🏖️ 許多人被傳統交易員洗腦,以為賺錢必須死盯著螢幕、看著密密麻麻的 K 線.\n\n<blockquote><b>🤖《Level 5 全託管模式：你唯一的工作是享受》</b></blockquote>\n\n人類有情緒、會疲勞、會犯錯,這注定了人類在交易市場中的弱勢.NσK® 的全託管模式,徹底拔除了「人為干預」這個最大的變數.你的工作只剩下一個：每週登入、確認系統為你掠奪的獲利,然後點擊「提款」.\n\n<blockquote><b>🤯 系統 24/7 無情地在市場中撕咬利潤,連你熟睡時也不例外</b></blockquote>\n<blockquote><b>✅ 把複雜的數據處理交給演算法,你只需要決定財富的去向</b></blockquote>\n\n這才是真正的高階人生配置：\n\n<blockquote><b>📁 你未來的日常參數</b>\n┣ ☕ <b>清晨：</b> 享受咖啡,檢視昨夜系統的自動獲利報表\n┣ 📱 <b>每週：</b> 點擊提款指令,等待 USDT 秒級入帳\n┗ ✈️ <b>其餘時間：</b> 拿回你人生的掌控權</blockquote>\n\n<b>點擊下方按鈕,預覽你脫離勞動束縛後的真實樣貌👇🏻</b>",
+        "btnText": "🌅 預覽全託管獲利生活",
+        "anchor": "system-revealed"
+    },
+    {
+        "tag": "法規現實",
+        "title": "Msg 7: 【法規現實】為何我們必須徹底拋棄傳統銀行體系？",
+        "content": "🏦 傳統銀行不是你的金庫,它是隨時能凍結你資產、盤問你資金來源的典獄長.\n\n<blockquote><b>🚫《去中心化結算：奪回資產的絕對控制權》</b></blockquote>\n\n當你的資金達到一定量級,傳統銀行就會成為你最大的阻礙.在 NσK®,我們不允許任何人干涉你的財富.透過區塊鏈點對點結算,沒有銀行經理能對你指手畫腳,沒有機構能關閉你的提款通道.\n\n<blockquote><b>🤯 告別傳統金融機構的監視與刁難</b></blockquote>\n<blockquote><b>✅ 真正實現「我的資產,只聽命於我的私鑰」</b></blockquote>\n\n這才是金字塔頂端在玩的自由遊戲：\n\n<blockquote><b>📁 區塊鏈結算絕對優勢</b>\n┣ 🔓 <b>抗審查性：</b> 任何政府與銀行皆無權凍結你的鏈上資產\n┣ 🚀 <b>無感吞吐：</b> 千萬美金的調度,宛如傳送簡訊般輕易\n┗ 🌍 <b>無國界性：</b> 在地球的任何一個角落,你都能隨時提現</blockquote>\n\n<b>點擊下方按鈕,了解為何頂級資本都在逃離傳統銀行👇🏻</b>",
+        "btnText": "💸 揭密去中心化結算優勢",
+        "anchor": "usdt-advantage"
+    },
+    {
+        "tag": "絕對底氣",
+        "title": "Msg 8: ⚖️【絕對底氣】為何我們敢簽署 200% 保底協議？",
+        "content": "🛡️ 「投資一定有風險」,那是華爾街拿來推卸責任的免死金牌.NσK® 的數學模型,不接受這種藉口.\n\n<blockquote><b>📜《機構級 200% 獲利保底協議 (Risk Reversal)》</b></blockquote>\n\n我們為什麼敢用白紙黑字保證底線獲利？因為在 AXIS 演算法的勝率與我們龐大的儲備資金池面前,市場的微小波動根本微不足道.補貼你帳戶的差額,對系統來說不過是四捨五入的誤差.\n\n<blockquote><b>🤯 若月結算未達標,智能合約將強制從儲備池中抽調資金補足你的帳戶</b></blockquote>\n<blockquote><b>✅ 你唯一的風險,就是繼續站在體制內「當個旁觀者」</b></blockquote>\n\n這份霸王條款,是給予行動者的絕對防護：\n\n<blockquote><b>📁 保底協議條款解析</b>\n┣ 📉 <b>零回撤承諾：</b> 發生任何市場黑天鵝,系統全額承擔虧損\n┣ 📊 <b>獲利強制補足：</b> 若未達 Tier 保底標準,毫秒內補足 USDT 差額\n┗ 🤝 <b>區塊鏈效力：</b> 協議寫入智能合約,不受任何人為干預自動執行</blockquote>\n\n<b>點擊下方按鈕,查閱這份讓你立於不敗之地的合約👇🏻</b>",
+        "btnText": "⚖️ 查閱保底協議詳細條款",
+        "anchor": "tier-calculator"
+    },
+    {
+        "tag": "運算警告",
+        "title": "Msg 9: 【運算警告】算力極度昂貴,請停止浪費 NσK® 的系統資源",
+        "content": "⚠️ 演算法的每一秒運算,都在燃燒極高的成本.\n\n<blockquote><b>🛑《伺服器資源閒置清退警告》</b></blockquote>\n\n系統偵測到你已佔用預備名額,卻遲遲未下達啟動指令.NσK® 的運算力是分配給準備好掠奪財富的人,我們不會容忍珍貴的頻寬浪費在無意義的猶豫上.\n\n<blockquote><b>🤯 在你猶豫的這段時間,系統已經為其他活躍帳戶賺取了數萬美金</b></blockquote>\n<blockquote><b>✅ 請立即完成資金注入,否則系統演算法將自動把你降級為「待清理名單」</b></blockquote>\n\n機會的窗口正在縮小：\n\n<blockquote><b>📁 節點資源狀態報告</b>\n┣ 🔴 <b>全球算力：</b> 高負載滿載運作中\n┣ 🟡 <b>你的節點：</b> 已標記為「閒置/準備回收」\n┗ ⏳ <b>系統建議：</b> 於 24 小時內完成開通,保住你的專屬通道</blockquote>\n\n<b>點擊下方按鈕,立即接管你的獲利節點,避免權限遭到抹除👇🏻</b>",
+        "btnText": "⚡️ 立即開通並鎖定系統權限",
+        "anchor": "final-action"
+    },
+    {
+        "tag": "核心科技",
+        "title": "Msg 10: ⚙️【核心科技】剝開黑盒子：每月數十萬美金是如何被「算」出來的",
+        "content": "🤖 忘掉那些財經專家的主觀分析,在這個時代,只有演算法不會說謊.\n\n<blockquote><b>⚙️《NσK® 系統底層運作邏輯解密》</b></blockquote>\n\n點擊按鈕,我們將毫不掩飾地向你展示,這台機器是如何冷血、無情地從全球市場中汲取流動性.看看我們如何將那些散戶的恐慌與貪婪,轉化為你錢包裡的數字：\n\n<blockquote><b>📈 系統穩定地為合格會員,每日創造 $3,000 美金以上的自動流入</b></blockquote>\n<blockquote><b>🎯 透過高頻數據清洗,將交易勝率死死釘在 85% 的基準線之上</b></blockquote>\n\n親眼目睹降維打擊的真實過程：\n\n<blockquote><b>📁 四大核心獲利引擎</b>\n┣ 🌉 <b>深層橋接 (Bridging):</b> 直接連線全球頂級暗池流動性\n┣ 🧠 <b>維度運算 (Computing):</b> AXIS 演算法精準鎖定套利空間\n┣ 🛡️ <b>絕對對沖 (Hedging):</b> RRM 機制在毫秒間抹平所有下行風險\n┗ 💰 <b>閃電結算 (Settlement):</b> 將獲利無損封裝,發送至你的帳戶</blockquote>\n\n<b>點擊下方按鈕,觀看系統如何無情地執行財富轉移👇🏻</b>",
+        "btnText": "🔍 深入觀看系統運作機密",
+        "anchor": "system-revealed"
+    },
+    {
+        "tag": "真實見證",
+        "title": "Msg 11: 🎬【真實見證】瑞典家庭主婦 Nancy P. 的 $168,420 美金首刷紀錄",
+        "content": "💰 真正的頂級科技,就是讓完全不懂金融的人,也能輕易擊敗華爾街交易員.\n\n<blockquote><b>🏆《Nancy P. 真實區塊鏈提款紀錄：$168,420 USD》</b></blockquote>\n\nNancy 來自瑞典,她看不懂任何一張 K 線圖,也不懂總體經濟.但她明白一個道理：把專業的事交給頂尖的系統.短短幾週,她透過系統抽走了 6 位數的美金.\n\n<blockquote><b>🤯 影片中將毫無保留地展示,她如何將 USDT 變現入帳的真實過程</b></blockquote>\n<blockquote><b>✅ 她沒有比你聰明,她只是做了一個你到現在還不敢做的決定：啟動系統</b></blockquote>\n\n在絕對的數據面前,任何質疑都顯得蒼白：\n\n<blockquote><b>📁 Nancy 的獲利數據庫</b>\n┣ 👤 <b>使用者標籤：</b> 瑞典 / 家庭主婦 (無金融背景)\n┣ 💵 <b>授權級別：</b> Tier 2 運算等級\n┗ 🏧 <b>單月強勢提領：</b> $168,420 美金</blockquote>\n\n<b>點擊下方按鈕,觀看 Nancy 如何輕易跨越財富階級👇🏻</b>",
+        "btnText": "🎬 觀看 Nancy 真實提款實錄",
+        "anchor": "success-stories"
+    },
+    {
+        "tag": "速度碾壓",
+        "title": "Msg 12: ⚙️【速度碾壓】ABM 科技：毫秒之間的財富重分配",
+        "content": "⚡ 當散戶還在看著延遲的報價軟體時,ABM 演算法已經完成了進場、獲利、退出的全套動作.\n\n<blockquote><b>🏎️《ABM 資訊不對稱科技：毫秒級的合法掠奪》</b></blockquote>\n\n天下武功,唯快不破.ABM 以低於 12 毫秒的延遲,同時監控全球 30,000+ 個金融標的.我們在市場價格發生變動前,就已經捕捉到了微觀結構的失衡,並完成無風險套利.這就是為什麼人類手動交易,永遠只有被系統收割的份.\n\n<blockquote><b>🤯 只要比市場快 0.02 秒,我們就能壟斷所有的利潤空間</b></blockquote>\n<blockquote><b>✅ 速度,決定了你是收割者,還是被收割的韭菜</b></blockquote>\n\n這不是交易,這是單方面的維度打擊：\n\n<blockquote><b>📁 ABM 物理規格</b>\n┣ ⚡ <b>極限延遲：</b> < 12 毫秒 (超越人類神經反應)\n┣ 🌐 <b>監控廣度：</b> 同時覆蓋 30,000+ 全球流動性池\n┗ ⚔️ <b>核心優勢：</b> 絕對的資訊不對稱套利</blockquote>\n\n<b>點擊下方按鈕,見識 ABM 如何在市場中如入無人之境👇🏻</b>",
+        "btnText": "⚡️ 探索 ABM 毫秒級核心科技",
+        "anchor": "abm-tech"
+    },
+    {
+        "tag": "見證震撼",
+        "title": "Msg 13: 🎬【見證震撼】美國 Matthew W. 提領 146 萬美金,徹底改寫家族命運",
+        "content": "🏙️ 單憑微薄的薪水與傳統的儲蓄,你攢三輩子也達不到這個數字.\n\n<blockquote><b>🏆《Matthew W. 累積提領實錄：$1,463,347 USD》</b></blockquote>\n\n這不是一夜暴富的虛假故事,這是 ABM 演算法日復一日、穩定抽血的累積結果.Matthew 總提領超過 146 萬美金,他徹底終結了家族的勞動宿命.\n\n<blockquote><b>🤯 他不再需要為了生活出賣時間,因為機器正在替他打理一切</b></blockquote>\n<blockquote><b>✅ 如果你當時沒有猶豫,這本來也可以是你的帳戶畫面</b></blockquote>\n\n數據見證階級的躍遷：\n\n<blockquote><b>📁 Matthew 的獲利數據庫</b>\n┣ 👤 <b>使用者標籤：</b> 美國 / 退休工程師\n┣ ⏳ <b>系統授權時間：</b> 8 個月持續運轉\n┗ 🏧 <b>累積提領總額：</b> $1,463,347 美金</blockquote>\n\n<b>點擊下方按鈕,觀看 Matthew 如何透過演算法重塑人生👇🏻</b>",
+        "btnText": "🎬 觀看 Matthew 家族躍遷見證",
+        "anchor": "success-stories"
+    },
+    {
+        "tag": "精準狙擊",
+        "title": "Msg 14: ⚙️【精準狙擊】AXIS 演算：剔除人類情緒,強制執行 85% 勝率",
+        "content": "🎯 散戶虧錢,是因為他們受制於恐懼與貪婪.AXIS 演算法沒有這些缺陷.\n\n<blockquote><b>🧠《AXIS 演算法：毫無破綻的數學印鈔機》</b></blockquote>\n\n我們鄙視預測,我們只計算機率.AXIS 不會去賭那些模糊不清的行情,它只在數學期望值為絕對正數的「第一象限」內發動攻擊.\n\n<blockquote><b>🤯 一旦系統判定勝率低於 85%,指令將被無情否決,絕不進場</b></blockquote>\n<blockquote><b>✅ 我們追求的不是頻繁交易產生手續費,而是百發百中的致命狙擊</b></blockquote>\n\n這就是演算法凌駕於人性的證明：\n\n<blockquote><b>📁 AXIS 嚴苛運作邏輯</b>\n┣ 📊 <b>深度學習：</b> 十年歷史回測矩陣 + 毫秒級即時動能比對\n┣ 🎯 <b>開火門檻：</b> 僅核准執行勝率大於 85% 的絕對優勢交易\n┗ 🤖 <b>執行紀律：</b> 0 情緒干擾,100% 絕對理性的數學法則</blockquote>\n\n<b>點擊下方按鈕,了解 AXIS 如何將交易變成一道必勝的數學題👇🏻</b>",
+        "btnText": "🎯 揭密 AXIS 高勝率演算法",
+        "anchor": "axis-tech"
+    },
+    {
+        "tag": "真實見證",
+        "title": "Msg 15: 🎬【真實見證】美國 Morgan K. 單月暴走獲利 $155,890 實錄",
+        "content": "📈 真正的穩定獲利,看起來極度無聊：就是每天看著帳戶餘額機械式地往上跳.\n\n<blockquote><b>🏆《Morgan K. 單月結算實錄：$155,890 USD》</b></blockquote>\n\n去看看 Morgan 帳戶裡那無聊卻龐大的數字.他做對了什麼？他只是放棄了自己那毫無勝算的「直覺判斷」,選擇臣服於 AXIS 的精準運算.\n\n<blockquote><b>🤯 在短短 30 天內,系統無情地為他從市場中榨取了 $155,890 美金</b></blockquote>\n<blockquote><b>✅ 放下自以為是的判斷,相信科技,這就是它給予的回報</b></blockquote>\n\n演算法的穩定輸出：\n\n<blockquote><b>📁 Morgan 的獲利數據庫</b>\n┣ 👤 <b>使用者標籤：</b> 美國 / 企業主\n┣ 💵 <b>授權級別：</b> Tier 3 深度運算\n┗ 🏧 <b>單月淨獲利：</b> $155,890 美金</blockquote>\n\n<b>點擊下方按鈕,觀看 Morgan 如何輕鬆駕馭這頭獲利巨獸👇🏻</b>",
+        "btnText": "🎬 觀看 Morgan 單月獲利實錄",
+        "anchor": "success-stories"
+    },
+    {
+        "tag": "絕對防禦",
+        "title": "Msg 16: ⚙️【絕對防禦】RRM 協議：讓「爆倉」在數學維度上成為不可能",
+        "content": "🛡️ 在金融市場中,進攻只是表演,防守才是生存的底線.散戶總是死於黑天鵝,而我們將風險鎖進了牢籠.\n\n<blockquote><b>🛡️《RRM 逆向對沖協議：本金的絕對防護罩》</b></blockquote>\n\nRRM (Risk Reverse Mechanism) 以極高頻率監控全球 2,000+ 項風險 KPI.當市場出現極端崩盤的毫秒內,系統早已在衍生品市場佈局完畢,執行完美的逆向對沖.\n\n<blockquote><b>🤯 當散戶在哀嚎爆倉時,RRM 正利用市場的恐慌,保護並擴張你的資產</b></blockquote>\n<blockquote><b>✅ 我們在底層架構上,就徹底排除了「本金歸零」的數學可能性</b></blockquote>\n\n這就是 NσK® 傲視群雄的底氣：\n\n<blockquote><b>📁 RRM 軍事級防禦</b>\n┣ 📡 <b>全域監控：</b> 2,000+ 風險指標毫秒級實時掃描\n┣ ⚔️ <b>瞬間對沖：</b> 毫秒級反向保險操作 (Reverse Hedging)\n┗ 🛡️ <b>終極結果：</b> 即使遭遇史詩級崩盤,你的資產依舊固若金湯</blockquote>\n\n<b>點擊下方按鈕,了解 RRM 如何為你的財富建立無懈可擊的防線👇🏻</b>",
+        "btnText": "🛡️ 揭密 RRM 絕對防禦科技",
+        "anchor": "rrm-tech"
+    },
+    {
+        "tag": "見證震撼",
+        "title": "Msg 17: 🎬【見證震撼】美國 Lisa N. 享受一週 $54,580 獲利的從容底氣",
+        "content": "😴 只有當你知道自己的錢絕對安全時,你才能體會到真正的「被動收入」.\n\n<blockquote><b>🏆《Lisa N. 一週結算實錄：$54,580 USD》</b></blockquote>\n\n因為 RRM 協議的絕對保護,Lisa 從不看盤,也從不擔心市場的劇烈震盪.當她在一週內輕鬆入帳五萬多美金時,多數人還在為了下個月的房租發愁.這就是認知帶來的階級差距.\n\n<blockquote><b>🤯 不需要任何盯盤焦慮,不需要承擔市場風險</b></blockquote>\n<blockquote><b>✅ RRM 讓她能以最優雅的姿態,收割市場的利潤</b></blockquote>\n\n感受真正的財富安全感：\n\n<blockquote><b>📁 Lisa 的獲利數據庫</b>\n┣ 👤 <b>使用者標籤：</b> 美國 / 自由業者\n┣ 🛡️ <b>核心依賴：</b> RRM 毫秒級風險對沖\n┗ 🏧 <b>一週淨提領：</b> $54,580 美金</blockquote>\n\n<b>點擊下方按鈕,觀看 Lisa 如何從容不迫地賺取暴利👇🏻</b>",
+        "btnText": "🎬 觀看 Lisa 從容獲利見證",
+        "anchor": "success-stories"
+    },
+    {
+        "tag": "菁英後盾",
+        "title": "Msg 18: ⚙️【菁英後盾】戰情室：前華爾街團隊 24/7 的邏輯覆核",
+        "content": "👨‍💻 你以為只有冷冰冰的 AI 在運作？不,我們擁有比華爾街更奢華的智力配置.\n\n<blockquote><b>🏛️《NσK® 全球戰情室：頂級人類大腦與 AI 的完美協作》</b></blockquote>\n\n我們不迷信單一系統,我們執行軍事級的雙重覆核.NσK® 戰情室 24 小時燈火通明,由前高盛、摩根士丹利的頂尖量化分析師輪班坐鎮,監控 AI 的每一次呼吸.\n\n<blockquote><b>🤯 你的每一筆獲利背後,都有一群曾主宰華爾街的菁英在為你護航</b></blockquote>\n<blockquote><b>✅ 人機協作的最高境界,確保系統在任何極端環境下依舊精準無誤</b></blockquote>\n\n我們為你配備了機構級的私人團隊：\n\n<blockquote><b>📁 戰情室奢華配置</b>\n┣ 👨‍💼 <b>策略指揮：</b> 前華爾街頂級量化分析師團隊\n┣ 👨‍💻 <b>架構維護：</b> 全球頂尖資安與區塊鏈底層工程師\n┗ 🕒 <b>鐵血紀律：</b> 24/7 全天候無死角監控與邏輯覆核</blockquote>\n\n<b>點擊下方按鈕,參觀你專屬的 NσK® 幕後菁英團隊👇🏻</b>",
+        "btnText": "🏛️ 進入 NσK® 全球戰情室",
+        "anchor": "elite-team"
+    },
+    {
+        "tag": "真實見證",
+        "title": "Msg 19: 🎬【真實見證】英國 Daniel G. 每日 $3,000 美金的「睡後收入」",
+        "content": "🛌 當你還在用勞力換取時薪,Daniel 已經讓全世界的流動性為他打工.\n\n<blockquote><b>🏆《Daniel G. 每日穩定流入：$3,000+ USD》</b></blockquote>\n\n每天早晨醒來,帳戶裡就多出 $3,000 美金的淨利潤.這對多數人來說是奇蹟,但在 NσK®,這只是會員最基本的生活常態.\n\n<blockquote><b>🤯 真正的「睡後收入」,不是口號,而是演算法日復一日的執行結果</b></blockquote>\n<blockquote><b>✅ 你寶貴的生命,根本不該浪費在看盤和無意義的勞動上</b></blockquote>\n\n看看從體制內解脫的模樣：\n\n<blockquote><b>📁 Daniel 的獲利數據庫</b>\n┣ 👤 <b>使用者標籤：</b> 英國 / 退休機師\n┣ 💤 <b>操作策略：</b> 100% 信任演算法,完全放手託管\n┗ 🏧 <b>每日均化收益：</b> 穩定溢出 $3,000+ 美金</blockquote>\n\n<b>點擊下方按鈕,觀看 Daniel 如何徹底實現財富自由👇🏻</b>",
+        "btnText": "🎬 觀看 Daniel 被動收入見證",
+        "anchor": "success-stories"
+    },
+    {
+        "tag": "最後確認",
+        "title": "Msg 20: ⚖️【最後確認】警告：你的 200% 保底協議即將被強制轉讓",
+        "content": "⚠️ NσK® 提供的保障,不是讓你拿來猶豫的籌碼.\n\n<blockquote><b>📜《機構保底協議失效與轉讓預警》</b></blockquote>\n\n資金池的額度極其珍貴,無數候補者正等著接收你的位子.如果你繼續保持這種無作為的狀態,這份保證你「穩賺不賠」的智能合約,將在倒數結束後,無情地轉讓給下一位更有決心的人.\n\n<blockquote><b>🤯 繼續猶豫,你失去的將是一份能保底翻轉階級的法律承諾</b></blockquote>\n<blockquote><b>✅ 這是你鎖定 200% 獲利防護網的最後窗口</b></blockquote>\n\n合約狀態即將變更：\n\n<blockquote><b>📁 協議存續狀態</b>\n┣ 🟢 <b>當前狀態：</b> 為你保留中 (有效)\n┣ 🔴 <b>即將變更：</b> 強制失效 (轉讓予候補名單)\n┗ ⏳ <b>系統通牒：</b> 建議於 24 小時內完成啟動程序</blockquote>\n\n<b>點擊下方按鈕,立即簽署並鎖定你的保底合約👇🏻</b>",
+        "btnText": "⚖️ 立即鎖定並啟動保底協議",
+        "anchor": "final-action"
+    },
+    {
+        "tag": "倒數 30 天",
+        "title": "Msg 21: ⏳【倒數 30 天】死亡倒數啟動：演算法不等待猶豫者",
+        "content": "⏱️ 頂級科技你看過了,暴利見證你查核過了,零風險保底我也端到你面前了.\n\n<blockquote><b>🚨《30 天強制清退程序啟動》</b></blockquote>\n\n如果你在擁有絕對優勢的情況下依然不敢行動,那麼很遺憾,這套系統可能真的不適合你.從此刻起,NσK® 啟動 **30 天倒數機制**.期限一到,你的帳號權限將被永久抹除,並列入系統黑名單.\n\n<blockquote><b>🤯 華爾街不會等你準備好,我們的演算法更不會</b></blockquote>\n<blockquote><b>✅ 停止你那無意義的恐懼,立刻掌握你最後 30 天的救贖機會</b></blockquote>\n\n你的時間開始流逝：\n\n<blockquote><b>📁 帳號存亡狀態</b>\n┣ ⏳ <b>倒數計時：</b> 29 天 23 小時 59 分\n┣ 🚫 <b>逾期後果：</b> 權限永久抹除,斷絕一切聯繫\n┗ ⚡ <b>唯一解法：</b> 立即執行入金與啟動指令</blockquote>\n\n<b>點擊下方按鈕,終止倒數,正式啟動你的獲利引擎👇🏻</b>",
+        "btnText": "⚡️ 立即啟動系統,停止倒數",
+        "anchor": "final-action"
+    },
+    {
+        "tag": "殘酷真相",
+        "title": "Msg 22: 【殘酷真相】通膨正在啃食你的現金,而我們的資產正在裂變",
+        "content": "💸 猶豫的這一個月裡,你以為你的錢沒變少？愚蠢至極.\n\n<blockquote><b>📉《認知差距：傳統現金的萎縮 vs 演算法的裂變》</b></blockquote>\n\n政府無止盡的印鈔,正在悄悄稀釋你的購買力.如果你上個月就啟動 NσK®,你的資產早已完成 200% 的翻倍.你以為的「安全保守」,其實是這世界上最危險的財務自殺.\n\n<blockquote><b>🤯 把錢留在銀行,就是在任由通膨屠宰你的未來</b></blockquote>\n<blockquote><b>✅ 別再用「保守」當作你不敢跨出舒適圈的遮羞布</b></blockquote>\n\n面對血淋淋的數學現實：\n\n<blockquote><b>📁 資產對比殘酷解析</b>\n┣ 📉 <b>你的法幣：</b> 購買力每月被通膨無聲蒸發\n┣ 📈 <b>會員資產：</b> 透過系統每月實現 200%+ 暴力複利\n┗ 💡 <b>終極結論：</b> 立刻將法幣轉換為 USDT 並啟動系統,是唯一的自救方案</blockquote>\n\n<b>點擊下方按鈕,停止資產縮水,讓演算法為你跑贏通膨👇🏻</b>",
+        "btnText": "🧮 計算你因猶豫而錯失的獲利",
+        "anchor": "tier-calculator"
+    },
+    {
+        "tag": "見證群像",
+        "title": "Msg 23: 🎬【見證群像】高齡 80 歲的 Gary 與護理師 Emilia,他們憑什麼贏你？",
+        "content": "👴 賺錢不需要高學歷,不需要懂程式碼,只需要「做對選擇」.\n\n<blockquote><b>🏆《跨越門檻：平凡人的非凡獲利》</b></blockquote>\n\n連 80 歲、連滑手機都有困難的 Gary 爺爺,都能準時登入系統提領利潤；工作極度高壓的護理師 Emilia,也能在短暫的休息時間內完成財富管理.如果你還在找藉口說「這太複雜我學不會」,那只是在掩飾你的懦弱.\n\n<blockquote><b>🤯 系統的設計初衷,就是為了讓任何人都能毫不費力地抽乾市場</b></blockquote>\n<blockquote><b>✅ 他們做得到,因為他們敢於信任頂尖科技,那你呢？</b></blockquote>\n\n沒有任何藉口可以阻擋你：\n\n<blockquote><b>📁 跨界會員檔案</b>\n┣ 👴 <b>Gary S. (80歲)：</b> 零數位能力,照樣每月提款\n┣ 👩‍⚕️ <b>Emilia R. (護理師)：</b> 無暇看盤,僅靠手機完成資產翻倍\n┗ 💡 <b>致富共通點：</b> 徹底臣服於系統的自動化運算</blockquote>\n\n<b>點擊下方按鈕,看看這些平凡人是如何透過 NσK® 輾壓菁英的👇🏻</b>",
+        "btnText": "🎬 觀看更多真實階級翻轉見證",
+        "anchor": "real-stories"
+    },
+    {
+        "tag": "最後通牒",
+        "title": "Msg 24: ⚠️【最後通牒】TIER 1 ($5.5k) 低門檻通道即將被系統封鎖",
+        "content": "🚪 緊急通知：由於全球算力成本暴增,系統即將關閉對小資金用戶的服務.\n\n<blockquote><b>🚨《TIER 1 (小額度) 通道強制關閉預警》</b></blockquote>\n\nNσK® 原本就不是為散戶打造的.這是你以 $5,500 最低門檻擠進特權階級的「最後機會」.通道關閉後,我們將只接待 $10,000 (Tier 2) 以上的 VIP 客戶.趁門還沒完全關上,強行擠進來.\n\n<blockquote><b>🤯 錯過這次窗口,你的入場成本將直接面臨翻倍的懲罰</b></blockquote>\n<blockquote><b>✅ 現在立刻鎖定 TIER 1 席次,你將享有永久的低門檻運算權益</b></blockquote>\n\n低成本跨越階級的最後呼喚：\n\n<blockquote><b>📁 系統通道即時狀態</b>\n┣ 🥉 <b>TIER 1 ($5.5k):</b> 🔴 進入關閉倒數程序\n┣ 🥈 <b>TIER 2 ($10k):</b> 🟢 正常開放 (未來最低門檻)\n┗ ⚠️ <b>最高指導原則：</b> 立即以現有最低門檻卡位,拒絕未來的高昂代價</blockquote>\n\n<b>點擊下方按鈕,在門關上前搶下最後的 TIER 1 授權👇🏻</b>",
+        "btnText": "⚡️ 立即鎖定 TIER 1 專屬席次",
+        "anchor": "tier-1"
+    },
+    {
+        "tag": "內部數據流出",
+        "title": "Msg 25: 📊【內部數據流出】眼睜睜看著 $12,000,000 派發,你卻一毛都沒拿到",
+        "content": "💸 本月系統結算已完成,恭喜所有合格會員,總派發利潤再次突破歷史新高.\n\n<blockquote><b>📉《殘酷的局外人：你錯過的 $12,000,000 USD 財富盛宴》</b></blockquote>\n\n在這 1,200 萬美金的龐大資金流中,原本系統已為你預算了一份豐厚的利潤.但因為你遲遲不敢下達啟動指令,這筆錢已經被演算法重新分配給了其他果斷的會員.看著別人瓜分本該屬於你的錢,這就是你要的保守嗎？\n\n<blockquote><b>🤯 這些白花花的 USDT,本該在幾分鐘前匯入你的冷錢包</b></blockquote>\n<blockquote><b>✅ 停止當個悲哀的旁觀者,確保下個月的財富派發名單上有你的名字</b></blockquote>\n\n直面你造成的機會成本損失：\n\n<blockquote><b>📁 本月度派發真實數據</b>\n┣ 💰 <b>系統總派發額：</b> 突破 $12,000,000+ USD\n┣ 👤 <b>你的結算獲利：</b> $0 (零)\n┗ 💡 <b>致命原因：</b> 拒絕執行啟動指令,喪失分配資格</blockquote>\n\n<b>點擊下方按鈕,終結這種愚蠢的損失,確保下月獲利入袋👇🏻</b>",
+        "btnText": "💰 立即啟動,參與下月度利潤派發",
+        "anchor": "final-action"
+    },
+    {
+        "tag": "金字塔頂端",
+        "title": "Msg 26: 🎬【金字塔頂端】巨鯨 Marco R. 的 $364,764 狂暴提領,這才是真實的金融世界",
+        "content": "🐳 當你還在為了區區 $5,000 的進場門檻徹夜難眠時,Marco 剛剛輕描淡寫地提領了 $364,764 美金.\n\n<blockquote><b>🏆《Tier 4 巨鯨階級 Marco R. 提領實錄：$364,764 USD》</b></blockquote>\n\n這就是階級與認知的鴻溝.貧窮不是因為你不夠努力,而是因為你缺乏像富人那樣「利用系統去賺錢」的膽識.來自義大利的 Marco 直接重倉頂級節點,啟動最高級別的演算火力,而你還在原地觀望.\n\n<blockquote><b>🤯 財富差距的拉開,往往只在於一次毫不猶豫的重倉</b></blockquote>\n<blockquote><b>✅ 想要成為巨鯨,你必須先學會像巨鯨一樣思考與決策</b></blockquote>\n\n俯瞰頂層階級的獲利視角：\n\n<blockquote><b>📁 巨鯨 Marco 的獲利數據庫</b>\n┣ 👤 <b>會員等級：</b> Tier 4 (頂級火力全開)\n┣ 🐋 <b>操作哲學：</b> 頂格投入,極致搾取系統效能\n┗ 🏧 <b>累計淨提領：</b> $364,764 美金 (仍在持續擴張)</blockquote>\n\n<b>點擊下方按鈕,觀看 Tier 4 巨鯨如何將市場當成私人提款機👇🏻</b>",
+        "btnText": "🎬 觀看巨鯨 Marco 的狂暴獲利見證",
+        "anchor": "tier-4"
+    },
+    {
+        "tag": "倒數 15 天",
+        "title": "Msg 27: ⏳【倒數 15 天】警告：NσK® 即將撤回你的「專屬真人開通團隊」",
+        "content": "👨‍💼 頂級團隊的服務,從不留給沒有價值的人.\n\n<blockquote><b>⚠️《專屬後勤服務撤回通知：倒數 15 天》</b></blockquote>\n\n由於你長期的不作為,我們決定在 15 天後,撤回原本為你保留的 24/7 專屬前華爾街客服與工程團隊.你即將失去一個全天候為你解決問題、協助你設定獲利參數的私人管家.\n\n<blockquote><b>🤯 15 天後,你將只能面對冰冷的 AI 機器人與繁瑣的排隊表單</b></blockquote>\n<blockquote><b>✅ 這是你保留 VIP 級別真人服務的最後機會</b></blockquote>\n\n資源回收程序已啟動：\n\n<blockquote><b>📁 VIP 權益變更通報</b>\n┣ 🟢 <b>當前待遇：</b> 24/7 專屬真人高階團隊一對一服務\n┣ 🔴 <b>15天後變更：</b> 降級為基礎 AI 機器人客服\n┗ ⚠️ <b>致命後果：</b> 失去專屬指導,問題解決效率將大幅跌落</blockquote>\n\n<b>點擊下方按鈕,立刻連線你的專屬團隊,阻止權限降級👇🏻</b>",
+        "btnText": "📞 立即聯繫並保留專屬開通團隊",
+        "anchor": "final-action"
+    },
+    {
+        "tag": "倒數 10 天",
+        "title": "Msg 28: ⏳【倒數 10 天】華爾街的掠奪遊戲,你還打算當多久的免費燃料？",
+        "content": "🏦 銀行付你不到 2% 的微薄利息,然後拿你的本金去市場裡賺取 300% 的暴利.這就是你所信仰的傳統金融.\n\n<blockquote><b>🚨《覺醒倒數：傳統金融的剝削真相》</b></blockquote>\n\n為什麼傳統體系不斷洗腦大眾「投資有風險,請長期持有」？因為那些穿著高檔西裝的基金經理人,需要你們的流動性來當作他們套利的「免費燃料」.當你把錢放在儲蓄或傳統基金時,你正在資助那些剝削你的人.NσK® 的存在,就是為了用演算法徹底切斷這種中世紀般的金融掠奪.\n\n<blockquote><b>🤯 傳統機構靠榨取你的管理費買私人飛機,而 NσK® 靠無情的數學剝削市場並還利於你</b></blockquote>\n<blockquote><b>✅ 倒數 10 天,這是你從這場不對等遊戲中「合法登出」的最後機會</b></blockquote>\n\n看清你目前的處境：\n\n<blockquote><b>📁 財富掠奪與降維打擊的對比</b>\n┣ 🏦 <b>銀行定存：</b> 你的購買力每年被通膨與手續費無聲吃掉\n┣ 📉 <b>零售基金：</b> 你承擔 100% 的市場風險,機構卻穩抽無風險管理費\n┗ ⚔️ <b>NσK® 系統：</b> 繞過所有吸血中介,系統利潤 100% 歸屬你的冷錢包</blockquote>\n\n<b>點擊下方按鈕,拒絕成為傳統金融的燃料,正式跨入特權階級👇🏻</b>",
+        "btnText": "✂️ 切斷銀行剝削,立即啟動系統",
+        "anchor": "final-action"
+    },
+    {
+        "tag": "倒數 7 天",
+        "title": "Msg 29: ⏳【倒數 7 天】嚴重警告：你即將永久錯失 FS 資金倍增額度",
+        "content": "📉 系統已經對你的拖延失去耐心,準備收回派發給你的武器.\n\n<blockquote><b>🚨《FS 輔助池額度強制回收通知：倒數 7 天》</b></blockquote>\n\n這不是演習.**如果你不立刻啟動系統**,原本預留給你、能將你的本金放大數十倍的 Fractional Shares (FS) 機構輔助額度,將被永久撤銷並轉派給其他活躍會員.你將錯過這筆免費的巨大槓桿資金.\n\n<blockquote><b>🤯 這是你最後的機會,使用 NσK® 的龐大資金池來為自己印鈔</b></blockquote>\n<blockquote><b>✅ 一旦額度遭到轉讓,你未來將只能依靠自己那微小的本金,在市場裡龜速爬行</b></blockquote>\n\n最後的通牒：\n\n<blockquote><b>📁 FS 輔助額度存亡狀態</b>\n┣ 💰 <b>你的預留額度：</b> $100,000+ (系統專屬輔助火力)\n┣ ⏳ <b>強制回收倒數：</b> 剩餘 7 天\n┗ ⚠️ <b>懲罰後果：</b> 喪失倍增引擎,獲利效率將暴跌 90% 以上</blockquote>\n\n<b>點擊下方按鈕,火速搶救即將被收回的資金倍增額度👇🏻</b>",
+        "btnText": "🔥 立即鎖定並激活 FS 倍增額度",
+        "anchor": "tier-hero-video"
+    },
+    {
+        "tag": "倒數 5 天",
+        "title": "Msg 30: ⏳【倒數 5 天】最終審判：你的 NσK® 會員資格即將迎來毀滅",
+        "content": "🚫 這是系統發出的最後一次、也是最嚴厲的警告.\n\n<blockquote><b>⛔《帳號永久註銷最終通知：倒數 5 天》</b></blockquote>\n\n5 天後,演算法將毫不留情地抹除你的 NσK® 帳戶.你的所有數據、預留額度、保底合約將被全數銷毀,且不可逆轉.你將徹底失去跨越階級的機會,重新回到你那平凡且毫無波瀾的生活中.\n\n<blockquote><b>🤯 財富的列車即將關門,而你依然站在月台上猶豫不決</b></blockquote>\n<blockquote><b>✅ 如果你還有任何一絲想改變命運的渴望,立刻,馬上聯絡我們</b></blockquote>\n\n結局即將底定：\n\n<blockquote><b>📁 毀滅程序倒數</b>\n┣ 🗑️ <b>數據抹除指令：</b> 5 天後由系統自動執行,無法中止\n┣ 🔓 <b>特權名額釋放：</b> 你的位子將立即由候補名單遞補\n┗ 📞 <b>最後的一線生機：</b> 立即點擊按鈕聯繫專員,強行攔截註銷程序</blockquote>\n\n<b>點擊下方按鈕,這是你挽救命運的最後一次點擊👇🏻</b>",
+        "btnText": "⚡️ 立即攔截帳號註銷程序,我要啟動",
+        "anchor": "final-action"
+    },
+    {
+        "tag": "經濟局勢 + 真實提款",
+        "title": "組合一：【經濟局勢 + 真實提款】",
+        "content": "**策略核心：放大對大環境的無力感,並展示系統完全無視經濟週期的降維打擊.**\n\nMsg XX: 📉【無情對比】當通膨吃掉你的晚餐,Markus W. 剛提領了 $50,585 美金\n🛒 去看看超市裡的物價,再看看你那幾年沒動過的薪水,這就是傳統經濟體制給你的回報.\n\n<blockquote><b>🚨《通膨屠宰場 vs 演算法印鈔機》</b></blockquote>\n\n政府不斷印鈔,物價瘋狂飆漲,中產階級正在被系統性地消滅.當你還在為了節省幾百塊錢的開銷而焦慮時,我們的會員 Markus W. 已經徹底脫離了這場老鼠圈遊戲.他在經濟最蕭條的這個月,透過系統逆勢提領了超過 5 萬美金.\n\n<blockquote><b>🤯 經濟崩盤對散戶是災難,對 NσK® 演算法卻是最完美的套利溫床</b></blockquote>\n<blockquote><b>✅ 系統不在乎經濟好壞,它只負責在市場波動中無情抽血</b></blockquote>\n\n看看無視經濟週期的真實結果：\n\n<blockquote><b>📁 Markus W. 的降維打擊數據庫</b>\n┣ 📉 <b>外部環境：</b> 通膨飆升,企業裁員潮\n┣ 🤖 <b>系統狀態：</b> AXIS 演算法捕捉劇烈波動,火力全開\n┗ 🏧 <b>單月淨提領：</b> $50,585 美金 (無懼通膨)</blockquote>\n\n<b>點擊下方按鈕,脫離通膨的屠宰場,讓系統為你印鈔👇🏻</b>",
+        "btnText": "✂️ 切斷通膨剝削,立即啟動系統",
+        "anchor": "axis-tech"
+    },
+    {
+        "tag": "生活化共感 + FOMO",
+        "title": "組合二：【生活化共感 + FOMO】",
+        "content": "**策略核心：刺痛他們在家庭與時間上的犧牲,並警告改變命運的窗口即將關閉.**\n\n### Msg XX: ⏳【時間殘酷】你已經錯過了多少陪伴家人的時間？還要錯過這次機會？\n\n🏢 每天在尖峰時刻塞車,在辦公室裡看老闆臉色,加班到深夜回家時,孩子已經睡了.這真的是你要的人生嗎？\n\n<blockquote><b>🚨《時間剝奪警告：特權列車即將關門》</b></blockquote>\n\n你用生命中最寶貴的時間,換取那僅能維持生存的死薪水.你以為你在為家庭奮鬥,但實際上你正在失去他們.NσK® 提供的不是一套軟體,而是「買回時間」的特權.而現在,這個能讓你重新掌握人生的通道,即將永遠對你關閉.\n\n<blockquote><b>🤯 當你還在猶豫,其他會員已經帶著家人在度假,讓系統替他們打工</b></blockquote>\n<blockquote><b>✅ 錯過這次啟動,你將永遠困在那個名為「辦公室」的監獄裡</b></blockquote>\n\n你正在失去的最寶貴資產：\n\n<blockquote><b>📁 你的生活耗損清單</b>\n┣ ⏳ <b>時間成本：</b> 每週 40+ 小時的無意義勞動\n┣ 👨‍👩‍👧 <b>家庭代價：</b> 錯失陪伴家人的黃金歲月\n┗ ⚠️ <b>系統狀態：</b> 你的專屬獲利通道即將註銷 (倒數中)</blockquote>\n\n<b>點擊下方按鈕,買回你的時間與自由,拒絕再當勞動機器👇🏻</b>",
+        "btnText": "⏳ 立即啟動,奪回人生的掌控權",
+        "anchor": "activation-steps"
+    },
+    {
+        "tag": "FOMO + 真實提款",
+        "title": "組合三：【FOMO + 真實提款】",
+        "content": "**策略核心：極致的心理剝奪感.讓他們知道「因為猶豫,本該屬於他的錢,被別人拿走了」.**\n\n### Msg XX: 💸【擦肩而過】候補名單的 Sophia 拿走了你的額度,並在一週內狂撈 $62,100\n\n🐳 這個世界從來不獎勵猶豫的人,它只獎勵果斷的掠奪者.\n\n<blockquote><b>🏆《殘酷的財富轉移：Sophia 一週提領 $62,100 USD》</b></blockquote>\n\n因為你遲遲未啟動系統,演算法自動將原本預留給你的運算頻寬與 FS 輔助資金,轉派給了候補名單上的 Sophia.結果呢？短短一週內,她利用「原本屬於你」的資源,從市場裡抽走了 $62,100 美金.\n\n<blockquote><b>🤯 看看這個數字,這原本應該是匯入你冷錢包裡的資產</b></blockquote>\n<blockquote><b>✅ 你的懦弱,成就了別人的財富自由.你還要繼續讓出機會嗎？</b></blockquote>\n\n看看你親手送給別人的財富：\n\n<blockquote><b>📁 資源轉移數據庫</b>\n┣ 👤 <b>受益者：</b> 候補名單會員 Sophia (取代了你的位置)\n┣ 💰 <b>你的損失：</b> 錯失頂級算力與倍增額度\n┗ 🏧 <b>她的淨提領：</b> $62,100 美金 (僅用一週)</blockquote>\n\n<b>點擊下方按鈕,搶回你剩下的系統權限,別再把錢送給別人👇🏻</b>",
+        "btnText": "⚡️ 拒絕讓位,立即搶回並啟動系統",
+        "anchor": "activation-steps"
+    },
+    {
+        "tag": "生活化 + 經濟局勢 + 唯一解法 (Activate)",
+        "title": "組合四：【生活化 + 經濟局勢 + 唯一解法 (Activate)】",
+        "content": "**策略核心：描繪中產階級的無解死局（房貸、稅金、低薪）,並強勢宣告 NσK® 是打破矩陣的唯一逃生艙.**\n\n### Msg XX: ⛓️【階級陷阱】繳完房貸與稅金,你還剩下什麼？這是打破矩陣的唯一解法\n\n🏦 傳統社會的劇本早就寫好了：讓你背上 30 年房貸,用稅金榨乾你的剩餘價值,直到你老去.\n\n<blockquote><b>🚨《中產階級的死局 vs NσK® 終極逃生艙》</b></blockquote>\n\n你非常努力工作,但你依然焦慮.為什麼？因為傳統經濟體制是一張設計完美的網,無論你怎麼掙扎,你的勞動果實最終都會流向頂層的資本家與銀行.只要你還依賴「薪水」來生活,你就永遠無法翻身.\n\n<blockquote><b>🤯 唯一的解法,就是擁抱不對稱的金融武器,用演算法去掠奪市場,而不是被市場掠奪</b></blockquote>\n<blockquote><b>✅ NσK® 系統是你跨越這道階級高牆的「唯一」合法途徑</b></blockquote>\n\n認清現實,執行唯一的正確指令：\n\n<blockquote><b>📁 矩陣逃脫指南</b>\n┣ ⛓️ <b>死局：</b> 薪水增幅永遠追不上房價與通膨的雙重絞殺\n┣ ⚔️ <b>武器：</b> 啟動 NσK® 演算法,執行毫秒級跨國套利\n┗ 🔑 <b>解法：</b> 點擊下方按鈕,立刻啟動你的專屬印鈔權限</blockquote>\n\n<b>點擊下方按鈕,登出傳統金融的奴役矩陣,啟動唯一解法👇🏻</b>",
+        "btnText": "✂️ 打破階級矩陣,立即啟動唯一解法",
+        "anchor": "activation-steps"
+    },
+    {
+        "tag": "心理疲勞 + 經濟局勢 + 真實提款",
+        "title": "組合五：【心理疲勞 + 經濟局勢 + 真實提款】",
+        "content": "**策略核心：針對那些曾經在幣圈或股市虧過錢的讀者,給予一擊斃命的降維打擊.**\n\n### Msg XX: 🧠【終結盲猜】別再當市場的韭菜了,Chen 靠「放棄思考」單月提領 $105,000\n\n📉 你每天盯著那些財經新聞,試圖預測比特幣或美股的漲跌,結果呢？你的帳戶依然在虧損.\n\n<blockquote><b>🏆《降維打擊的智慧：Emily R. 單月淨提領 $125,400 USD》</b></blockquote>\n\n在機構級的 AI 與高頻交易面前,散戶的主觀分析跟瞎猜沒有兩樣.經濟局勢越混亂,你的勝率就越低.我們的會員 Emily R. 以前也是個天天盯盤的散戶,直到她受夠了虧損的折磨,選擇把資金交給 NσK® 系統全託管.\n\n<blockquote><b>🤯 她放棄了自己那可悲的預測,換來的是單月 $125,400 美金的無情入帳</b></blockquote>\n<blockquote><b>✅ 你不需要比市場聰明,你只需要擁有比市場更快的演算機器</b></blockquote>\n\n停止盲目交易,看看機器的精準輸出：\n\n<blockquote><b>📁 Emily R. 的覺醒數據庫</b>\n┣ 📉 <b>過去狀態：</b> 盲目追高殺低,承受巨大精神壓力與虧損\n┣ 🤖 <b>現在狀態：</b> 100% 信任 AXIS 演算法,零情緒干預\n┗ 🏧 <b>單月淨提領：</b> $125,400 美金 (穩定且無聊的獲利)</blockquote>\n\n<b>點擊下方按鈕,終結你的韭菜宿命,把交易交給冷血的機器👇🏻</b>",
+        "btnText": "🤖 停止手動虧損,啟動全自動獲利",
+        "anchor": "axis-tech"
+    },
+    {
+        "tag": "市場真相",
+        "title": "Msg XX: 🩸【市場真相】你以為你在交易,其實你只是莊家的「流動性燃料」",
+        "content": "🦈 華爾街最喜歡你這種每天看新聞、畫 K 線圖的散戶,因為你們是他們最肥美的獵物.\n\n<blockquote><b>🚨《底層邏輯：市場早被操縱 (The Market is Rigged)》</b></blockquote>\n\n別傻了,你以為你在做「技術分析」？在那些掌管百億資金的造市商 (Market Makers) 和演算法眼中,你的止損點 (Stop Loss) 只是他們用來完成大額訂單的「流動性燃料 (Liquidity)」.這是一場莊家與莊家之間的博弈,而散戶只是被擺在桌上的籌碼.\n\n<blockquote><b>🤯 傳統散戶是在憑運氣賭博,而 NσK® 是直接跟隨莊家的訂單流 (Order Flow) 進行毫秒級掠奪</b></blockquote>\n<blockquote><b>✅ 你唯一不被收割的方法,就是擁有與莊家同等級的演算法武器</b></blockquote>\n\n看看脫離散戶思維後的真實獲利：\n\n<blockquote><b>📁 前當沖客 Jason K. 的躍遷數據庫</b>\n┣ 📉 <b>過去狀態：</b> 每天畫線分析,被莊家來回「掃停損」,精神耗弱\n┣ 🤖 <b>覺醒選擇：</b> 放棄手動瞎猜,啟動 NσK® 狙擊莊家訂單流\n┗ 🏧 <b>單月淨提領：</b> $48,300 美金 (輕鬆收割市場波動)</blockquote>\n\n<b>點擊下方按鈕,停止當莊家的燃料,與我們一起收割市場👇🏻</b>",
+        "btnText": "✂️ 捨棄散戶思維,啟動莊家級演算法",
+        "anchor": "abm-tech"
+    },
+    {
+        "tag": "降維打擊",
+        "title": "Msg XX: 🎲【降維打擊】畫線分析只是金融界的算命,真正的贏家只看「期望值」",
+        "content": "🧠 人類大腦的直覺,在量化金融的世界裡一文不值.\n\n<blockquote><b>🎯《零和博弈：你在賭博,我們在開賭場》</b></blockquote>\n\n你買進一個資產,祈禱它會漲,這叫「賭博」.NσK® 的 AXIS 演算法不祈禱,它只執行數學上的「正期望值 (Positive Expectancy)」.我們不預測明天大盤怎麼走,我們只在市場微觀結構失衡的瞬間,執行 100% 穩賺不賠的統計學套利 (Statistical Arbitrage).\n\n<blockquote><b>🤯 當你還在猶豫這筆交易會不會虧損時,系統已經完成了 500 次的無風險套利</b></blockquote>\n<blockquote><b>✅ 放棄你那可悲的預測,把交易交給冷血、精準的數學模型</b></blockquote>\n\n看看數學帶來的純粹暴力：\n\n<blockquote><b>📁 工程師 Albert S. 的獲利數據庫</b>\n┣ 🧠 <b>過去狀態：</b> 沉迷各種技術指標,勝率永遠跨不過 50% 的死亡線\n┣ ⚙️ <b>覺醒選擇：</b> 臣服於 AXIS 的統計學套利,徹底剔除人類情緒\n┗ 🏧 <b>單月淨提領：</b> $159,330 美金 (極致無聊的穩定獲利)</blockquote>\n\n<b>點擊下方按鈕,從賭客晉升為賭場莊家,啟動絕對優勢👇🏻</b>",
+        "btnText": "🎲 啟動數學套利,終結盲目賭博",
+        "anchor": "axis-tech"
+    },
+    {
+        "tag": "時間陷阱",
+        "title": "Msg XX: ⏳【時間陷阱】「長期持有」是窮人的麻藥,富人要的是「資金流轉率」",
+        "content": "🕰️ 基金經理人叫你「長期投資 (HODL)」,是因為他們需要鎖死你的資金,好讓他們慢慢抽管理費.\n\n<blockquote><b>🚨《打破謊言：你沒有無限的時間去等優質資產翻倍》</b></blockquote>\n\n除非你有無限的壽命,或者你本來就有幾千萬美金的本金,否則憑著買入並持有的「信仰」,你這輩子都無法跨越階級.如果你想在「這個月」、在「今年」就累積到足以辭職的巨大財富,你唯一能依靠的只有「資金流轉率 (Capital Velocity)」.\n\n<blockquote><b>🤯 NσK® 的高頻交易,將別人十年的投資回報,暴力壓縮在 30 天內完成</b></blockquote>\n<blockquote><b>✅ 你要的是現在就改變生活,而不是等 65 歲老了才領那一丁點退休金</b></blockquote>\n\n時間壓縮的真實威力：\n\n<blockquote><b>📁 創業者 Peter J. 的財富壓縮數據庫</b>\n┣ 📉 <b>過去狀態：</b> 定期定額買指數基金,年化報酬率 8%,被通膨吃掉一半\n┣ 🚀 <b>覺醒選擇：</b> 啟動 NσK® 高頻引擎,追求極致的資金流轉速度\n┗ 🏧 <b>單月淨提領：</b> $205,110 美金 (一個月賺走別人一輩子的錢)</blockquote>\n\n<b>點擊下方按鈕,拒絕漫長的等待,立刻啟動財富壓縮引擎👇🏻</b>",
+        "btnText": "⏳ 啟動資金流轉引擎,我要現在就獲利",
+        "anchor": "tier-hero-video"
+    },
+    {
+        "tag": "武器差距",
+        "title": "Msg XX: ⚔️【武器差距】帶著冷兵器上現代戰場,你的下場只有一個",
+        "content": "🤖 你真的以為,憑你一台筆記型電腦和微弱的網路,能贏過華爾街那群量子電腦嗎？\n\n<blockquote><b>🏎️《演算法戰爭：毫秒之間的屠殺 (Latency Arbitrage)》</b></blockquote>\n\n現在的金融市場,早就不是人類與人類的對決,而是機器與機器的屠殺.高頻交易機構 (HFT) 花費數十億美金鋪設海底光纜,只為了比你快 0.001 秒看到報價.在這種「延遲套利」的絕對優勢下,你手手動按下的每一次買賣,都注定是被收割的結局.\n\n<blockquote><b>🤯 面對華爾街的武裝直升機,你還在用手動交易這把生鏽的刀？</b></blockquote>\n<blockquote><b>✅ NσK® 是我們遞給你的一把高科技狙擊槍,這是你唯一能反殺的機會</b></blockquote>\n\n裝備頂級武器後的戰果：\n\n<blockquote><b>📁 散戶 Ryan D. 的反殺數據庫</b>\n┣ 📉 <b>過去狀態：</b> 總是被套在最高點,砍在最低點,淪為市場提款機\n┣ 🛡️ <b>覺醒選擇：</b> 接入 NσK® 戰情室算力,以 ABM 科技抹平速度劣勢\n┗ 🏧 <b>單月淨提領：</b> $199,230 美金 (從被收割者,變成收割者)</blockquote>\n\n<b>點擊下方按鈕,丟掉你手上的冷兵器,裝備機構級演算法👇🏻</b>",
+        "btnText": "⚔️ 裝備頂級算力,啟動反殺權限",
+        "anchor": "abm-tech"
+    },
+    {
+        "tag": "生命倒數",
+        "title": "Msg XX: ⏳【生命倒數】你這輩子,還有幾個「四年」可以浪費？",
+        "content": "🤡 那些在螢幕前叫你「死拿 (HODL)」的財經專家,根本不在乎你下個月的房貸從哪來.\n\n<blockquote><b>🚨《四年週期的謊言：用生命去賭一個沒有保證的未來》</b></blockquote>\n\n讓我們還原幣圈和股市最殘酷的真相：專家在三年前信誓旦旦叫你買入某個「潛力資產」,告訴你比特幣是四年一個週期.結果呢？買入後直接迎來「膝蓋斬」暴跌 70%.\n\n當你家裡急需用錢、當你面臨生活危機時,你只能被迫在谷底「割肉清倉」換取救命錢.四年後,這個資產好不容易爬回原價,甚至多漲了那可悲的 5%.這時候專家跳出來大喊：「看吧！我早就告訴過你會漲 (I told you so!)」\n\n<blockquote><b>🤯 專家用你的血汗錢試錯,贏了他是神,輸了是你信仰不足</b></blockquote>\n<blockquote><b>✅ NσK® 不跟你談虛無縹緲的「四年後」,我們只談「這個月」你能提領多少</b></blockquote>\n\n看清什麼才是真正的負責：\n\n<blockquote><b>📁 降維打擊 vs 專家謊言</b>\n┣ 🤡 <b>財經專家：</b> 叫你用生命去硬扛虧損,對你的真實生活零責任\n┣ 🛡️ <b>NσK® 系統：</b> 簽署 200% 保底協議,跌了算我們的,獲利秒級入帳\n┗ 💡 <b>現實考量：</b> 你的生活開銷不能等四年,你需要的是「現在」的現金流</blockquote>\n\n<b>點擊下方按鈕,拒絕用生命去賭博,啟動當下立見的獲利引擎👇🏻</b>",
+        "btnText": "⏳ 終結漫長等待,我要現在就獲利",
+        "anchor": "tier-calculator"
+    },
+    {
+        "tag": "流動性陷阱",
+        "title": "Msg XX: 🩸【流動性陷阱】「鑽石手」是莊家發明的詞,為了讓你安心當接盤俠",
+        "content": "💎 他們洗腦你只要不賣就不算虧,卻沒告訴你,他們正在用你的錢買別墅.\n\n<blockquote><b>🚨《絕對負責的底氣：我們不玩「時間換取空間」的騙局》</b></blockquote>\n\n這世界上最不負責任的投資建議,就是叫你「拉長線」.當你的資產被腰斬,資金被死死套牢,這就叫「喪失流動性」.在真實世界裡,生病需要錢、孩子上學需要錢,你根本沒有資格去拚那種「可能在未來某一天會漲回來」的機率.\n\nNσK® 為什麼強大？因為我們不依賴單一資產的漲跌.系統透過高頻套利,每天都在幫你把市場的錢洗進你的冷錢包.這才是真正的「絕對負責」.\n\n<blockquote><b>🤯 傳統投資要你把命運交給未知的週期,NσK® 讓演算法把利潤鎖死在今天</b></blockquote>\n<blockquote><b>✅ 真正的財富自由,是當你需要錢的「任何瞬間」,都能毫不猶豫地提款</b></blockquote>\n\n看看擁有絕對流動性的生活：\n\n<blockquote><b>📁 會員 Hubert M. 的流動性覺醒數據庫</b>\n┣ 📉 <b>過去慘況：</b> 聽信專家「死拿」某幣,遇急用錢被迫虧損 60% 割肉\n┣ 🚀 <b>覺醒選擇：</b> 啟動 NσK® 每日高頻結算,拒絕資金被套牢\n┗ 🏧 <b>極速提領實證：</b> 系統開通僅兩天即提領近 $8,000 美金 (要用錢,隨時按提款)</blockquote>\n\n<b>點擊下方按鈕,釋放你的資金流動性,拿回生活的掌控權👇🏻</b>",
+        "btnText": "✂️ 拒絕套牢割肉,啟動隨時提款特權",
+        "anchor": "usdt-advantage"
+    },
+    {
+        "tag": "真實契約",
+        "title": "Msg XX: ⚖️【真實契約】合約上的白紙黑字,碾壓專家嘴裡的一萬句預測",
+        "content": "🗣️ 專家的預測不用負法律責任,但 NσK® 的獲利保底寫在智能合約裡.\n\n<blockquote><b>🏆《不對等的金融碾壓：結果導向的絕對暴力》</b></blockquote>\n\n不要再聽那些西裝筆挺的分析師畫大餅了.當市場大跌,他們只會雙手一攤說「這是總體經濟的不可抗力」.在 NσK® 的世界裡,沒有藉口,只有結果.\n\n如果系統這個月沒有幫你賺到合約上承諾的數字,我們龐大的資金池會自動補足差額.我們敢扛下 100% 的市場風險,是因為我們擁有凌駕於市場之上的演算科技.這不是傲慢,這是實力碾壓.\n\n<blockquote><b>🤯 把你的錢交給一張嘴,還是交給一份保證你獲利的數學模型契約？</b></blockquote>\n<blockquote><b>✅ 你的家庭需要的是穩定匯入的 USDT,而不是專家四年後的一句「I told you so」</b></blockquote>\n\n選擇真正有保障的未來：\n\n<blockquote><b>📁 契約與謊言的對決</b>\n┣ 🗣️ <b>分析師預測：</b> 零法律效力,虧損你自負,獲利他邀功\n┣ ⚖️ <b>NσK® 保底協議：</b> 智能合約鎖定,虧損系統扛,月底強制達標\n┗ 🏧 <b>會員單月實證：</b> $135,000 美金 (無需等待週期,準時入帳)</blockquote>\n\n<b>點擊下方按鈕,簽署你的獲利保底協議,讓演算法對你絕對負責👇🏻</b>",
+        "btnText": "⚖️ 捨棄專家謊言,啟動保底協議",
+        "anchor": "tier-calculator"
+    },
+    {
+        "tag": "階級粉碎",
+        "title": "Msg XX: 🪜【階級粉碎】你是想勉強「生存」,還是想擁有絕對的「支配權」？",
+        "content": "⛓️ 傳統社會的階級是一座無法攀越的高牆,但演算法只認資本,不認出身.\n\n<blockquote><b>🚨《NσK® 階級躍遷指南：從無產到金字塔頂端》</b></blockquote>\n\n社會的設計,就是讓無產階級終身勞動,讓中產階級背負房貸不敢辭職.如果你現在是無產階級,TIER 1 ($5,500) 就是你逃離底層的唯一繩索.它每個月穩定的獲利,足以覆蓋你的帳單、房租,讓你瞬間晉升為不愁吃穿的小康一族,從此不必再看老闆臉色.\n\n但如果你已經是有點積蓄的中產階級,千萬別被那虛假的「安穩」騙了.你距離真正的財富自由,只差一個 TIER 3 或 TIER 4 的授權.當系統每個月為你結算數萬甚至數十萬美金時,你買的不再是奢侈品,而是「絕對的支配權」.\n\n<blockquote><b>🤯 TIER 1 幫你贖回人身自由；TIER 4 讓你從此支配別人的人生</b></blockquote>\n<blockquote><b>✅ 演算法面前人人平等,你的階級,由你投入的節點算力決定</b></blockquote>\n\n看看不同階級的真實躍遷：\n\n<blockquote><b>📁 演算階級的真實寫照</b>\n┣ 🥉 <b>倉管員 Mark T. (TIER 1)：</b> 單月提領 $15,250,當天遞交辭呈,晉升小康自由人\n┣ 💎 <b>外商主管 David C. (TIER 4)：</b> 單月狂掃 $280,000,徹底跨入頂層 1% 俱樂部\n┗ 💡 <b>殘酷現實：</b> 留在體制內,你們兩個的結局都是幹到 65 歲退休</blockquote>\n\n<b>點擊下方按鈕,選擇你的火力配置,強行跨越社會階級👇🏻</b>",
+        "btnText": "🪜 選擇 TIER 等級,啟動階級躍遷",
+        "anchor": "tier-1"
+    },
+    {
+        "tag": "中產陷阱",
+        "title": "Msg XX: 👔【中產陷阱】你以為的高薪,在演算法眼裡只是可悲的「零錢」",
+        "content": "💼 開著好車、住著貸款買來的房子、領著不錯的薪水……你以為你很富有？這世界上最危險的幻覺,就是「中產階級的虛假繁榮」.\n\n<blockquote><b>🚨《戳破中產幻象：你只是比較高級的勞動機器》</b></blockquote>\n\n只要你停止工作,你的現金流就會斷裂,房貸和車貸會在三個月內把你逼破產.真正的富裕（Wealthy）,是你的被動收入遠大於你的開銷,是你可以隨時對任何不喜歡的人事物說「不」.\n\n對於那些還在為溫飽掙扎的人,我們的 TIER 1 是一個極佳的避風港,能給予他們生活的基本尊嚴.但對於已經具備基礎資金的你,停留在舒適圈就是一種罪惡.將你的資金注入 更高階的 TIER 演算池,系統將以百倍的槓桿火力,為你創造連你自己都不敢想像的現金流.\n\n<blockquote><b>🤯 把你一年的年薪,壓縮成系統一個月的自動提領額度</b></blockquote>\n<blockquote><b>✅ 這才是真正的富裕：用機器的高頻運算,買斷你未來 40 年的時間</b></blockquote>\n\n見證中產階級的徹底覺醒：\n\n<blockquote><b>📁 會員 Emily R. 的覺醒數據庫</b>\n┣ 📉 <b>過去狀態：</b> 年薪 12 萬美金的高級工程師,每天焦慮害怕被裁員\n┣ 🚀 <b>覺醒選擇：</b> 拒絕虛假繁榮,重倉啟動 TIER 3 高階演算\n┗ 🏧 <b>單月淨提領：</b> $125,400 美金 (一個月賺贏過去兩年,徹底財富自由)</blockquote>\n\n<b>點擊下方按鈕,撕碎中產階級的枷鎖,邁入真正的絕對富裕👇🏻</b>",
+        "btnText": "✂️ 啟動高階 TIER 引擎,買斷你的未來",
+        "anchor": "tier-3"
+    },
+    {
+        "tag": "底線保衛",
+        "title": "Msg XX: ⏳【底線保衛】TIER 1 席次即將滿載,你的「小康門票」正在流失",
+        "content": "🚪 我們不介意你現在一無所有,但我們無法容忍你連改變的勇氣都沒有.\n\n<blockquote><b>🚨《底層逃生艙倒數：TIER 1 ($5.5k) 通道即將超載》</b></blockquote>\n\n無數的底層打工族和無產階級,已經意識到傳統金融體系根本沒有他們的容身之處.他們正瘋狂湧入 NσK® 的 TIER 1 節點,因為他們知道,這 $5,500 是他們這輩子唯一能擺脫死薪水、跨入小康階級的合法外掛.\n\n如果你連這個最低門檻都在猶豫,當 TIER 1 通道因為算力飽和而強制關閉時,你將永遠被鎖死在社會的最底層.到時候,你只能眼睜睜看著原本和你一樣平凡的人,每天喝著咖啡,提領著你幾個月的薪水.\n\n<blockquote><b>🤯 有錢人砸重金啟動 TIER 4 享受暴利,而你連一張 TIER 1 的小康門票都握不住？</b></blockquote>\n<blockquote><b>✅ 別讓猶豫,成為你這輩子無法翻身的墓誌銘</b></blockquote>\n\n特權通道即將關閉：\n\n<blockquote><b>📁 TIER 1 算力狀態報告</b>\n┣ 🟢 <b>造富能力：</b> 足以將任何無產階級強行拉升至小康水平\n┣ 🔴 <b>通道狀態：</b> 湧入人數暴增,即將觸發算力保護機制 (關閉註冊)\n┗ ⚠️ <b>唯一解法：</b> 搶在通道封鎖前,鎖定你的底線獲利權限</blockquote>\n\n<b>點擊下方按鈕,搶佔最後的 TIER 1 席次,拒絕底層宿命👇🏻</b>",
+        "btnText": "⚡️ 鎖定 TIER 1 小康門票,立即啟動",
+        "anchor": "tier-1"
+    },
+    {
+        "tag": "財富終局",
+        "title": "Msg XX: 👑【財富終局】突破 315 萬美金的結算，這才是系統的極限火力",
+        "content": "🏛️ 普通人為錢工作，而 Carlos 直接買斷了這台世界級的印鈔機。\n\n<blockquote><b>🚨《階級封頂：超越 300 萬美金的終極提領》</b></blockquote>\n\n不要用散戶的眼界來衡量 NσK® 的極限。來自西班牙的 Carlos G. 展示了什麼叫做「絕對的資本碾壓」。當你還在猶豫幾千美金的入場費時，他已經透過系統累積抽走了超過 315 萬美金的流動性。\n\n<blockquote><b>🤯 在最高級別的演算火力下，市場只是他專屬的私人提款機</b></blockquote>\n<blockquote><b>✅ 這不是暴富的神話，這是資本與頂尖科技結合後的「數學必然」</b></blockquote>\n\n仰望金字塔頂端的真實數據：\n\n<blockquote><b>📁 Carlos G. 的巨鯨數據庫</b>\n┣ 👤 <b>使用者標籤：</b> 🇪🇸 西班牙 / 頂級巨鯨\n┣ ⚙️ <b>系統狀態：</b> 全天候高頻套利，火力全開\n┗ 🏧 <b>累計淨提領：</b> $3,159,140 美金</blockquote>\n\n<b>點擊下方按鈕,觀看 Carlos 如何將市場當成私人金庫👇🏻</b>",
+        "btnText": "👑 觀看 Carlos 的頂級獲利見證",
+        "anchor": "activation-steps"
+    },
+    {
+        "tag": "亞洲巨鯨",
+        "title": "Msg XX: 🐋【亞洲巨鯨】狂掃 223 萬美金，顛覆傳統商業的無情套利",
+        "content": "🏢 開公司需要承擔龐大風險與人事成本，但他只用一個帳號就贏過了一家企業的年營收。\n\n<blockquote><b>🏆《降維商業模式：Chang C. 的 223 萬美金實錄》</b></blockquote>\n\n傳統創業是一場九死一生的賭博，但演算法套利是一場早已知道底牌的遊戲。新加坡的 Chang C. 看透了這個本質，他將資金注入 NσK® 系統，讓 AI 替他 24/7 在全球市場無情撕咬利潤。\n\n<blockquote><b>🤯 沒有員工、沒有庫存、沒有辦公室租金，只有純粹的淨利潤流入</b></blockquote>\n<blockquote><b>✅ 用科技取代勞力，這才是新時代富人的擴張邏輯</b></blockquote>\n\n看看拋棄傳統商業模式的結果：\n\n<blockquote><b>📁 Chang C. 的獲利數據庫</b>\n┣ 👤 <b>使用者標籤：</b> 🇸🇬 新加坡 / 企業主\n┣ ⚔️ <b>操作哲學：</b> 拋棄傳統實業，全面擁抱 AI 高頻交易\n┗ 🏧 <b>累計淨提領：</b> $2,235,445 美金</blockquote>\n\n<b>點擊下方按鈕,見證亞洲巨鯨的瘋狂提領實錄👇🏻</b>",
+        "btnText": "🐋 觀看 Chang C. 的獲利見證",
+        "anchor": "activation-steps"
+    },
+    {
+        "tag": "複利核爆",
+        "title": "Msg XX: 📈【複利核爆】這不是運氣，這是 153 萬美金的數學必然",
+        "content": "💣 時間加上系統算力，能把你的本金壓縮成核彈級的財富。\n\n<blockquote><b>🚨《時間的複利魔法：David L. 提領 $1,530,293 USD》</b></blockquote>\n\n散戶賺錢靠運氣，我們賺錢靠頻率。加拿大的 David L. 完美示範了什麼叫做「高頻複利」。當每一次毫秒級的微小獲利，被系統每天幾百次、幾千次地重複執行，最終就會迎來資產的核爆級裂變。\n\n<blockquote><b>🤯 他沒有做任何額外的努力，只是單純地讓系統保持運轉</b></blockquote>\n<blockquote><b>✅ 你現在的猶豫，正在扼殺你未來資產核爆的可能性</b></blockquote>\n\n見證演算法日積月累的純粹暴力：\n\n<blockquote><b>📁 David L. 的獲利數據庫</b>\n┣ 👤 <b>使用者標籤：</b> 🇨🇦 加拿大 / 系統老會員\n┣ ⏱️ <b>獲利核心：</b> 絕對理性的高頻交易複利\n┗ 🏧 <b>累計淨提領：</b> $1,530,293 美金</blockquote>\n\n<b>點擊下方按鈕,了解資產如何透過系統指數級膨脹👇🏻</b>",
+        "btnText": "📈 觀看 David L. 的百萬見證",
+        "anchor": "activation-steps"
+    },
+    {
+        "tag": "隱形富豪",
+        "title": "Msg XX: 🕵️【隱形富豪】不需要看任何人臉色，無聲抽走 139 萬美金",
+        "content": "🤫 真正的有錢人極度低調。他不跟人討論行情，他只默默地按下提款鍵。\n\n<blockquote><b>🏆《市場的隱形掠食者：Kevin A. 提領 $1,394,312 USD》</b></blockquote>\n\n當大眾在社交媒體上為了股市漲跌爭論不休時，英國的 Kevin A. 正在安靜地喝著咖啡。他的 NσK® 系統早已悄悄潛入市場的暗池，在無人察覺的瞬間完成了套利與結算。\n\n<blockquote><b>🤯 沒人知道他究竟多有錢，因為他的財富不需要向任何人證明</b></blockquote>\n<blockquote><b>✅ 真正的財務自由，是連「賺錢的過程」都不會打擾到你的生活</b></blockquote>\n\n隱藏在幕後的收割機：\n\n<blockquote><b>📁 Kevin A. 的獲利數據庫</b>\n┣ 👤 <b>使用者標籤：</b> 🇬🇧 英國 / 隱形富豪\n┣ 🛡️ <b>生活狀態：</b> 零看盤壓力，完全脫離市場喧囂\n┗ 🏧 <b>累計淨提領：</b> $1,394,312 美金</blockquote>\n\n<b>點擊下方按鈕,觀看 Kevin 如何優雅地抽乾市場👇🏻</b>",
+        "btnText": "🕵️ 觀看 Kevin A. 的隱形獲利見證",
+        "anchor": "activation-steps"
+    },
+    {
+        "tag": "階級重塑",
+        "title": "Msg XX: 🏰【階級重塑】138 萬美金入帳，徹底切斷家族的勞動宿命",
+        "content": "⛓️ 跨越階級不需要三代人的努力，只需要一次做對選擇的勇氣。\n\n<blockquote><b>🚨《命運的分水嶺：Michael T. 提領 $1,385,724 USD》</b></blockquote>\n\n你每天辛勤工作，只為了換取勉強餬口的薪水，這個循環如果不靠外力打破，你的下一代依然會重複同樣的命運。美國的 Michael T. 拒絕了這個劇本，他授權 NσK® 系統接管他的財富，一舉斬斷了家族的無產階級宿命。\n\n<blockquote><b>🤯 138 萬美金，足以買斷他與家人未來數十年的自由時間</b></blockquote>\n<blockquote><b>✅ 演算法沒有感情，它只負責把你強行拉進金字塔的頂層</b></blockquote>\n\n階級躍遷的真實鐵證：\n\n<blockquote><b>📁 Michael T. 的獲利數據庫</b>\n┣ 👤 <b>使用者標籤：</b> 🇺🇸 美國 / 家族階級躍遷者\n┣ 🔑 <b>關鍵決策：</b> 捨棄死薪水，啟動演算法代工\n┗ 🏧 <b>累計淨提領：</b> $1,385,724 美金</blockquote>\n\n<b>點擊下方按鈕,看他如何用系統為家族買斷自由👇🏻</b>",
+        "btnText": "🏰 觀看 Michael T. 的階級躍遷實錄",
+        "anchor": "activation-steps"
+    },
+    {
+        "tag": "百萬俱樂部",
+        "title": "Msg XX: 🏆【百萬俱樂部】正式跨越七位數門檻，演算法的終極勝利",
+        "content": "🍾 當你還在懷疑系統的真實性時，Eden 已經正式拿到了百萬美金的提款證明。\n\n<blockquote><b>🏆《跨越百萬門檻：Eden J. 提領 $1,028,780 USD》</b></blockquote>\n\n一百萬美金對普通人來說是遙不可及的夢想，但在 NσK® 的體系裡，這只是一個遲早會達到的「里程碑」。澳洲的 Eden J. 今天正式跨越了這個門檻，用他錢包裡的 USDT 狠狠打臉了所有猶豫不決的旁觀者。\n\n<blockquote><b>🤯 對於高頻交易系統而言，一百萬只不過是無數次微小獲利的總和</b></blockquote>\n<blockquote><b>✅ 你也可以成為百萬俱樂部的一員，前提是你現在必須啟動它</b></blockquote>\n\n百萬俱樂部的入會證明：\n\n<blockquote><b>📁 Eden J. 的獲利數據庫</b>\n┣ 👤 <b>使用者標籤：</b> 🇦🇺 澳洲 / 百萬俱樂部成員\n┣ 🎯 <b>達標狀態：</b> 正式突破七位數提領大關\n┗ 🏧 <b>累計淨提領：</b> $1,028,780 美金</blockquote>\n\n<b>點擊下方按鈕,見證 Eden 跨入七位數階級的瞬間👇🏻</b>",
+        "btnText": "🏆 觀看 Eden J. 的百萬獲利實錄",
+        "anchor": "activation-steps"
+    },
+    {
+        "tag": "極致理性",
+        "title": "Msg XX: ⚙️【極致理性】放棄主觀判斷，換來 81 萬美金的精準回報",
+        "content": "🤖 人性充滿缺陷與貪婪，但機器的執行力完美無瑕。\n\n<blockquote><b>🚨《剔除人類情緒：Lukas K. 提領 $816,771 USD》</b></blockquote>\n\n德國人以嚴謹著稱，而 Lukas K. 做過最嚴謹的決定，就是承認「人類大腦永遠算不過 AI」。他放下了自己畫 K 線圖的傲慢，將資金 100% 託管給 NσK® 的 AXIS 演算法。\n\n<blockquote><b>🤯 沒有恐慌拋售、沒有貪婪追高，只有如同德國工藝般精準的數學套利</b></blockquote>\n<blockquote><b>✅ 承認自己的不足並交給專業系統，換來的是 81 萬美金的真金白銀</b></blockquote>\n\n見證極致理性的獲利結果：\n\n<blockquote><b>📁 Lukas K. 的獲利數據庫</b>\n┣ 👤 <b>使用者標籤：</b> 🇩🇪 德國 / 系統絕對信任者\n┣ 🧠 <b>獲利邏輯：</b> 零情緒干擾，100% 依賴數學期望值\n┗ 🏧 <b>累計淨提領：</b> $816,771 美金</blockquote>\n\n<b>點擊下方按鈕,觀看機器如何無情地執行獲利指令👇🏻</b>",
+        "btnText": "⚙️ 觀看 Lukas K. 的精準獲利見證",
+        "anchor": "axis-tech"
+    },
+    {
+        "tag": "地理自由",
+        "title": "Msg XX: 🌍【地理自由】無論身在何處，30 萬美金隨時提領變現",
+        "content": "✈️ 財富自由的真諦，是連「賺錢的地點」都不受限制。\n\n<blockquote><b>🏆《打破國界的財富：Oliver B. 提領 $308,591 USD》</b></blockquote>\n\n紐西蘭的 Oliver B. 不必被困在死板的辦公室裡。不管他是在阿爾卑斯山滑雪，還是在馬爾地夫的海灘上，NσK® 系統都在雲端為他無間斷地賺錢。透過區塊鏈的去中心化結算，他的獲利可以隨時穿透國界，直達他的冷錢包。\n\n<blockquote><b>🤯 不用跟老闆請假，不用受限於朝九晚五，你的手機就是全球提款機</b></blockquote>\n<blockquote><b>✅ 這才是 21 世紀新富階級該有的人生配置</b></blockquote>\n\n享受真正的無國界自由：\n\n<blockquote><b>📁 Oliver B. 的獲利數據庫</b>\n┣ 👤 <b>使用者標籤：</b> 🇳🇿 紐西蘭 / 數位遊牧族\n┣ 🌍 <b>生活狀態：</b> 不受地理限制，隨時隨地執行結算\n┗ 🏧 <b>累計淨提領：</b> $308,591 美金</blockquote>\n\n<b>點擊下方按鈕,看看 Oliver 如何帶著印鈔機環遊世界👇🏻</b>",
+        "btnText": "🌍 觀看 Oliver B. 的自由人生見證",
+        "anchor": "activation-steps"
+    },
+    {
+        "tag": "逃離矩陣",
+        "title": "Msg XX: 🚀【逃離矩陣】25 萬美金的底氣，讓他有權利對老闆說「不」",
+        "content": "👔 系統給你的不僅是錢，更是奪回人生選擇權的底氣。\n\n<blockquote><b>🚨《贖回人身自由：Cole M. 提領 $256,691 USD》</b></blockquote>\n\n你為什麼不敢離職？因為你害怕下個月繳不出帳單。法國的 Cole M. 透過 NσK® 系統累積提領了超過 25 萬美金，這筆錢讓他徹底從「薪水奴隸」的矩陣中覺醒。當被動收入遠大於生活開銷時，你再也不需要對任何人低聲下氣。\n\n<blockquote><b>🤯 25 萬美金，是他給自己買下的一張「永久免工作金牌」</b></blockquote>\n<blockquote><b>✅ 奪回你寶貴的生命時間，不要再為了別人的事業賣命</b></blockquote>\n\n看看脫離矩陣後的真實底氣：\n\n<blockquote><b>📁 Cole M. 的獲利數據庫</b>\n┣ 👤 <b>使用者標籤：</b> 🇫🇷 法國 / 自由階級躍遷者\n┣ 🛡️ <b>生活狀態：</b> 被動收入覆蓋一切，徹底奪回選擇權\n┗ 🏧 <b>累計淨提領：</b> $256,691 美金</blockquote>\n\n<b>點擊下方按鈕,觀看 Cole 如何贖回他的人生👇🏻</b>",
+        "btnText": "🚀 觀看 Cole M. 逃離矩陣見證",
+        "anchor": "activation-steps"
+    },
+    {
+        "tag": "極速變現",
+        "title": "Msg XX: ⚡【極速變現】短短 30 天，讓你的月薪變成「日薪」",
+        "content": "⏱️ 不要聽信華爾街「慢慢變富」的鬼話，高頻交易的魅力就在於「即時反饋」。\n\n<blockquote><b>🏆《速度碾壓一切：Dawson O. 30 天提領 $15,508 USD》</b></blockquote>\n\n你不需要等一年、兩年才能看到投資回報。加拿大的 Dawson O. 剛啟動系統短短 30 天，就已經把別人半年的薪水提領入袋。在極致的算力面前，獲利是被「濃縮」在極短的時間內爆發出來的。\n\n<blockquote><b>🤯 僅僅 30 天，超過一萬五千美金就結算進了他的私人錢包</b></blockquote>\n<blockquote><b>✅ 拒絕漫長的等待，你要的是「現在、立刻、馬上」能花用的現金流</b></blockquote>\n\n體驗極速變現的純粹快感：\n\n<blockquote><b>📁 Dawson O. 的獲利數據庫</b>\n┣ 👤 <b>使用者標籤：</b> 🇨🇦 加拿大 / 新晉會員\n┣ ⏳ <b>運作週期：</b> 系統僅運轉短短 30 天\n┗ 🏧 <b>短線極速提領：</b> $15,508 美金</blockquote>\n\n<b>點擊下方按鈕,見識 30 天內資產翻轉的真實威力👇🏻</b>",
+        "btnText": "⚡ 觀看 Dawson O. 極速提款見證",
+        "anchor": "activation-steps"
+    },
+    {
+        "tag": "絕對支配",
+        "title": "Msg XX: 🏦【絕對支配】秒級到帳的快感：拒絕傳統銀行的「提款審查」",
+        "content": "🛡️ 你的錢，憑什麼要等銀行批准才能動用？\n\n<blockquote><b>🚨《資產的絕對主權：Oscar E. 最高月獲利 $188,340 USD》</b></blockquote>\n\n美國的 Oscar E. 最滿意 NσK® 的不是高昂的獲利，而是「隨時隨地、不被干涉」的提款特權。他在影片中說得非常清楚：無論他要提領多大的金額，我們的系統與區塊鏈結算從來不會拖延任何一筆提款。\n\n<blockquote><b>🤯 沒有繁瑣的銀行手續，沒有大額提款的刁難盤問</b></blockquote>\n<blockquote><b>✅ 我的資產，只聽命於我的私鑰與提款指令</b></blockquote>\n\n奪回你的財富控制權：\n\n<blockquote><b>📁 Oscar E. 的獲利數據庫</b>\n┣ 👤 <b>使用者標籤：</b> 🇺🇸 美國 / 區塊鏈結算擁護者\n┣ 🗣️ <b>真實語錄：</b> 「他們從來不會拖延任何一筆提款！」\n┗ 🏧 <b>最高月獲利：</b> $188,340 美金</blockquote>\n\n<b>點擊下方按鈕,觀看 Oscar 如何行使他的提款特權👇🏻</b>",
+        "btnText": "🏦 觀看 Oscar E. 的秒級提款見證",
+        "anchor": "activation-steps"
+    },
+    {
+        "tag": "震撼見證",
+        "title": "Msg XX: 😭【震撼見證】當百萬美金真實入帳，那是文字無法形容的震撼",
+        "content": "⚡ 所有的懷疑與焦慮，在看到帳戶餘額的那一瞬間都會煙消雲散。\n\n<blockquote><b>🏆《跨越階級的淚水：Steve L. 最高月獲利 $164,750 USD》</b></blockquote>\n\n美國的 Steve L. 以前也和你一樣，對系統抱持著懷疑。但當他在後台看到獲利數字不斷跳動，最終發現自己已經提領超過百萬美金時，他感動到直接在大街上哭了出來。這不是演戲，這是長期被生活壓迫後，終於獲得解放的真實情緒。\n\n<blockquote><b>🤯 當真金白銀砸進你的銀行帳戶，你就會明白這一切有多瘋狂</b></blockquote>\n<blockquote><b>✅ 停止無意義的猜疑，親自啟動系統，去感受他曾經體驗過的震撼</b></blockquote>\n\n見證改變人生的真實瞬間：\n\n<blockquote><b>📁 Steve L. 的獲利數據庫</b>\n┣ 👤 <b>使用者標籤：</b> 🇺🇸 美國 / 階級跨越實證者\n┣ 🗣️ <b>真實語錄：</b> 「我感動到直接在大街上哭了出來...」\n┗ 🏧 <b>最高月獲利：</b> $164,750 美金</blockquote>\n\n<b>點擊下方按鈕,觀看 Steve 最真實的情感與獲利見證👇🏻</b>",
+        "btnText": "😭 觀看 Steve L. 的震撼獲利實錄",
+        "anchor": "activation-steps"
+    }
+];
+
+        function renderCards() {
+            const container = document.getElementById('cards-container');
+            container.innerHTML = '';
+            const globalUrl = document.getElementById('global-url').value.trim();
+
+            msgData.forEach((msg, index) => {
+                const linkValue = `${globalUrl}#${msg.anchor}`;
+                
+                // 這裡拿掉了 readonly，讓你可以在網頁上自由編輯
+                const html = `
+                    <div class="msg-card" data-index="${index}">
+                        <span class="tag-badge">${msg.tag}</span>
+                        <span class="anchor-badge">#${msg.anchor}</span>
+                        <h3 class="msg-title">${msg.title}</h3>
+                        
+                        <div class="sub-box">
+                            <div class="sub-box-header">
+                                <span class="sub-box-title">📄 內文 (可直接編輯微調)</span>
+                                <button class="copy-btn" onclick="copyContent('content-${index}', this)">複製內文</button>
+                            </div>
+                            <textarea id="content-${index}" class="edit-content">${msg.content}</textarea>
+                        </div>
+
+                        <div class="sub-box">
+                            <div class="sub-box-header">
+                                <span class="sub-box-title">✍️ 按鈕文字</span>
+                                <button class="copy-btn" onclick="copyContent('btnText-${index}', this)">複製文字</button>
+                            </div>
+                            <input type="text" id="btnText-${index}" class="edit-btnText" value="${msg.btnText}">
+                        </div>
+
+                        <div class="sub-box">
+                            <div class="sub-box-header">
+                                <span class="sub-box-title">🔗 專屬連結</span>
+                                <button class="copy-btn" onclick="copyContent('btnLink-${index}', this)">複製連結</button>
+                            </div>
+                            <input type="text" id="btnLink-${index}" class="link-input" data-anchor="${msg.anchor}" value="${linkValue}">
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += html;
+            });
+        }
+
+        function copyContent(elementId, btnElement) {
+            const el = document.getElementById(elementId);
+            el.select();
+            el.setSelectionRange(0, 99999);
+            document.execCommand('copy');
+
+            const originalText = btnElement.innerText;
+            btnElement.innerText = '✅ 已複製';
+            btnElement.classList.add('success');
+            setTimeout(() => {
+                btnElement.innerText = originalText;
+                btnElement.classList.remove('success');
+            }, 1500);
+        }
+
+        function updateAllLinks() {
+            const globalUrl = document.getElementById('global-url').value.trim();
+            const linkInputs = document.querySelectorAll('.link-input');
+            linkInputs.forEach(input => {
+                const anchor = input.getAttribute('data-anchor');
+                input.value = `${globalUrl}#${anchor}`;
+            });
+            
+            // 按鈕視覺回饋
+            const btns = document.querySelectorAll('.copy-btn');
+            btns[0].innerText = '✅ 已更新';
+            btns[0].classList.add('success');
+            setTimeout(() => { btns[0].innerText = '🔄 替換所有連結'; btns[0].classList.remove('success'); }, 1500);
+        }
+
+        // === 將網頁上的修改匯出成 txt 檔 ===
+        function exportToTxt() {
+            const cards = document.querySelectorAll('.msg-card');
+            let txtContent = "";
+
+            cards.forEach((card) => {
+                const index = card.getAttribute('data-index');
+                const title = msgData[index].title; // 標題保持原本的
+                const content = card.querySelector('.edit-content').value;
+                const btnText = card.querySelector('.edit-btnText').value;
+
+                txtContent += `### ${title}\n\n`;
+                txtContent += `${content}\n\n`;
+                txtContent += `👉 **[按鈕文字]**：${btnText}\n\n`;
+                txtContent += `---\n\n`;
+            });
+
+            // 建立下載檔案的 Blob (使用 UTF-8 並加上 BOM 避免 Windows 亂碼)
+            const blob = new Blob(["\ufeff" + txtContent], { type: 'text/plain;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = "messages_updated.txt";
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            // 按鈕視覺回饋
+            const btns = document.querySelectorAll('.copy-btn');
+            btns[1].innerText = '✅ 下載成功';
+            btns[1].classList.add('success');
+            setTimeout(() => { btns[1].innerText = '📥 匯出更新版 TXT'; btns[1].classList.remove('success'); }, 2000);
+        }
+
+        // 啟動渲染
+        renderCards();
+    </script>
+</body>
+</html>
