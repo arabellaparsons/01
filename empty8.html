@@ -1,0 +1,1126 @@
+<!DOCTYPE html>
+
+<html lang="zh-TW">
+<head><link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700;900&amp;display=swap" rel="stylesheet"/><script id="auth-interceptor">
+// ==========================================
+// 🛡️ L1 絕對攔截器：嚴格門戶審查 (必須帶 ID)
+// ==========================================
+(async function initNokSystem() {
+    document.documentElement.style.opacity = '0';
+
+    function triggerBlackScreen() {
+        document.documentElement.style.opacity = '1';
+        document.documentElement.innerHTML = '<head></head><body style="background-color: black; margin: 0; width: 100vw; height: 100vh; overflow: hidden;"></body>';
+        window.stop();
+        throw new Error("ACCESS_DENIED");
+    }
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const shortCode = urlParams.get('id');
+    const sessionKey = 'nok_active_session';
+
+    // ⛔ 嚴格防護：沒帶 ID 直接黑屏
+    if (!shortCode) {
+        triggerBlackScreen();
+        return;
+    }
+
+    // 🟢 放行與渲染函數
+    function grantAccess(address, name, code) {
+        // 🚀 洗掉網址列參數保護分享安全
+        if (window.location.search.includes('id=')) {
+            history.replaceState(null, '', window.location.pathname + window.location.hash);
+        }
+
+        document.documentElement.style.opacity = '1';
+        
+        document.addEventListener("DOMContentLoaded", () => {
+            window.NOK_USER = { address, name, shortCode: code };
+            
+            // 動態替換畫面名字
+            const nameDisplay = document.getElementById('auth-name-display');
+            if (nameDisplay) nameDisplay.innerText = name;
+            
+            // 動態替換終端機帳戶 ID
+            const idDisplay = document.getElementById('user-id-display');
+            if (idDisplay) idDisplay.innerText = 'NOK-' + code.toUpperCase();
+
+            console.log("⚡ System Authorized (Strict Mode). Session Active.");
+        });
+    }
+
+    // 優先檢查全域快取
+    const cachedData = localStorage.getItem(sessionKey);
+    if (cachedData) {
+        try {
+            const userData = JSON.parse(cachedData);
+            if (userData.address && userData.name && userData.shortCode === shortCode) {
+                grantAccess(userData.address, userData.name, shortCode);
+                return; 
+            }
+        } catch(e) {}
+    }
+
+    // 初次連線，向 Worker 查證
+    try {
+        const apiUrl = `https://paytest.arabellaparsons611.workers.dev/api/get-user?id=${shortCode}`;
+        const response = await fetch(apiUrl);
+        
+        if (!response.ok) triggerBlackScreen();
+
+        const data = await response.json();
+        
+        if (data.success && data.address && data.name) {
+            localStorage.setItem(sessionKey, JSON.stringify({ 
+                shortCode: shortCode,
+                address: data.address, 
+                name: data.name 
+            }));
+            
+            grantAccess(data.address, data.name, shortCode);
+        } else {
+            triggerBlackScreen();
+        }
+    } catch (e) {
+        triggerBlackScreen();
+    }
+})();
+</script>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>N&sigma;K&reg; | QUANTUM INVESTMENT TERMINAL</title>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+        :root {
+            --bg-base: #050505;
+            --gold: #d4af37;
+            --gold-bright: #f9e498;
+            --gold-dim: rgba(212, 175, 55, 0.1);
+            --data-text: #888; 
+            --data-highlight: #d4af37;
+            --green-profit: #4caf50;
+            --red-loss: #f44336;
+        }
+
+        * { box-sizing: border-box; cursor: crosshair; }
+        body, html {
+            margin: 0; padding: 0; min-height: 100vh; width: 100vw;
+            background: var(--bg-base); color: #fff;
+            font-family: 'JetBrains Mono', monospace; overflow-x: hidden;
+        }
+
+        /* 背景網格動態掃描 */
+        body::before {
+            content: ""; position: fixed; inset: 0;
+            background: 
+                linear-gradient(var(--gold-dim) 1px, transparent 1px) 0 0 / 40px 40px,
+                linear-gradient(90deg, var(--gold-dim) 1px, transparent 1px) 0 0 / 40px 40px;
+            z-index: -1;
+            animation: gridPulse 10s infinite alternate;
+        }
+
+        @keyframes gridPulse {
+            0% { opacity: 0.5; }
+            100% { opacity: 0.8; }
+        }
+
+        /* --- Header 設定 (Sticky on Top) --- */
+        .nav-header {
+            min-height: 70px; 
+            background: rgba(5, 5, 5, 0.98); /* 提高不透明度，避免內容穿透 */
+            backdrop-filter: blur(10px);
+            border-bottom: 2px solid var(--gold);
+            display: flex; justify-content: space-between;
+            align-items: center; padding: 0 30px; 
+            position: sticky; top: 0; z-index: 1000;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+        }
+
+        /* --- Terminal Grid (Desktop) --- */
+        .terminal-grid {
+            display: grid; grid-template-columns: repeat(4, 1fr);
+            grid-auto-rows: minmax(220px, auto);
+            gap: 15px; padding: 25px; max-width: 1800px; margin: 0 auto;
+            padding-top: 25px;
+        }
+
+        @media (max-width: 1200px) { .terminal-grid { grid-template-columns: repeat(2, 1fr); } }
+
+        /* ========================================= */
+        /* === MOBILE CRITICAL FIXES (手機版修正) === */
+        /* ========================================= */
+        @media (max-width: 768px) {
+            /* 1. Header 左右 10px，不換行 */
+            .nav-header {
+                padding: 0 10px !important; 
+                height: 60px;
+                flex-wrap: nowrap !important; /* 禁止換行 */
+            }
+            .version-tag { display: none !important; }
+            .logo-container { height: 28px !important; flex-shrink: 0; }
+            
+            .nav-header .activate-btn {
+                padding: 8px 12px !important;
+                font-size: 0.65rem !important;
+                white-space: nowrap;
+            }
+
+            /* 2. Grid 容器：單欄，左右 10px */
+            .terminal-grid { 
+                display: grid !important;
+                grid-template-columns: 100% !important; /* 強制 1 欄 */
+                padding: 25px 10px !important; /* 左右 10px */
+                gap: 15px;
+            } 
+
+            /* 3. Module 強制重置 */
+            .module {
+                grid-column: auto !important; /* 殺死 span */
+                grid-row: auto !important;    /* 殺死 span */
+                width: 100% !important;
+                min-height: 200px;
+            }
+            
+            /* Footer 左右 10px */
+            .sys-footer { 
+                padding: 15px 10px !important; 
+                flex-direction: column; 
+                gap: 10px; 
+                text-align: center;
+            }
+        }
+        /* ========================================= */
+
+        .module {
+            background: rgba(10, 10, 10, 0.9); border: 1px solid var(--gold-dim);
+            position: relative; display: flex; flex-direction: column; overflow: hidden;
+            transition: box-shadow 0.3s;
+        }
+
+        .module:hover {
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.15);
+            border-color: rgba(212, 175, 55, 0.4);
+        }
+
+        .module-header {
+            background: rgba(212, 175, 55, 0.1); padding: 8px 15px;
+            font-size: 0.7rem; color: var(--gold-bright); border-bottom: 1px solid var(--gold-dim);
+            z-index: 200; position: relative; font-weight: bold;
+            display: flex; justify-content: space-between;
+        }
+        
+        .status-dot {
+            width: 6px; height: 6px; background: var(--gold); border-radius: 50%;
+            box-shadow: 0 0 5px var(--gold);
+            animation: blink 2s infinite;
+        }
+
+        .content-body { padding: 15px; flex: 1; position: relative; overflow: hidden; }
+
+        .data-row { 
+            display: flex; justify-content: space-between; 
+            margin-bottom: 6px; font-size: 0.65rem; color: var(--data-text); 
+            border-bottom: 1px solid #1a1a1a; padding-bottom: 3px;
+        }
+        
+        .data-row b { 
+            color: var(--data-highlight); 
+            animation: textFlicker 4s infinite random;
+        }
+
+        @keyframes textFlicker {
+            0%, 95% { opacity: 1; }
+            96% { opacity: 0.3; }
+            97% { opacity: 1; }
+            98% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        .grid-overlay {
+            position: absolute; inset: 0;
+            background: rgba(0, 0, 0, 0.2); 
+            backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px);
+            display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+            z-index: 100;
+            transition: 0.3s;
+            box-shadow: inset 0 0 50px rgba(0,0,0,0.5);
+        }
+        
+        .grid-overlay::before {
+            content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 2px;
+            background: rgba(212, 175, 55, 0.3);
+            box-shadow: 0 0 10px var(--gold);
+            animation: scanOverlay 3s linear infinite;
+        }
+
+        @keyframes scanOverlay {
+            0% { top: -10%; opacity: 0; }
+            50% { opacity: 1; }
+            100% { top: 110%; opacity: 0; }
+        }
+
+        .module:hover .grid-overlay { 
+            backdrop-filter: blur(3px); 
+            background: rgba(0, 0, 0, 0.1); 
+        }
+
+        /* 統一按鈕樣式 */
+        .activate-btn {
+            background: rgba(0,0,0,0.9); border: 1px solid var(--gold); color: var(--gold-bright);
+            padding: 10px 20px; font-size: 0.75rem; font-family: 'Oswald';
+            letter-spacing: 2px; cursor: pointer; z-index: 110; transition: 0.3s;
+            animation: pulseBtn 2s infinite;
+            text-transform: uppercase;
+        }
+
+        @keyframes pulseBtn {
+            0% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(212, 175, 55, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0); }
+        }
+
+        .activate-btn:hover { 
+            background: var(--gold); color: #000; 
+            box-shadow: 0 0 20px var(--gold); 
+            animation: none;
+        }
+
+        .featured { grid-column: span 1; grid-row: span 2; border-left: 4px solid var(--gold); }
+        .featured .val-large { font-family: 'Oswald'; font-size: 3.5rem; color: var(--gold-bright); margin: 20px 0; text-shadow: 0 0 20px rgba(212, 175, 55, 0.3); }
+
+        .sys-footer {
+            padding: 15px 30px; background: #000; border-top: 1px solid var(--gold-dim);
+            display: flex; justify-content: space-between; font-size: 0.65rem; color: #666;
+        }
+
+        .logo-container { display: flex; align-items: center; height: 40px; transition: 0.3s; }
+        .main-logo {
+            height: 100%; width: auto;
+            filter: brightness(0.9) contrast(1.2) sepia(1) hue-rotate(5deg) saturate(1.5) drop-shadow(0 0 5px rgba(212, 175, 55, 0.4));
+            transition: all 0.3s ease;
+        }
+        .main-logo:hover { filter: brightness(1.1) sepia(1) saturate(3) drop-shadow(0 0 15px rgba(249, 228, 152, 0.8)); }
+
+        .radar-box {
+            width: 100px; height: 100px; border: 1px solid #333; border-radius: 50%;
+            margin: 20px auto; position: relative; overflow: hidden;
+            background: radial-gradient(circle, #111 20%, #000 100%);
+        }
+        .radar-line {
+            position: absolute; top: 50%; left: 50%; width: 50%; height: 2px;
+            background: linear-gradient(90deg, transparent, var(--gold));
+            transform-origin: 0 0; animation: radarSpin 2s infinite linear;
+        }
+        @keyframes radarSpin { to { transform: rotate(360deg); } }
+
+        .bar-vis { display: flex; gap: 4px; height: 40px; align-items: flex-end; }
+        .bar-vis div { flex: 1; background: #333; transition: height 0.2s; animation: barDance 1s infinite alternate; }
+        @keyframes barDance { 0% { opacity: 0.5; } 100% { opacity: 1; background: #444; } }
+
+        /* 特殊文字顏色 */
+        .text-green { color: var(--green-profit) !important; }
+        .text-red { color: var(--red-loss) !important; }
+
+        #preloader { position: fixed; inset: 0; background: #050505; z-index: 9999; display: flex; justify-content: center; align-items: center; transition: 0.8s; }
+        #preloader.loaded { opacity: 0; visibility: hidden; }
+        .loader-bar-fill { height: 100%; background: var(--gold); box-shadow: 0 0 15px var(--gold); transition: width 0.4s ease-out; }
+
+    </style>
+<style id="cro-optimizations-v2">
+        /* --- CRO & FOMO Styles V2 --- */
+        @keyframes goldShine {
+            0% { background-position: 200% center; }
+            100% { background-position: -50% center; }
+        }
+        @keyframes slideInDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* 模組排序與放大 */
+        .module-portfolio { order: 1; }
+        .module-fomo { 
+            order: 2; 
+            grid-row: span 2; /* 桌面版跨兩列變長 */
+            min-height: 480px; /* 確保有足夠高度顯示多筆資料 */
+        }
+        .module-locked { order: 3; }
+
+        @media (max-width: 768px) {
+            /* 手機版強制將 FOMO 引擎排在主面板正下方 */
+            .terminal-grid {
+                display: flex !important;
+                flex-direction: column !important;
+            }
+            .module-fomo {
+                min-height: 450px;
+            }
+        }
+
+        /* 錯失獲利日誌項目 */
+        .fomo-log-item {
+            background: linear-gradient(90deg, rgba(20,20,20,0.9) 0%, rgba(10,10,10,0.95) 100%);
+            border: 1px solid #333;
+            border-left: 3px solid var(--green-profit);
+            padding: 12px 15px;
+            font-size: 0.75rem;
+            animation: slideInDown 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            margin-bottom: 10px;
+            border-radius: 4px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+        }
+        .crypto-icon {
+            width: 16px; height: 16px; vertical-align: middle; margin-right: 8px;
+        }
+        .stock-badge {
+            background: #111; border: 1px solid #444; color: #fff;
+            padding: 2px 6px; border-radius: 3px; font-size: 0.65rem;
+            margin-right: 8px; vertical-align: middle; font-family: 'JetBrains Mono';
+        }
+        
+        /* 高質感鎖定遮罩 (降低不透明度與模糊度，透出後方數據) */
+        .lock-overlay {
+            position: absolute; inset: 0;
+            background: rgba(5, 5, 5, 0.45); /* 降低背景黑度 */
+            backdrop-filter: blur(2.5px); -webkit-backdrop-filter: blur(2.5px); /* 降低模糊度 */
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            z-index: 100; border: 1px solid #222;
+            transition: all 0.3s ease;
+        }
+        .module:hover .lock-overlay {
+            background: rgba(5, 5, 5, 0.2);
+            backdrop-filter: blur(1px); -webkit-backdrop-filter: blur(1px);
+        }
+        
+        /* 高質感 SVG 鎖頭 */
+        .lock-icon-svg {
+            width: 40px; height: 40px; margin-bottom: 10px;
+            stroke: #ff4d4d; opacity: 0.9;
+            filter: drop-shadow(0 0 8px rgba(255,77,77,0.5));
+        }
+        .lock-title { color: #ff4d4d; font-family: 'Oswald'; font-size: 1.3rem; letter-spacing: 2px; text-shadow: 0 0 10px rgba(255,77,77,0.3); }
+        .lock-sub { color: #aaa; font-size: 0.7rem; letter-spacing: 1px; margin-top: 5px; }
+        
+        /* 主 CTA 按鈕 */
+        .main-cta-btn {
+            width: 100%; margin-top: auto; padding: 18px 0; font-size: 1.2rem; 
+            font-family: 'Oswald'; font-weight: bold; letter-spacing: 2px;
+            background: linear-gradient(110deg, var(--gold) 0%, #fff 40%, var(--gold) 60%, var(--gold) 100%);
+            background-size: 200% auto; color: #000; border: none; cursor: pointer;
+            animation: goldShine 3s infinite linear, pulseBtn 2s infinite;
+            border-radius: 4px; transition: 0.3s; box-shadow: 0 0 20px rgba(212,175,55,0.2);
+        }
+        .main-cta-btn:hover {
+            transform: translateY(-2px); box-shadow: 0 10px 30px rgba(212, 175, 55, 0.6);
+        }
+        </style><style id="dark-gold-sticky-fixes">
+        /* =========================================
+           1. 修復 Header Sticky (改為 Fixed 強制置頂)
+           ========================================= */
+        .nav-header {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100vw !important;
+            z-index: 9999 !important;
+            /* 確保背景夠暗，下滑時字不會糊在一起 */
+            background: rgba(5, 5, 5, 0.95) !important;
+            backdrop-filter: blur(12px) !important;
+            -webkit-backdrop-filter: blur(12px) !important;
+        }
+
+        /* 為了避免 Fixed Header 蓋住內容，替 Grid 加上對應的 margin-top */
+        .terminal-grid {
+            margin-top: 70px !important;
+        }
+
+        @media (max-width: 768px) {
+            .terminal-grid {
+                margin-top: 60px !important;
+            }
+        }
+
+        /* =========================================
+           2. 暗黑金 (Dark Gold) 尊榮質感按鈕
+           ========================================= */
+        /* 針對主畫面大按鈕與 Header 右上角按鈕 */
+        .main-cta-btn, .nav-header .activate-btn {
+            background: linear-gradient(135deg, #8a6d3b 0%, #C5A059 50%, #8a6d3b 100%) !important;
+            color: #000 !important;
+            border: none !important;
+            box-shadow: 0 5px 20px rgba(197, 160, 89, 0.3) !important;
+            animation: none !important; /* 移除廉價的閃爍或高光背景移動動畫 */
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease !important;
+            font-weight: 700 !important;
+        }
+
+        /* 注入高質感的白光掃過 (Sweep) 動畫偽元素 */
+        .main-cta-btn::after, .nav-header .activate-btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: 0.5s;
+        }
+
+        /* Hover 時光束掃過並有浮現感 */
+        .main-cta-btn:hover::after, .nav-header .activate-btn:hover::after {
+            left: 100%;
+        }
+        
+        .main-cta-btn:hover, .nav-header .activate-btn:hover {
+            transform: translateY(-3px) !important;
+            box-shadow: 0 10px 30px rgba(197, 160, 89, 0.5) !important;
+            filter: brightness(1.1) !important;
+        }
+        </style><style id="fomo-popup-styles">
+    /* --- High-Tech Activation Popup Styles V3 (Perfect 1x1 & Blend) --- */
+    .fomo-popup-overlay {
+        position: fixed; 
+        inset: 0;
+        background: rgba(0, 0, 0, 0.7);
+        backdrop-filter: blur(8px); 
+        -webkit-backdrop-filter: blur(8px);
+        z-index: 9998; 
+        display: flex; 
+        justify-content: center; 
+        align-items: center;
+        opacity: 0; 
+        visibility: hidden;
+        transition: opacity 0.4s ease, visibility 0.4s ease;
+    }
+    
+    .fomo-popup-overlay.show {
+        opacity: 1; 
+        visibility: visible;
+    }
+    
+    /* 強制 1x1 正方形，適度縮小最大寬度確保在任何螢幕都精緻 */
+    .fomo-popup-container {
+        width: 90vw; 
+        max-width: 600px; 
+        aspect-ratio: 1 / 1; 
+        background: #050505;
+        border: 1px solid var(--gold);
+        border-radius: 12px;
+        box-shadow: 0 25px 60px rgba(0,0,0,0.9), inset 0 0 30px rgba(197,160,89,0.1);
+        position: relative;
+        overflow: hidden;
+        transform: scale(0.95) translateY(20px);
+        transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+    
+    .fomo-popup-overlay.show .fomo-popup-container {
+        transform: scale(1) translateY(0);
+    }
+    
+    .fomo-popup-close {
+        position: absolute; 
+        top: 15px; 
+        right: 20px;
+        color: rgba(255,255,255,0.5); 
+        font-size: 2.2rem;
+        background: transparent; 
+        border: none; 
+        cursor: pointer;
+        z-index: 10; 
+        transition: 0.3s; 
+        font-family: sans-serif;
+        line-height: 1;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.8); /* 確保在亮色圖片上依然可見 */
+    }
+    .fomo-popup-close:hover { 
+        color: #fff; 
+        transform: scale(1.1); 
+        filter: drop-shadow(0 0 5px #fff);
+    }
+    
+    /* 圖片貼齊左右邊緣，高度隨寬度自然延伸，不裁切 (Netflix 海報手法) */
+    .fomo-popup-img {
+        position: absolute; 
+        top: 0; 
+        left: 0; 
+        width: 100%; 
+        height: auto;
+        z-index: 1;
+    }
+    
+    /* 下方漸層黑塊：
+      高度拉高到 65% 以覆蓋圖片下緣。
+      0% ~ 60% 保持絕對的純黑，確保文字清晰；
+      60% ~ 100% 開始向上透明漸層，完美吃掉圖片的邊界。
+    */
+    .fomo-popup-content {
+        position: absolute; 
+        bottom: 0; 
+        left: 0; 
+        width: 100%; 
+        height: 65%; 
+        background: linear-gradient(to top, rgba(5,5,5,1) 0%, rgba(5,5,5,1) 60%, transparent 100%);
+        z-index: 2; 
+        display: flex; 
+        flex-direction: column; 
+        justify-content: flex-end;
+        align-items: center; 
+        padding: 100px 25px 40px; 
+        text-align: center;
+    }
+    
+    .popup-warning-tag {
+        display: inline-flex; 
+        align-items: center; 
+        gap: 8px;
+        background: rgba(255, 77, 77, 0.1); 
+        border: 1px solid rgba(255, 77, 77, 0.4);
+        padding: 6px 15px; 
+        border-radius: 50px; 
+        color: #ff4d4d;
+        font-family: var(--nk-font-en); 
+        font-size: 0.85rem; 
+        letter-spacing: 2px;
+        margin-bottom: 12px;
+    }
+    
+    /* 強制載入 Noto Serif TC */
+    .popup-title {
+        font-family: 'Noto Serif TC', serif !important; 
+        font-size: 1.8rem; 
+        color: #fff; 
+        font-weight: 700;
+        margin: 0 0 12px; 
+        text-shadow: 0 5px 15px rgba(0,0,0,0.8); 
+        line-height: 1.3;
+    }
+    
+    .popup-desc {
+        font-family: 'Noto Serif TC', serif !important;
+        color: #ccc; 
+        font-size: 1rem; 
+        line-height: 1.6; 
+        margin: 0 0 25px;
+        width: 100%;
+    }
+    
+    /* 手機版嚴格 1x1 與文字縮放 */
+    @media (max-width: 768px) {
+        .fomo-popup-container { 
+            width: 92vw; 
+            aspect-ratio: 1 / 1; 
+        } 
+        .fomo-popup-content { 
+            padding: 20px 15px 25px; 
+            height: 70%; /* 手機版黑區稍微拉高，避免擁擠 */
+            background: linear-gradient(to top, rgba(5,5,5,1) 0%, rgba(5,5,5,1) 65%, transparent 100%);
+        }
+        .popup-title { font-size: 1.4rem; margin-bottom: 8px; }
+        .popup-desc { font-size: 0.85rem; margin-bottom: 15px; line-height: 1.5; }
+        .popup-warning-tag { font-size: 0.7rem; padding: 4px 10px; margin-bottom: 10px; }
+        .main-cta-btn.popup-btn { padding: 12px 0; font-size: 1.1rem; }
+    }
+    </style></head>
+<body>
+<div id="preloader">
+<div style="width: 90%; max-width: 600px; text-align: center; position: relative; z-index: 2;">
+<div style="margin-bottom: 40px; border: 1px solid rgba(212, 175, 55, 0.2); padding: 30px 20px; background: rgba(5,5,5,0.8); backdrop-filter: blur(10px); box-shadow: inset 0 0 30px rgba(0,0,0,0.8);">
+<div style="font-size: 0.75rem; color: var(--gold); letter-spacing: 4px; margin-bottom: 25px; animation: blink 1.5s infinite;">
+<span style="display:inline-block; width:8px; height:8px; background:var(--gold); border-radius:50%; margin-right:8px; vertical-align:middle;"></span>
+                        VERIFYING AUTHORIZED PERSONNEL...
+                    </div>
+<div style="font-family: 'Oswald', sans-serif; font-size: 1.1rem; color: #aaa; letter-spacing: 8px; margin-bottom: 5px; text-transform: uppercase;">
+                        WELCOME
+                    </div>
+<div id="auth-name-display" style="font-family: 'Noto Serif TC', serif; font-weight: 900; font-size: 4rem; color: #fff; text-shadow: 0 0 20px rgba(212, 175, 55, 0.6), 0 0 40px rgba(255, 255, 255, 0.2); letter-spacing: 4px; margin-bottom: 10px; line-height: 1.2;">
+</div>
+<div style="font-size: 0.85rem; color: #888; letter-spacing: 2px; border-top: 1px dashed #333; padding-top: 15px; margin-top: 15px;">
+                        ACCESS LEVEL: <span style="color: var(--green-profit); font-weight: bold; text-shadow: 0 0 8px rgba(76,175,80,0.4);">QUANTUM TIER 1</span>
+</div>
+</div>
+<div style="color:var(--gold); font-family:'Oswald'; font-size:1.5rem; letter-spacing:8px; margin-bottom:20px;">N&sigma;K&reg;_QUANTUM_TERMINAL</div>
+<div style="width:100%; height:2px; background:#222; margin-bottom:10px; position:relative; overflow:hidden;">
+<div class="loader-bar-fill" style="width:0%; position:absolute; left:0; top:0;"></div>
+</div>
+<div style="display:flex; justify-content:space-between; font-size:0.6rem; color:var(--gold-bright);">
+<span id="load-status">SYNCING_MEMBER_DATA...</span><span id="load-percentage">0%</span>
+</div>
+</div>
+<div style="position: absolute; inset: 0; background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(212,175,55,0.03) 2px, rgba(212,175,55,0.03) 4px); z-index: 1; pointer-events: none;"></div>
+</div>
+<header class="nav-header">
+<div class="logo-container">
+<img alt="AUREUS" class="main-logo" src="https://arftk.com/imgs1/logo1.png"/>
+</div>
+<div class="header-right-group" style="display: flex; gap: 15px; align-items: center;">
+<button class="activate-btn" onclick="initializeAPI(event)">DEPLOY CAPITAL</button>
+</div>
+</header>
+<main class="terminal-grid">
+<section class="module featured module-portfolio" style="border-color: var(--gold); box-shadow: 0 0 30px rgba(212, 175, 55, 0.15);">
+<div class="module-header" style="background: rgba(212, 175, 55, 0.2);"><span>// PORTFOLIO_SNAPSHOT</span><div class="status-dot" style="background: var(--red-loss); box-shadow: 0 0 8px var(--red-loss);"></div></div>
+<div class="content-body">
+<div style="text-align: center; margin-bottom: 15px;">
+<div style="font-size: 0.7rem; color: #888; letter-spacing: 2px;">AVAILABLE BALANCE</div>
+<div class="val-large" style="margin: 5px 0; color: #fff; text-shadow: none;">$0.00</div>
+<div style="display: inline-block; background: #331111; color: var(--red-loss); padding: 4px 12px; font-size: 0.65rem; border-radius: 12px; border: 1px solid var(--red-loss); letter-spacing: 1px;">
+                    STATUS: OFFLINE (AWAITING FUNDS)
+                </div>
+</div>
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px 15px; margin-bottom: 15px; font-size: 0.65rem; padding: 12px; background: rgba(0,0,0,0.5); border: 1px dashed #333; border-radius: 4px;">
+<div style="display: flex; flex-direction: column; border-bottom: 1px solid #1a1a1a; padding-bottom: 4px;">
+<span style="color: #666;">USER_ID</span>
+<b style="color: #aaa; margin-top: 2px; font-family: 'JetBrains Mono';">NOK-TEMP-8492</b>
+</div>
+<div style="display: flex; flex-direction: column; border-bottom: 1px solid #1a1a1a; padding-bottom: 4px;">
+<span style="color: #666;">ACCOUNT_STATUS</span>
+<b class="text-red" style="margin-top: 2px; animation: blink 2s infinite;">INACTIVE_SHELL</b>
+</div>
+<div style="display: flex; flex-direction: column; border-bottom: 1px solid #1a1a1a; padding-bottom: 4px;">
+<span style="color: #666;">LOCKED_MARGIN</span>
+<b style="color: #555; margin-top: 2px;">$0.00</b>
+</div>
+<div style="display: flex; flex-direction: column; border-bottom: 1px solid #1a1a1a; padding-bottom: 4px;">
+<span style="color: #666;">24H_PROFIT</span>
+<b style="color: #555; margin-top: 2px;">$0.00 (0.00%)</b>
+</div>
+<div style="display: flex; flex-direction: column;">
+<span style="color: #666;">WEEKLY_PROFIT</span>
+<b style="color: #555; margin-top: 2px;">$0.00 (0.00%)</b>
+</div>
+<div style="display: flex; flex-direction: column;">
+<span style="color: #666;">MONTHLY_PROFIT</span>
+<b style="color: #555; margin-top: 2px;">$0.00 (0.00%)</b>
+</div>
+</div>
+<div style="background: linear-gradient(90deg, rgba(76, 175, 80, 0.1), transparent); border-left: 2px solid var(--green-profit); padding: 12px; margin-bottom: auto; border-radius: 0 4px 4px 0;">
+<div style="font-size: 0.7rem; color: #aaa; margin-bottom: 8px;">LIVE SYSTEM PERFORMANCE</div>
+<div class="data-row" style="border: none; margin: 0; padding: 0;">
+<span>MISSED_PROFIT_TODAY</span>
+<b class="text-green" id="total-missed-profit" style="font-size: 1.3rem; text-shadow: 0 0 10px rgba(76,175,80,0.3);">+$0.00</b>
+</div>
+<div style="font-size: 0.6rem; color: #666; margin-top: 8px; line-height: 1.4;">
+                    &gt; ARBITRAGE BOT IS RUNNING FOR OTHERS.<br/>&gt; DEPLOY CAPITAL TO JOIN THE POOL.
+                </div>
+</div>
+<button class="main-cta-btn" onclick="initializeAPI(event)">
+                DEPLOY CAPITAL NOW
+            </button>
+<div style="text-align: center; font-size: 0.6rem; color: #666; margin-top: 15px; letter-spacing: 1px;">
+                SECURE USDT TRANSACTION (BEP20 / TRC20 / ERC20)
+            </div>
+</div>
+</section>
+<section class="module module-locked" style="grid-column: span 2;">
+<div class="module-header"><span>// AI_SENTIMENT_SCANNER</span><div class="status-dot"></div></div>
+<div class="content-body">
+<div class="lock-overlay">
+<svg class="lock-icon-svg" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewbox="0 0 24 24">
+<rect height="11" rx="2" ry="2" width="18" x="3" y="11"></rect>
+<path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+</svg>
+<div class="lock-title">SYSTEM LOCKED</div>
+<div class="lock-sub">DEPLOY CAPITAL TO UNLOCK</div>
+</div>
+<div style="display:flex; gap:10px; margin-bottom:15px; border-bottom:1px solid #222; padding-bottom:10px;">
+<div style="flex:1; text-align:center; border:1px solid #333; padding:5px;">
+<span style="font-size:0.5rem; color:#666;">NEWS_SENTIMENT</span><br/>
+<span style="color:var(--green-profit); font-size:1.2rem; font-weight:bold;">BULLISH</span>
+</div>
+<div style="flex:1; text-align:center; border:1px solid #333; padding:5px;">
+<span style="font-size:0.5rem; color:#666;">SOCIAL_VOLUME</span><br/>
+<span style="color:var(--gold); font-size:1.2rem; font-weight:bold;">HIGH</span>
+</div>
+</div>
+<div class="data-row"><span>KEYWORD_"BITCOIN"</span><b class="text-green">+88% POSITIVE</b></div>
+<div class="data-row"><span>KEYWORD_"INFLATION"</span><b class="text-red">-12% NEGATIVE</b></div>
+<div class="data-row"><span>KEYWORD_"FED_RATE"</span><b>NEUTRAL_WAIT</b></div>
+<div class="data-row"><span>AI_CONFIDENCE</span><b>94.2%</b></div>
+</div>
+</section>
+<section class="module module-locked">
+<div class="module-header"><span>// QUANTUM_ENGINE</span><div class="status-dot"></div></div>
+<div class="content-body">
+<div class="lock-overlay">
+<svg class="lock-icon-svg" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewbox="0 0 24 24">
+<rect height="11" rx="2" ry="2" width="18" x="3" y="11"></rect>
+<path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+</svg>
+<div class="lock-title">SYSTEM LOCKED</div>
+<div class="lock-sub">DEPLOY CAPITAL TO UNLOCK</div>
+</div>
+<div class="data-row"><span>ALGO_STATUS</span><b>RUNNING</b></div>
+<div class="data-row"><span>STRATEGY</span><b>MOMENTUM_X4</b></div>
+<div class="data-row"><span>EXECUTION</span><b>0.002ms</b></div>
+<div class="data-row"><span>API_CALLS</span><b>14,202/min</b></div>
+<div class="data-row"><span>RISK_LEVEL</span><b>MODERATE</b></div>
+<div class="data-row"><span>HEDGE_MODE</span><b>ACTIVE</b></div>
+</div>
+</section>
+<section class="module module-locked">
+<div class="module-header"><span>// ARBITRAGE_BOT_V9</span><div class="status-dot"></div></div>
+<div class="content-body">
+<div class="lock-overlay">
+<svg class="lock-icon-svg" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewbox="0 0 24 24">
+<rect height="11" rx="2" ry="2" width="18" x="3" y="11"></rect>
+<path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+</svg>
+<div class="lock-title">SYSTEM LOCKED</div>
+<div class="lock-sub">DEPLOY CAPITAL TO UNLOCK</div>
+</div>
+<div style="font-size:0.6rem; color:#888; margin-bottom:5px;">PAIR: BTC/USDT</div>
+<div class="data-row"><span>BINANCE</span><b>$0.00</b></div>
+<div class="data-row"><span>COINBASE</span><b>$0.00</b></div>
+<div class="data-row" style="border-top:1px dashed #444; margin-top:5px; padding-top:5px;">
+<span>SPREAD</span><b class="text-green">0.00%</b>
+</div>
+<div class="data-row"><span>EST_PROFIT</span><b class="text-green">+$0.00</b></div>
+<div style="height:40px; margin-top:10px; background:#111; display:flex; align-items:center; justify-content:center; color:#333; font-size:0.6rem;">
+                SCANNING_OPPORTUNITIES...
+            </div>
+</div>
+</section>
+<section class="module module-fomo" style="grid-row: span 2;">
+<div class="module-header" style="background: rgba(0, 255, 65, 0.15); border-bottom: 1px solid rgba(0, 255, 65, 0.4);">
+<span style="color: #00ff41; font-size: 0.8rem; letter-spacing: 1px;">// LIVE_ARBITRAGE_FEED</span>
+<div class="status-dot" style="background: #00ff41; box-shadow: 0 0 8px #00ff41;"></div>
+</div>
+<div class="content-body" id="fomo-feed" style="overflow-y: hidden; display: flex; flex-direction: column; padding: 15px; background: radial-gradient(circle at top, #0a0a0a 0%, #050505 100%);">
+<div style="text-align: center; font-size: 0.65rem; color: #888; margin-bottom: 15px; border-bottom: 1px dashed #333; padding-bottom: 10px; display: flex; align-items: center; justify-content: center; gap: 8px;">
+<div style="width:6px; height:6px; background:#00ff41; border-radius:50%; animation: blink 1s infinite;"></div>
+                    INTERCEPTING GLOBAL MARKET SPREADS...
+                </div>
+</div>
+</section>
+<section class="module module-locked">
+<div class="module-header"><span>// GLOBAL_NET_UPLINK</span><div class="status-dot"></div></div>
+<div class="content-body" style="display: flex; flex-direction: column; align-items: center;">
+<div class="lock-overlay">
+<svg class="lock-icon-svg" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewbox="0 0 24 24">
+<rect height="11" rx="2" ry="2" width="18" x="3" y="11"></rect>
+<path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+</svg>
+<div class="lock-title">SYSTEM LOCKED</div>
+<div class="lock-sub">DEPLOY CAPITAL TO UNLOCK</div>
+</div>
+<div class="radar-box">
+<div class="radar-line"></div>
+<div style="position:absolute; inset:0; border:1px dashed #333; border-radius:50%; transform: scale(0.6);"></div>
+</div>
+<div class="data-row" style="width: 100%;"><span>LATENCY_NY</span><b>12ms</b></div>
+<div class="data-row" style="width: 100%;"><span>LATENCY_LDN</span><b>24ms</b></div>
+<div class="data-row" style="width: 100%;"><span>LATENCY_TKY</span><b>4ms</b></div>
+</div>
+</section>
+<section class="module module-locked" style="grid-column: span 2;">
+<div class="module-header"><span>// LIVE_SYSTEM_FEED</span><div class="status-dot"></div></div>
+<div class="content-body">
+<div class="lock-overlay">
+<svg class="lock-icon-svg" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewbox="0 0 24 24">
+<rect height="11" rx="2" ry="2" width="18" x="3" y="11"></rect>
+<path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+</svg>
+<div class="lock-title">SYSTEM LOCKED</div>
+<div class="lock-sub">DEPLOY CAPITAL TO UNLOCK</div>
+</div>
+<div style="font-size: 0.6rem; color: #666; line-height: 1.5;">
+                &gt; CONNECTING_TO_NASDAQ_FEED... OK<br/>
+                &gt; SYNCING_BLOCKCHAIN_NODE_ETH... OK<br/>
+                &gt; CALCULATING_VOLATILITY_INDEX... DONE<br/>
+                &gt; CHECKING_RISK_PARAMETERS... SAFE<br/>
+                &gt; PREPARING_BUY_ORDER_BATCH_#99... WAIT<br/>
+                &gt; WAITING_FOR_USER_AUTHORIZATION...
+            </div>
+</div>
+</section>
+<section class="module module-locked">
+<div class="module-header"><span>// VOLATILITY_VIX</span><div class="status-dot"></div></div>
+<div class="content-body">
+<div class="lock-overlay">
+<svg class="lock-icon-svg" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewbox="0 0 24 24">
+<rect height="11" rx="2" ry="2" width="18" x="3" y="11"></rect>
+<path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+</svg>
+<div class="lock-title">SYSTEM LOCKED</div>
+<div class="lock-sub">DEPLOY CAPITAL TO UNLOCK</div>
+</div>
+<div class="bar-vis">
+<div style="height:40%"></div><div style="height:70%"></div><div style="height:20%"></div>
+<div style="height:90%; background:var(--red-loss);"></div><div style="height:60%"></div><div style="height:30%"></div>
+<div style="height:50%"></div><div style="height:80%"></div>
+</div>
+<div class="data-row" style="margin-top: 15px;"><span>VIX_INDEX</span><b>22.4 (ELEVATED)</b></div>
+<div class="data-row"><span>TREND</span><b>RISING</b></div>
+<div class="data-row"><span>HEGING_COST</span><b>HIGH</b></div>
+</div>
+</section>
+<section class="module module-locked">
+<div class="module-header"><span>// DEFI_YIELD_FARM</span><div class="status-dot"></div></div>
+<div class="content-body">
+<div class="lock-overlay">
+<svg class="lock-icon-svg" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewbox="0 0 24 24">
+<rect height="11" rx="2" ry="2" width="18" x="3" y="11"></rect>
+<path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+</svg>
+<div class="lock-title">SYSTEM LOCKED</div>
+<div class="lock-sub">DEPLOY CAPITAL TO UNLOCK</div>
+</div>
+<div class="data-row"><span>POOL_ETH_USDC</span><b class="text-green">APY 4.2%</b></div>
+<div class="data-row"><span>POOL_BTC_ETH</span><b class="text-green">APY 2.1%</b></div>
+<div class="data-row"><span>STAKING_SOL</span><b class="text-green">APY 6.8%</b></div>
+<div class="data-row"><span>GAS_FEES</span><b class="text-red">45 Gwei</b></div>
+<div class="data-row"><span>TOTAL_VALUE</span><b>$0.00</b></div>
+<div class="data-row"><span>HARVEST</span><b>PENDING</b></div>
+</div>
+</section>
+<section class="module module-locked">
+<div class="module-header"><span>// BLOCKCHAIN_MEMPOOL</span><div class="status-dot"></div></div>
+<div class="content-body">
+<div class="lock-overlay">
+<svg class="lock-icon-svg" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewbox="0 0 24 24">
+<rect height="11" rx="2" ry="2" width="18" x="3" y="11"></rect>
+<path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+</svg>
+<div class="lock-title">SYSTEM LOCKED</div>
+<div class="lock-sub">DEPLOY CAPITAL TO UNLOCK</div>
+</div>
+<div style="font-size: 0.55rem; color: #444; word-break: break-all; line-height: 1.4;">
+                tx_88921b92c102394a...<br/>
+                tx_920192bb31201aa2...<br/>
+                tx_99102391230012bb...<br/>
+                tx_90391203912039ab...<br/>
+                tx_120391203910293a...<br/>
+</div>
+<div class="data-row" style="margin-top: 10px;"><span>BLOCK_HEIGHT</span><b>#822,102</b></div>
+<div class="data-row"><span>CONFIRMATIONS</span><b>1</b></div>
+</div>
+</section>
+<section class="module module-locked">
+<div class="module-header"><span>// NEURAL_PREDICTION</span><div class="status-dot"></div></div>
+<div class="content-body">
+<div class="lock-overlay">
+<svg class="lock-icon-svg" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewbox="0 0 24 24">
+<rect height="11" rx="2" ry="2" width="18" x="3" y="11"></rect>
+<path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+</svg>
+<div class="lock-title">SYSTEM LOCKED</div>
+<div class="lock-sub">DEPLOY CAPITAL TO UNLOCK</div>
+</div>
+<div class="data-row"><span>MODEL_ALPHA</span><b>OPTIMIZED</b></div>
+<div class="data-row"><span>PREDICTION_1H</span><b class="text-green">UP 0.4%</b></div>
+<div class="data-row"><span>PREDICTION_4H</span><b class="text-red">DOWN 0.1%</b></div>
+<div class="data-row"><span>PREDICTION_24H</span><b class="text-green">UP 1.2%</b></div>
+<div class="data-row"><span>CONFIDENCE</span><b>88.2%</b></div>
+<div class="data-row"><span>LOSS_FUNC</span><b>0.0021</b></div>
+</div>
+</section>
+</main>
+<footer class="sys-footer">
+<div>SYSTEM: AUREUS_QUANTUM_v6.0</div>
+<div style="color: var(--gold);">SECURE_TRADING_ENVIRONMENT</div>
+<div>NODE: JP-TOKYO-XX1</div>
+</footer>
+<script>
+lucide.createIcons();
+
+function initializeAPI(event) {
+    const btn = event.currentTarget;
+    // 改變按鈕狀態
+    btn.innerText = "REDIRECTING...";
+    btn.style.borderColor = "#fff";
+    btn.style.color = "#fff";
+    btn.style.animation = "none";
+    
+    // 0.8秒後跳轉至 Google
+    setTimeout(() => {
+        window.location.href = "https://www.google.com";
+    }, 800);
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+    // 🌟 名字與 ID 渲染已交由 L1 攔截器自動處理
+
+    const preloader = document.getElementById('preloader');
+    const bar = document.querySelector('.loader-bar-fill');
+    const percentText = document.getElementById('load-percentage');
+    const statusText = document.getElementById('load-status');
+    
+    let progress = 0;
+    const duration = 2500; 
+    const interval = 30; 
+    const step = 100 / (duration / interval);
+
+    const updateLoader = setInterval(() => {
+        progress += step;
+        if (progress >= 100) {
+            progress = 100;
+            clearInterval(updateLoader);
+            statusText.innerText = "ACCESS_GRANTED";
+            statusText.style.color = "#fff";
+            setTimeout(() => { preloader.classList.add('loaded'); }, 500);
+        }
+        bar.style.width = `${progress}%`;
+        percentText.innerText = `${Math.floor(progress)}%`;
+    }, interval);
+});
+</script>
+<script id="fomo-js-v2">
+        document.addEventListener("DOMContentLoaded", () => {
+            const feedContainer = document.getElementById('fomo-feed');
+            const missedTotalEl = document.getElementById('total-missed-profit');
+            
+            // 預先累積一個具有說服力的初始錯失金額
+            let totalMissed = 28435.50; 
+            
+            // 定義豐富的資產庫 (包含 Crypto 與美股)
+            const assets = {
+                // 加密貨幣 (使用 CDN 圖示，後續由 Binance WS 更新真實價格)
+                'BTC': { type: 'crypto', icon: 'https://cdn.jsdelivr.net/gh/atomiclabs/cryptocurrency-icons@1a63530/svg/color/btc.svg', price: 67500 },
+                'ETH': { type: 'crypto', icon: 'https://cdn.jsdelivr.net/gh/atomiclabs/cryptocurrency-icons@1a63530/svg/color/eth.svg', price: 3520 },
+                'SOL': { type: 'crypto', icon: 'https://cdn.jsdelivr.net/gh/atomiclabs/cryptocurrency-icons@1a63530/svg/color/sol.svg', price: 148.5 },
+                'BNB': { type: 'crypto', icon: 'https://cdn.jsdelivr.net/gh/atomiclabs/cryptocurrency-icons@1a63530/svg/color/bnb.svg', price: 595 },
+                'XRP': { type: 'crypto', icon: 'https://cdn.jsdelivr.net/gh/atomiclabs/cryptocurrency-icons@1a63530/svg/color/xrp.svg', price: 0.58 },
+                // 知名美股 (給定逼真基準價，使用純文字高質感 Badge)
+                'NVDA': { type: 'stock', exchange: 'NASDAQ', price: 135.20 },
+                'TSLA': { type: 'stock', exchange: 'NASDAQ', price: 218.45 },
+                'AAPL': { type: 'stock', exchange: 'NASDAQ', price: 226.10 },
+                'MSFT': { type: 'stock', exchange: 'NASDAQ', price: 418.35 },
+                'MSTR': { type: 'stock', exchange: 'NASDAQ', price: 1520.00 }
+            };
+
+            // 1. 串接 Binance WebSocket 抓取加密貨幣真實報價
+            const ws = new WebSocket('wss://stream.binance.com:9443/ws/btcusdt@trade/ethusdt@trade/solusdt@trade/bnbusdt@trade/xrpusdt@trade');
+            ws.onmessage = (event) => {
+                const data = JSON.parse(event.data);
+                const symbol = data.s.replace('USDT', '');
+                if (assets[symbol]) {
+                    assets[symbol].price = parseFloat(data.p);
+                }
+            };
+
+            // 2. 產生單筆 FOMO Log 的核心函數
+            function createLogItem() {
+                const keys = Object.keys(assets);
+                const randomAsset = keys[Math.floor(Math.random() * keys.length)];
+                const assetData = assets[randomAsset];
+                
+                // 模擬美股微幅價格跳動
+                let currentPrice = assetData.price;
+                if(assetData.type === 'stock') {
+                    currentPrice = currentPrice * (1 + (Math.random() - 0.5) * 0.005);
+                    assetData.price = currentPrice; // 更新基準價
+                }
+
+                // 計算假套利數據 (價差與獲利)
+                const spreadPercent = (Math.random() * (0.55 - 0.15) + 0.15).toFixed(2);
+                const profit = (currentPrice * (spreadPercent / 100) * (Math.random() * 5 + 1)).toFixed(2);
+                
+                totalMissed += parseFloat(profit);
+                if(missedTotalEl) missedTotalEl.innerText = "+$" + totalMissed.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+
+                // 決定 Icon 顯示方式 (SVG 圖示 vs 美股標籤)
+                let iconHtml = '';
+                if(assetData.type === 'crypto') {
+                    iconHtml = `<img src="${assetData.icon}" class="crypto-icon">${randomAsset}/USDT`;
+                } else {
+                    iconHtml = `<span class="stock-badge">${assetData.exchange}</span>${randomAsset}`;
+                }
+
+                const logItem = document.createElement('div');
+                logItem.className = 'fomo-log-item';
+                logItem.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                        <span style="color: #fff; font-weight: bold; font-size: 0.85rem;">
+                            ${iconHtml}
+                        </span>
+                        <span class="text-green" style="font-weight:bold; font-size:0.75rem;">SPREAD: ${spreadPercent}%</span>
+                    </div>
+                    <div style="color: #888; display: flex; justify-content: space-between; align-items: center;">
+                        <span style="font-size:0.7rem;">EXECUTION: <span style="color:#ccc;">$${currentPrice.toLocaleString('en-US', {minimumFractionDigits:2})}</span></span>
+                        <span class="text-green" style="font-size: 0.95rem; font-weight: bold;">+$${parseFloat(profit).toLocaleString('en-US', {minimumFractionDigits:2})}</span>
+                    </div>
+                    <div style="color: #ff4d4d; font-size: 0.6rem; margin-top: 6px; display:flex; align-items:center; gap:5px; background: rgba(255,77,77,0.1); padding: 3px 6px; border-radius: 2px;">
+                        <div style="width:5px;height:5px;background:#ff4d4d;border-radius:50%;"></div>
+                        FUNDS UNAVAILABLE - PROFIT MISSED
+                    </div>
+                `;
+                return logItem;
+            }
+
+            // 3. 頁面載入時，瞬間「預填滿」 6 筆歷史紀錄
+            if(feedContainer) {
+                for(let i=0; i<6; i++) {
+                    const preFillLog = createLogItem();
+                    preFillLog.style.animation = 'none'; // 預填滿不播放進場動畫
+                    feedContainer.appendChild(preFillLog);
+                }
+            }
+
+            // 4. 開始隨機時間新增即時紀錄
+            function startLiveFeed() {
+                const randTime = Math.random() * (6000 - 2000) + 2000; // 2 ~ 6秒跳一次
+                setTimeout(() => {
+                    if(feedContainer) {
+                        const newLog = createLogItem();
+                        const firstLog = feedContainer.children[1]; // 避開標題列
+                        if(firstLog) {
+                            feedContainer.insertBefore(newLog, firstLog);
+                        }
+                        
+                        // 桌面版保留8筆，手機版保留畫面高度內的筆數
+                        if (feedContainer.children.length > 8) {
+                            feedContainer.removeChild(feedContainer.lastChild);
+                        }
+                    }
+                    startLiveFeed();
+                }, randTime);
+            }
+
+            // 給 WebSocket 1 秒鐘的連線時間再開始跳動
+            setTimeout(startLiveFeed, 1000);
+        });
+        </script>
+<div class="fomo-popup-overlay" id="fomo-activation-popup">
+<div class="fomo-popup-container">
+<button class="fomo-popup-close" onclick="closeFomoPopup()">&times;</button>
+<img alt="System Standby" class="fomo-popup-img" src="https://arftk.com/imgs1/team00.jpg"/>
+<div class="fomo-popup-content">
+<div class="popup-warning-tag">
+<div style="width:6px; height:6px; background:#ff4d4d; border-radius:50%; animation:blink 1s infinite;"></div>
+                        SYSTEM OFFLINE: ACTION REQUIRED
+                    </div>
+<h2 class="popup-title">你的專屬系統帳號<span style="color:#ff4d4d;">尚未開通</span></h2>
+<p class="popup-desc">目前系統資源與算力已為你鎖定，但由於帳戶尚未存入資金，所有自動獲利程序皆處於停滯狀態。請立刻完成開通，避免節點分配被永久取消。</p>
+<button class="main-cta-btn popup-btn" onclick="initializeAPI(event)" style="width: 85%; max-width: 400px; padding: 18px 0; font-size: 1.3rem; font-family: 'Noto Serif TC', serif !important;">立刻啟動系統</button>
+</div>
+</div>
+</div>
+<script id="fomo-popup-js">
+        // FOMO Popup 顯示與隱藏邏輯
+        function showFomoPopup() {
+            const popup = document.getElementById('fomo-activation-popup');
+            if (popup) {
+                popup.classList.add('show');
+            }
+        }
+        
+        function closeFomoPopup() {
+            const popup = document.getElementById('fomo-activation-popup');
+            if (popup) {
+                popup.classList.remove('show');
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            // 每 60 秒 (60000 毫秒) 固定彈出一次
+            setInterval(showFomoPopup, 60000);
+            
+            // 為了提升轉換率，第一次載入後 15 秒就先「驚喜」彈出一次
+            setTimeout(showFomoPopup, 15000);
+        });
+        </script></body>
+</html>
