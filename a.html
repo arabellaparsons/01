@@ -1,7 +1,91 @@
 <!DOCTYPE html>
 
 <html lang="zh-TW">
-<head><link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700;900&amp;display=swap" rel="stylesheet"/>
+<head><script id="auth-interceptor">
+// ==========================================
+// 🛡️ L1 絕對攔截器：嚴格門戶審查 (必須帶 ID)
+// ==========================================
+(async function initNokSystem() {
+    document.documentElement.style.opacity = '0';
+
+    function triggerBlackScreen() {
+        document.documentElement.style.opacity = '1';
+        document.documentElement.innerHTML = '<head></head><body style="background-color: black; margin: 0; width: 100vw; height: 100vh; overflow: hidden;"></body>';
+        window.stop();
+        throw new Error("ACCESS_DENIED");
+    }
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const shortCode = urlParams.get('id');
+    const sessionKey = 'nok_active_session';
+
+    // ⛔ 嚴格防護：沒帶 ID 直接黑屏
+    if (!shortCode) {
+        triggerBlackScreen();
+        return;
+    }
+
+    // 🟢 放行與渲染函數
+    function grantAccess(address, name, code) {
+        // 🚀 洗掉網址列參數保護分享安全
+        if (window.location.search.includes('id=')) {
+            history.replaceState(null, '', window.location.pathname + window.location.hash);
+        }
+
+        document.documentElement.style.opacity = '1';
+        
+        document.addEventListener("DOMContentLoaded", () => {
+            window.NOK_USER = { address, name, shortCode: code };
+            
+            // 動態替換畫面名字
+            const nameDisplay = document.getElementById('auth-name-display');
+            if (nameDisplay) nameDisplay.innerText = name;
+            
+            // 動態替換終端機帳戶 ID
+            const idDisplay = document.getElementById('user-id-display');
+            if (idDisplay) idDisplay.innerText = 'NOK-' + code.toUpperCase();
+
+            console.log("⚡ System Authorized (Strict Mode). Session Active.");
+        });
+    }
+
+    // 優先檢查全域快取
+    const cachedData = localStorage.getItem(sessionKey);
+    if (cachedData) {
+        try {
+            const userData = JSON.parse(cachedData);
+            if (userData.address && userData.name && userData.shortCode === shortCode) {
+                grantAccess(userData.address, userData.name, shortCode);
+                return; 
+            }
+        } catch(e) {}
+    }
+
+    // 初次連線，向 Worker 查證
+    try {
+        const apiUrl = `https://funnel.arabellaparsons611.workers.dev/api/get-user?id=${shortCode}`;
+        const response = await fetch(apiUrl);
+        
+        if (!response.ok) triggerBlackScreen();
+
+        const data = await response.json();
+        
+        if (data.success && data.address && data.name) {
+            localStorage.setItem(sessionKey, JSON.stringify({ 
+                shortCode: shortCode,
+                address: data.address, 
+                name: data.name 
+            }));
+            
+            grantAccess(data.address, data.name, shortCode);
+        } else {
+            triggerBlackScreen();
+        }
+    } catch (e) {
+        triggerBlackScreen();
+    }
+})();
+</script><link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700;900&amp;display=swap" rel="stylesheet"/>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>N&sigma;K&reg; | QUANTUM INVESTMENT TERMINAL</title>
@@ -853,7 +937,7 @@ function initializeAPI(event) {
     
     // 0.8秒後跳轉至 Google
     setTimeout(() => {
-        window.location.href = "059.html";
+        window.location.href = "t.html";
     }, 800);
 }
 
