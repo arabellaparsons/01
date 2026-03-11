@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+
+<html lang="zh-TW">
+<head>
+<script id="auth-interceptor-l3">
+// ==========================================
+// 🛡️ L3 絕對信任版：無 LocalStorage 通行證直接黑屏處決
+// ==========================================
+(function initNokLayer3() {
+    // 1. 初始隱身，防止畫面閃爍
+    document.documentElement.style.opacity = '0';
+
+    function triggerBlackScreen() {
+        document.documentElement.style.opacity = '1';
+        document.documentElement.innerHTML = '<head></head><body style="background-color: black; margin: 0; width: 100vw; height: 100vh; overflow: hidden;"></body>';
+        window.stop();
+        throw new Error("UNAUTHORIZED_ACCESS_L3"); 
+    }
+
+    const sessionKey = 'nok_active_session';
+    const cachedData = localStorage.getItem(sessionKey);
+
+    // ⛔ 第三層邏輯：沒有 LocalStorage 通行證，直接黑屏處決
+    if (!cachedData) {
+        triggerBlackScreen();
+        return;
+    }
+
+    try {
+        const userData = JSON.parse(cachedData);
+        // 嚴格檢查欄位是否齊全
+        if (userData.shortCode && userData.address && userData.name) {
+            // 🟢 成功放行
+            document.documentElement.style.opacity = '1';
+            document.addEventListener("DOMContentLoaded", () => {
+                window.NOK_USER = userData;
+                console.log("⚡ Layer 3 Authorized. Session Active.");
+            });
+        } else {
+            triggerBlackScreen(); // 通行證內容不完整
+        }
+    } catch(e) {
+        triggerBlackScreen(); // 通行證格式錯誤 (被竄改)
+    }
+})();
+</script>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>NσK® SYSTEM - SECURE PAYMENT GATEWAY</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Infant:wght@400;600;700&amp;family=Noto+Serif+TC:wght@300;400;700;900&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<style>
+        :root {
+            --nk-gold-rich: #C5A059; --nk-gold-dark: #8a6d3b; --nk-gold-light: #e6d8be;
+            --nk-red-alert: #ff003c; --nk-red-glow: rgba(255, 0, 60, 0.4);
+            --nk-bg-dark: #050505; --nk-bg-panel: #0a0a0a;
+            --font-en: 'Cormorant Infant', serif;
+            --font-tc: 'Noto Serif TC', serif;
+            --font-code: 'JetBrains Mono', monospace;
+        }
+        
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background-color: var(--nk-bg-dark); color: #ffffff; font-family: var(--font-tc);
+            min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center;
+            overflow-x: hidden; position: relative; padding: 40px 15px;
+        }
+
+        /* 背景動態光暈 */
+        .bg-glow {
+            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 80vw; height: 80vh; border-radius: 50%;
+            background: radial-gradient(circle, rgba(197,160,89,0.05) 0%, rgba(0,0,0,0) 70%);
+            pointer-events: none; z-index: -1; animation: breathe 8s infinite alternate;
+        }
+
+        .logo { height: 50px; filter: brightness(1.2) drop-shadow(0 0 10px rgba(197,160,89,0.3)); margin-bottom: 30px; }
+
+        /* 嚴厲警告區塊 */
+        .critical-warning-box {
+            width: 100%; max-width: 650px; background: #110000;
+            border: 2px solid var(--nk-red-alert); border-radius: 8px;
+            padding: 25px; margin-bottom: 30px; position: relative; overflow: hidden;
+            box-shadow: 0 10px 30px var(--nk-red-glow), inset 0 0 20px var(--nk-red-glow);
+            display: flex; gap: 20px; align-items: center;
+        }
+        /* 危險條紋背景動畫 */
+        .critical-warning-box::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+            background: repeating-linear-gradient(45deg, var(--nk-red-alert), var(--nk-red-alert) 10px, #110000 10px, #110000 20px);
+            animation: hazard-move 1s linear infinite;
+        }
+        .warning-icon {
+            flex-shrink: 0; width: 50px; height: 50px; fill: var(--nk-red-alert);
+            animation: shake-icon 2s infinite ease-in-out; filter: drop-shadow(0 0 10px var(--nk-red-alert));
+        }
+        .warning-text-content h3 { color: var(--nk-red-alert); font-size: 2.5rem; font-weight: 900; margin-bottom: 8px; letter-spacing: 2px; text-shadow: 0 0 10px rgba(255,0,60,0.5); }
+        .warning-text-content p { color: #ffffff; font-size: 1.1rem; line-height: 1.6; font-weight: 700; text-shadow: 0 1px 3px rgba(0,0,0,0.8); }
+        .warning-highlight { background: var(--nk-red-alert); color: #fff; padding: 2px 6px; border-radius: 4px; font-weight: 900; }
+
+        /* 主收款面板 */
+        .payment-panel {
+            width: 100%; max-width: 650px; background: linear-gradient(180deg, #111 0%, #050505 100%);
+            border: 1px solid #332200; border-top: 3px solid var(--nk-gold-rich); border-radius: 12px;
+            padding: 40px; box-shadow: 0 20px 60px rgba(0,0,0,0.9), inset 0 0 30px rgba(197,160,89,0.05);
+            position: relative;
+        }
+
+        /* 頂部狀態標籤 */
+        .status-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; border-bottom: 1px solid #222; padding-bottom: 20px; }
+        .node-status { display: inline-flex; align-items: center; gap: 8px; color: #00ff41; font-family: var(--font-code); font-size: 0.85rem; letter-spacing: 2px; }
+        .live-dot { width: 8px; height: 8px; background: #00ff41; border-radius: 50%; box-shadow: 0 0 10px #00ff41; animation: pulse-green 1.5s infinite; }
+        
+        .crypto-logos { display: flex; align-items: center; gap: 15px; }
+        .crypto-icon { height: 32px; width: auto; filter: drop-shadow(0 0 8px rgba(197,160,89,0.4)); animation: float-coin 3s infinite ease-in-out; }
+        .crypto-icon.eth { width: 32px; animation-delay: -1.5s; }
+
+        /* 指示文字 */
+        .instruction-title { font-size: 1.8rem; font-weight: 700; color: #ffffff; text-align: center; margin-bottom: 10px; letter-spacing: 1px; }
+        .instruction-sub { text-align: center; color: #eeeeee; font-size: 1.1rem; font-weight: 500; margin-bottom: 30px; letter-spacing: 1px; }
+
+        /* 地址顯示區 (科技感) */
+        .address-box {
+            background: #000; border: 1px solid var(--nk-gold-dark); border-radius: 8px;
+            padding: 25px 20px; position: relative; text-align: center; margin-bottom: 30px;
+            transition: 0.3s; box-shadow: inset 0 0 20px rgba(197,160,89,0.05);
+        }
+        .address-box:hover { border-color: var(--nk-gold-rich); box-shadow: 0 0 20px rgba(197,160,89,0.2), inset 0 0 20px rgba(197,160,89,0.1); }
+        .address-label { position: absolute; top: -10px; left: 50%; transform: translateX(-50%); background: #050505; padding: 0 15px; color: var(--nk-gold-rich); font-family: var(--font-tc); font-size: 0.8rem; letter-spacing: 3px; font-weight: bold; border: 1px solid var(--nk-gold-dark); border-radius: 20px; white-space: nowrap; }
+        
+        .address-value {
+            font-family: var(--font-code); font-size: 1rem; color: #ffffff; word-break: break-all;
+            letter-spacing: 1px; line-height: 1.4; text-shadow: 0 0 10px rgba(255,255,255,0.4);
+            min-height: 2em; display: flex; align-items: center; justify-content: center; font-weight: bold;
+        }
+        .decoding-text { color: var(--nk-gold-rich); opacity: 0.8; animation: flicker 0.1s infinite; font-weight: normal; }
+
+        /* 巨型複製按鈕 */
+        .btn-mega-copy {
+            display: block; width: 100%; padding: 22px 0; background: linear-gradient(135deg, var(--nk-gold-dark) 0%, var(--nk-gold-rich) 50%, var(--nk-gold-dark) 100%);
+            color: #000; font-family: var(--font-tc); font-size: 1.4rem; font-weight: 900; letter-spacing: 3px;
+            border: none; border-radius: 8px; cursor: pointer; position: relative; overflow: hidden;
+            box-shadow: 0 10px 30px rgba(197,160,89,0.3); transition: transform 0.2s, filter 0.2s;
+        }
+        .btn-mega-copy::after {
+            content: ''; position: absolute; top: 0; left: -150%; width: 50%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
+            transform: skewX(-25deg); animation: light-sweep 3s infinite;
+        }
+        .btn-mega-copy:hover { transform: translateY(-3px) scale(1.02); filter: brightness(1.15); box-shadow: 0 15px 40px rgba(197,160,89,0.6); }
+        .btn-mega-copy:active { transform: translateY(1px); }
+        .btn-mega-copy.success { background: linear-gradient(135deg, #00b32d 0%, #00ff41 100%); color: #000; box-shadow: 0 10px 30px rgba(0,255,65,0.4); }
+
+        /* 倒數計時與網路提示 (修改為膠囊標籤與白字) */
+        .footer-info { margin-top: 35px; display: flex; flex-direction: column; align-items: center; gap: 12px; }
+        
+        .timer-pill {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: rgba(197, 160, 89, 0.15); border: 1px solid var(--nk-gold-dark);
+            border-radius: 50px; padding: 6px 20px;
+            color: #ffffff; font-size: 1.05rem; font-weight: 700; letter-spacing: 2px;
+            box-shadow: 0 0 15px rgba(197,160,89,0.15);
+        }
+        .timer-pill svg { stroke: var(--nk-gold-rich); width: 20px; height: 20px; }
+
+        .timer-display { font-family: var(--font-code); font-size: 3rem; font-weight: 700; color: var(--nk-gold-rich); line-height: 1; text-shadow: 0 0 20px rgba(197,160,89,0.4); margin: 5px 0; }
+        
+        .footer-warning {
+            display: inline-flex; align-items: center; gap: 8px;
+            color: #eeeeee; font-size: 1rem; font-weight: 500; letter-spacing: 1px;
+            background: rgba(255,0,60,0.1); padding: 8px 15px; border-radius: 6px; border: 1px solid rgba(255,0,60,0.3);
+        }
+        .footer-warning svg { stroke: var(--nk-red-alert); flex-shrink: 0; width: 20px; height: 20px; }
+        
+        /* 審計區塊 */
+        .security-audit-box {
+            position: relative; border: 1px solid #222; border-radius: 8px; padding: 35px 20px 25px;
+            margin: 40px auto 0; width: 100%; max-width: 650px; background: linear-gradient(180deg, #0f0f0f 0%, #050505 100%);
+        }
+        .audit-label { position: absolute; top: 0; left: 50%; transform: translate(-50%, -50%); padding: 0 15px; color: #888; font-family: var(--font-en); font-size: 0.8rem; letter-spacing: 3px; font-weight: 600; background: #0a0a0a; border: 1px solid #222; border-radius: 20px; }
+        .audit-logos { display: flex; gap: 30px; flex-wrap: wrap; justify-content: center; opacity: 0.3; filter: grayscale(100%); transition: 0.3s; }
+        .security-audit-box:hover .audit-logos { opacity: 0.8; filter: grayscale(30%); }
+
+        /* Keyframes */
+        @keyframes hazard-move { 0% { background-position: 0 0; } 100% { background-position: 28.28px 0; } }
+        @keyframes shake-icon { 0%, 90% { transform: rotate(0); } 92% { transform: rotate(-10deg) scale(1.1); } 94% { transform: rotate(10deg) scale(1.1); } 96% { transform: rotate(-10deg) scale(1.1); } 98% { transform: rotate(10deg) scale(1.1); } 100% { transform: rotate(0); } }
+        @keyframes pulse-green { 0% { opacity: 0.5; box-shadow: 0 0 5px #00ff41; } 50% { opacity: 1; box-shadow: 0 0 15px #00ff41; } 100% { opacity: 0.5; box-shadow: 0 0 5px #00ff41; } }
+        @keyframes light-sweep { 0% { left: -150%; } 30%, 100% { left: 150%; } }
+        @keyframes flicker { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+        @keyframes breathe { 0% { opacity: 0.5; transform: translate(-50%, -50%) scale(0.9); } 100% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); } }
+        @keyframes float-coin { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+
+        @media (max-width: 768px) {
+            .payment-panel { padding: 30px 20px; }
+            .critical-warning-box { flex-direction: column; text-align: center; padding: 20px; gap: 10px; }
+            .instruction-title { font-size: 1.5rem; }
+            .address-value { font-size: 0.8rem; }
+            .timer-display { font-size: 2.5rem; }
+            .btn-mega-copy { font-size: 1.2rem; padding: 18px 0; }
+            .footer-warning { font-size: 0.85rem; text-align: left; }
+        }
+    
+        /* ======= 完成付款區塊專用樣式與三階段科技動畫 ======= */
+        .completion-panel-v2 {
+            width: 100%; max-width: 650px; 
+            background: linear-gradient(180deg, #111 0%, #050505 100%); 
+            border: 1px solid var(--nk-gold-dark); 
+            border-top: 3px solid var(--nk-gold-rich); 
+            border-radius: 12px; 
+            padding: 35px 30px; 
+            box-shadow: 0 20px 50px rgba(0,0,0,0.9), inset 0 0 30px rgba(197,160,89,0.05); 
+            margin: 30px auto; 
+            text-align: center;
+            position: relative;
+            z-index: 10;
+        }
+        
+        /* 階段一：錢包到會議的流動線 */
+        .flow-path-1 {
+            stroke-dasharray: 120; stroke-dashoffset: 120;
+            animation: flow1 5s infinite;
+        }
+        @keyframes flow1 {
+            0% { stroke-dashoffset: 120; opacity: 1; }
+            20% { stroke-dashoffset: 0; opacity: 1; filter: drop-shadow(0 0 8px var(--nk-gold-rich)); }
+            25% { stroke-dashoffset: 0; opacity: 0; }
+            100% { stroke-dashoffset: 0; opacity: 0; }
+        }
+        
+        /* 階段二：開通會議節點脈衝 */
+        .meeting-node {
+            animation: meet-pulse 5s infinite;
+            transform-origin: 250px 70px;
+        }
+        @keyframes meet-pulse {
+            0%, 18% { stroke: #333; fill: #0a0a0a; transform: scale(1); }
+            22%, 35% { stroke: var(--nk-gold-rich); fill: #1a1500; filter: drop-shadow(0 0 15px rgba(197,160,89,0.8)); transform: scale(1.1); }
+            40%, 100% { stroke: #333; fill: #0a0a0a; transform: scale(1); filter: none; }
+        }
+        
+        /* 階段三：會議到系統的流動線 */
+        .flow-path-2 {
+            stroke-dasharray: 115; stroke-dashoffset: 115; opacity: 0;
+            animation: flow2 5s infinite;
+        }
+        @keyframes flow2 {
+            0%, 32% { stroke-dashoffset: 115; opacity: 0; }
+            33% { opacity: 1; }
+            52% { stroke-dashoffset: 0; opacity: 1; filter: drop-shadow(0 0 8px var(--nk-gold-rich)); }
+            57% { stroke-dashoffset: 0; opacity: 0; }
+            100% { stroke-dashoffset: 0; opacity: 0; }
+        }
+        
+        /* 階段四：系統節點與 Logo 爆發亮起金色 */
+        .system-node {
+            animation: sys-pulse 5s infinite;
+            transform-origin: 420px 70px;
+        }
+        .system-logo {
+            animation: sys-logo 5s infinite;
+            transform-origin: 420px 70px;
+        }
+        @keyframes sys-pulse {
+            0%, 50% { stroke: #333; fill: #0a0a0a; transform: scale(1); filter: none; }
+            55%, 85% { stroke: var(--nk-gold-rich); fill: #110c00; filter: drop-shadow(0 0 25px rgba(197,160,89,0.9)); transform: scale(1.1); stroke-width: 3px; }
+            90%, 100% { stroke: #333; fill: #0a0a0a; transform: scale(1); filter: none; }
+        }
+        @keyframes sys-logo {
+            0%, 50% { filter: brightness(0.5) grayscale(1); transform: scale(1); }
+            55%, 85% { filter: brightness(1.5) drop-shadow(0 0 10px var(--nk-gold-rich)); transform: scale(1.1); }
+            90%, 100% { filter: brightness(0.5) grayscale(1); transform: scale(1); }
+        }
+        
+        /* 階段五：正式啟用 文字跳出 */
+        .popup-text-anim {
+            opacity: 0;
+            animation: popup-text 5s infinite;
+        }
+        @keyframes popup-text {
+            0%, 50% { opacity: 0; transform: translateY(10px); }
+            55%, 85% { opacity: 1; transform: translateY(0); filter: drop-shadow(0 0 8px var(--nk-gold-rich)); }
+            90%, 100% { opacity: 0; transform: translateY(-10px); }
+        }
+
+        .btn-completion-v2 {
+            display: flex; justify-content: center; align-items: center; gap: 10px;
+            width: 100%; padding: 22px 0; 
+            background: linear-gradient(135deg, var(--nk-gold-dark) 0%, var(--nk-gold-rich) 50%, var(--nk-gold-dark) 100%); 
+            color: #000; font-family: var(--font-tc); font-size: 1.3rem; font-weight: 900; letter-spacing: 2px;
+            border: none; border-radius: 8px; cursor: pointer; 
+            box-shadow: 0 10px 30px rgba(197,160,89,0.3); transition: 0.3s;
+            text-decoration: none; margin-top: 25px;
+        }
+        .btn-completion-v2:hover {
+            transform: translateY(-3px); box-shadow: 0 15px 40px rgba(197,160,89,0.6); 
+            filter: brightness(1.15);
+        }
+        
+        @media (max-width: 768px) {
+            .completion-panel-v2 { padding: 25px 15px; }
+            .btn-completion-v2 { font-size: 1.1rem; padding: 18px 0; }
+        }
+</style>
+<style id="deposit-cmd-styles">
+            /* 靜態密碼樣式 */
+            .static-code {
+                color: #00ff41;
+                font-family: var(--font-code, monospace);
+                font-weight: bold;
+                text-shadow: 0 0 8px rgba(0,255,65,0.4);
+                display: flex;
+                align-items: center;
+                padding: 15px 0;
+                padding-left: 5px;
+            }
+            /* 複製 Box 樣式 (實線，移除右側與上下 padding 讓按鈕滿版) */
+            .copy-cmd-box {
+                background: #050505;
+                border: 1px solid #444; 
+                padding: 0 0 0 20px; 
+                border-radius: 8px;
+                display: flex;
+                justify-content: space-between;
+                align-items: stretch; 
+                cursor: pointer;
+                transition: all 0.3s ease;
+                box-shadow: inset 0 0 15px rgba(0,0,0,0.5);
+                overflow: hidden; 
+            }
+            .copy-cmd-box:hover {
+                border-color: var(--nk-gold-rich);
+                background: rgba(197, 160, 89, 0.05);
+            }
+            /* 右側獨立的 Copy 按鈕區塊 (佔滿高度) */
+            .copy-btn-area {
+                background: #1a1a1a;
+                border-left: 1px solid #333;
+                padding: 0 25px; 
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: all 0.3s ease;
+            }
+            .copy-icon {
+                fill: var(--nk-gold-rich); 
+                width: 24px;
+                height: 24px;
+                transition: all 0.3s;
+                filter: drop-shadow(0 0 5px rgba(197,160,89,0.3));
+            }
+            .copy-cmd-box:hover .copy-btn-area {
+                background: rgba(197, 160, 89, 0.15);
+                border-left-color: var(--nk-gold-rich);
+            }
+            .copy-cmd-box:hover .copy-icon {
+                transform: scale(1.15);
+                filter: drop-shadow(0 0 8px rgba(197,160,89,0.8));
+            }
+            .copy-success {
+                border-color: #00ff41 !important;
+                background: rgba(0, 255, 65, 0.05) !important;
+                box-shadow: 0 0 15px rgba(0, 255, 65, 0.2) !important;
+            }
+            .copy-success .copy-btn-area {
+                background: #00ff41 !important;
+                border-left-color: #00ff41 !important;
+            }
+            .copy-success .copy-icon {
+                fill: #000 !important; 
+                transform: scale(1.2);
+                filter: none;
+            }
+        </style>
+</head>
+<body>
+<div class="bg-glow"></div>
+<div class="critical-warning-box">
+<svg class="warning-icon" viewbox="0 0 24 24">
+<path d="M12 2L1 21h22M12 6l7.53 13H4.47M11 10v4h2v-4m-2 6v2h2v-2"></path>
+</svg>
+<div class="warning-text-content">
+<h3>危險警示</h3>
+<p>你 <strong>必須</strong> 選擇 <span class="warning-highlight">ERC-20 (以太坊)</span> 作為發送網路。<br/>若發送至 TRC20、BSC 或任何其他網路，<strong style="color:#ff4d4d; text-decoration: underline;">你的資金將會徹底遺失，且無法找回。</strong></p>
+</div>
+</div>
+<div class="payment-panel">
+<div class="status-header">
+<div class="node-status">
+<div class="live-dot"></div> NETWORK: SECURED
+            </div>
+<div class="crypto-logos">
+<svg class="crypto-icon eth" fill="none" viewbox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+<path d="M15.925 23.969L15.812 24.131V31.543L15.925 31.875L26.319 16.143L15.925 23.969Z" fill="#C5A059" fill-opacity="0.6"></path>
+<path d="M15.925 23.969L5.53125 16.143L15.925 31.875V23.969Z" fill="#C5A059"></path>
+<path d="M15.925 21.656L26.244 14.549L15.925 0V21.656Z" fill="#C5A059" fill-opacity="0.6"></path>
+<path d="M5.53125 14.549L15.925 21.656V0L5.53125 14.549Z" fill="#C5A059" fill-opacity="0.8"></path>
+<path d="M15.925 20.081V23.968L26.269 16.143L15.925 20.081Z" fill="#e6d8be" fill-opacity="0.5"></path>
+<path d="M5.53125 16.143L15.812 23.968V20.081L5.53125 16.143Z" fill="#e6d8be"></path>
+</svg>
+<svg class="crypto-icon" fill="none" viewbox="0 0 111 90" xmlns="http://www.w3.org/2000/svg">
+<path clip-rule="evenodd" d="M24.4825 0.862305H88.0496C89.5663 0.862305 90.9675 1.64827 91.7239 2.92338L110.244 34.1419C111.204 35.7609 110.919 37.8043 109.549 39.1171L58.5729 87.9703C56.9216 89.5528 54.2652 89.5528 52.6139 87.9703L1.70699 39.1831C0.305262 37.8398 0.0427812 35.7367 1.07354 34.1077L20.8696 2.82322C21.6406 1.60483 23.0087 0.862305 24.4825 0.862305ZM79.8419 14.8003V23.5597H61.7343V29.6329C74.4518 30.2819 83.9934 32.9475 84.0642 36.1425L84.0638 42.803C83.993 45.998 74.4518 48.6635 61.7343 49.3125V64.2168H49.7105V49.3125C36.9929 48.6635 27.4513 45.998 27.3805 42.803L27.381 36.1425C27.4517 32.9475 36.9929 30.2819 49.7105 29.6329V23.5597H31.6028V14.8003H79.8419ZM55.7224 44.7367C69.2943 44.7367 80.6382 42.4827 83.4143 39.4727C81.0601 36.9202 72.5448 34.9114 61.7343 34.3597V40.7183C59.7966 40.8172 57.7852 40.8693 55.7224 40.8693C53.6595 40.8693 51.6481 40.8172 49.7105 40.7183V34.3597C38.8999 34.9114 30.3846 36.9202 28.0304 39.4727C30.8066 42.4827 42.1504 44.7367 55.7224 44.7367Z" fill="#009393" fill-rule="evenodd"></path>
+</svg>
+</div>
+</div>
+<h2 class="instruction-title">USDT 匯款地址與金額</h2>
+<p class="instruction-sub">請依造你要投資的金額 以 <span style="background: var(--nk-gold-dark); color: #fff; padding: 2px 6px; border-radius: 4px; font-weight: 900; margin: 0 4px; font-family: --font-code">1 USD = 1 USDT</span> 換算成USDT,並發送至下方收款地址</p>
+<div class="address-box">
+<div class="address-label">收款地址</div>
+<div class="address-value" id="wallet-address">
+<span class="decoding-text">CONNECTING TO LEDGER...</span>
+</div>
+</div>
+<button class="btn-mega-copy" id="copy-btn" onclick="copyAddress()">一鍵複製收款地址 <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" style="width: 22px; height: 22px; vertical-align: middle; margin-left: 5px; margin-bottom: 4px;" viewbox="0 0 24 24"><rect height="13" rx="2" ry="2" width="13" x="9" y="9"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button>
+</div>
+<div class="completion-panel-v2">
+<h2 style="color: #fff; font-family: var(--font-tc); font-size: 1.6rem; margin-bottom: 25px; font-weight: 900; letter-spacing: 2px; text-shadow: 0 2px 10px rgba(0,0,0,0.8);"><svg fill="none" stroke="#00ff41" stroke-linecap="round" stroke-linejoin="round" stroke-width="3" style="width: 32px; height: 32px; filter: drop-shadow(0 0 8px rgba(0,255,65,0.5));" viewbox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg> 匯款完成請核實入帳狀態</h2>
+<div style="width: 100%; background: #000; border: 1px solid #222; border-radius: 8px; padding: 30px 10px; margin-bottom: 25px; position: relative; overflow: hidden; box-shadow: inset 0 0 20px rgba(197,160,89,0.05);">
+<svg style="width: 100%; height: auto; display: block; overflow: visible;" viewbox="0 0 500 150">
+<path d="M 105 70 L 225 70" stroke="#222" stroke-dasharray="4,4" stroke-width="2"></path>
+<path d="M 275 70 L 385 70" stroke="#222" stroke-dasharray="4,4" stroke-width="2"></path>
+<path class="flow-path-1" d="M 105 70 L 225 70" fill="none" stroke="var(--nk-gold-rich)" stroke-width="3"></path>
+<path class="flow-path-2" d="M 275 70 L 385 70" fill="none" stroke="var(--nk-gold-rich)" stroke-width="3"></path>
+<circle cx="80" cy="70" fill="#0a0a0a" r="25" stroke="var(--nk-gold-dark)" stroke-width="2"></circle>
+<svg fill="#aaa" height="28" viewbox="0 0 24 24" width="28" x="66" y="56"><path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"></path></svg>
+<text fill="#888" font-family="var(--font-code)" font-size="12" font-weight="bold" letter-spacing="1" text-anchor="middle" x="80" y="125">YOUR WALLET</text>
+<circle class="meeting-node" cx="250" cy="70" fill="#0a0a0a" r="25" stroke="#333" stroke-width="2"></circle>
+<svg fill="#ccc" height="28" viewbox="0 0 24 24" width="28" x="236" y="56"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"></path></svg>
+<text fill="#ccc" font-family="var(--font-tc)" font-size="13" font-weight="bold" letter-spacing="2" text-anchor="middle" x="250" y="125">完成驗證</text>
+<text class="popup-text-anim" fill="var(--nk-gold-rich)" font-family="var(--font-tc)" font-size="16" font-weight="900" letter-spacing="2" text-anchor="middle" x="420" y="25">正式啟用</text>
+<circle class="system-node" cx="420" cy="70" fill="#0a0a0a" r="32" stroke="#333" stroke-width="2"></circle>
+<image class="system-logo" height="50" href="https://arftk.com/imgs1/logo1.png" width="50" x="395" y="45"/>
+<text fill="var(--nk-gold-dark)" font-family="var(--font-code)" font-size="12" font-weight="bold" letter-spacing="1" text-anchor="middle" x="420" y="125">NσK SYSTEM</text>
+</svg>
+</div>
+<div id="check-section">
+<div id="check-section" style="margin-top: 30px;">
+<p style="font-size: 1.1rem; color: #ccc; line-height: 1.7; margin-bottom: 25px; text-align: justify;">
+                資金發送完成後，請點擊複製下方的<strong style="color: var(--nk-gold-rich); border-bottom: 1px solid var(--nk-gold-rich);">開通密碼</strong>，並回到 NσK® 官方 Telegram 機器人發送給系統。<br/><br/>
+                系統將會自動連線區塊鏈判別是否成功入帳，一旦確認入帳，就會立即為你自動開通系統運作權限！
+            </p>
+<div class="copy-cmd-box" onclick="copyDynamicText(this)" style="margin-bottom: 30px; max-width: 400px; margin-left: auto; margin-right: auto;">
+<span class="static-code" style="font-size: 1.6rem; letter-spacing: 4px;">NVI89AF0</span>
+<div class="copy-btn-area">
+<svg class="copy-icon" viewbox="0 0 24 24"><path d="M16 1H4C2.9 1 2 1.9 2 3v14h2V3h12V1zm3 4H8C6.9 5 6 5.9 6 7v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"></path></svg>
+</div>
+</div>
+<a class="btn-completion-v2" href="YOUR_TELEGRAM_LINK_HERE" style="text-decoration: none;">
+<svg fill="none" stroke="currentColor" stroke-width="2" style="width: 24px; height: 24px; margin-right: 5px;" viewbox="0 0 24 24"><line x1="22" x2="11" y1="2" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                前往 Telegram 系統機器人
+            </a>
+</div>
+</div>
+</div>
+<div class="security-audit-box">
+<span class="audit-label">SECURE PAYMENT</span>
+<div class="audit-logos">
+<svg fill="none" height="26" viewbox="0 0 146 34" width="110" xmlns="http://www.w3.org/2000/svg"><path clip-rule="evenodd" d="M43.27 9.273V0h3.092v34H43.27V18.546h-3.089V34H37.09V18.546H3.091v3.09H34V34h-3.092v-9.273H15.454V34h-3.092v-9.273h-3.09V34h-3.09v-9.273h-3.09V34H0V0h3.092v15.454h3.09V0h3.09v15.454H43.272v-3.092H12.361V0h3.092v9.273h15.454V0H34v9.273h3.09V0h3.091v9.273h3.09zm23.977 6.445v-3.356h2.518v9.23h-2.518v-3.356h-7.55v3.356H57.18v-9.23h2.518v3.356h7.549zm47.822 2.518h-2.518l2.518-2.518v-3.355h-2.518v3.355h-7.549v-3.355h-2.518v9.229h2.518v-3.356h7.549v3.356h2.518v-3.356zm-31.882-5.874H72.28v9.23h2.518v-3.356h7.552v3.355h2.518v-9.229h-1.68zm-8.389 3.356v-.84h7.552v.84h-7.552zm25.168-3.356v2.518H89.899v4.193h10.067v2.518H87.38v-9.229h12.585zm30.202 2.518v-2.518h-12.585v9.23h12.585v-2.518h-10.067v-.838h10.067v-2.518h-10.067v-.838h10.067zm12.583 3.356v-5.874h2.518v9.23h-2.518l-7.549-5.874v5.873h-2.518v-9.229h2.518l7.549 5.874z" fill="#ffffff" fill-rule="evenodd"></path></svg>
+<svg fill="none" style="height: 24px; width: auto;" viewbox="0 0 2750 552" xmlns="http://www.w3.org/2000/svg"><path d="M259.998 0L75.6531 61.5265Z" fill="#ffffff"></path><path d="M259.998 0L444.342 61.5265Z" fill="#ffffff"></path><path d="M159.34 301.235H360.656Z" fill="#ffffff"></path><path d="M75.6531 61.5265L93.9042 95.4048Z" fill="#ffffff"></path><path d="M137.805 261.253H382.191Z" fill="#ffffff"></path><path d="M426.092 95.4048L444.342 61.5265Z" fill="#ffffff"></path><path d="M482.849 74.3677L512.363 84.2217Z" fill="#ffffff"></path><path d="M259.999 39.9717L426.092 95.4048Z" fill="#ffffff"></path><path d="M37.1479 74.3677L7.63753 84.2244Z" fill="#ffffff"></path><path d="M93.9042 95.4048L259.999 39.9717Z" fill="#ffffff"></path><path d="M259.998 0L75.6531 61.5265L93.9042 95.4048L259.999 39.9717L426.092 95.4048L444.342 61.5265L259.998 0Z" fill="#ffffff"></path><path clip-rule="evenodd" d="M360.656 301.235H159.34L259.998 488.12L360.656 301.235ZM137.805 261.253H382.191L482.849 74.3677L512.363 84.2217C530.76 179.32 515.683 277.851 469.687 363.108C423.692 448.365 349.609 515.101 259.999 552C170.39 515.101 96.307 448.365 50.3114 363.108C4.31582 277.851 -10.76 179.323 7.63753 84.2244L37.1479 74.3677L137.805 261.253ZM85.396 343.908C55.6135 288.614 40.0155 226.801 39.9984 164.004L210.656 480.849C158.216 446.254 115.179 399.203 85.396 343.908ZM479.999 164.004L309.342 480.849C361.782 446.254 404.819 399.203 434.602 343.908C464.384 288.614 479.982 226.801 479.999 164.004Z" fill="#ffffff" fill-rule="evenodd"></path><path d="M779 414C769.4 414 760.6 411.828 752.6 407.483C744.867 402.883 738.6 396.878 733.8 389.467C729.267 381.8 727 373.367 727 364.167V187.833C727 178.633 729.267 170.328 733.8 162.917C738.6 155.25 744.867 149.244 752.6 144.9C760.6 140.3 769.4 138 779 138H1014.2V179.4H785C780.733 179.4 777.133 180.806 774.2 183.617C771.533 186.172 770.2 189.494 770.2 193.583V358.417C770.2 362.506 771.533 365.956 774.2 368.767C777.133 371.322 780.733 372.6 785 372.6H1014.2V414H779Z" fill="#ffffff"></path><path d="M1134.2 414V138H1398.2V179.4H1177.8V255.3H1355V296.7H1177.8V372.6H1398.2V414H1134.2Z" fill="#ffffff"></path><path d="M1754.2 413.809L1664.2 310.692H1720.6L1804.6 406.142V413.809H1754.2ZM1518.2 413.809V138.192H1753.8C1763.4 138.192 1772.2 140.492 1780.2 145.092C1788.2 149.692 1794.47 155.825 1799 163.492C1803.8 170.903 1806.2 179.081 1806.2 188.025V265.459C1806.2 274.659 1803.8 283.092 1799 290.759C1794.47 298.17 1788.2 304.175 1780.2 308.775C1772.2 313.12 1763.4 315.292 1753.8 315.292L1561.4 315.675V413.809H1518.2ZM1571.4 273.509H1753C1755.67 273.509 1757.93 272.614 1759.8 270.825C1761.67 269.036 1762.6 266.864 1762.6 264.309V189.175C1762.6 186.62 1761.67 184.447 1759.8 182.659C1757.93 180.614 1755.67 179.592 1753 179.592H1571.4C1568.73 179.592 1566.33 180.614 1564.2 182.659C1562.33 184.447 1561.4 186.62 1561.4 189.175V264.309C1561.4 266.864 1562.33 269.036 1564.2 270.825C1566.33 272.614 1568.73 273.509 1571.4 273.509Z" fill="#ffffff"></path><path d="M2036.6 414V179.4H1914.2V138H2202.2V179.4H2079.8V414H2036.6Z" fill="#ffffff"></path><path d="M2310.2 414V138H2353.4V414H2310.2Z" fill="#ffffff"></path><path d="M2473.4 414V138H2517V255.3H2596.6L2699 138H2749V145.667L2635 276L2749.4 406.333V414H2699L2596.6 296.7H2517V414H2473.4Z" fill="#ffffff"></path></svg>
+</div>
+</div>
+<script>
+            // 強硬讀取 localStorage
+            const urlParams = new URLSearchParams(window.location.search);
+            const finalAddress = window.NOK_USER ? window.NOK_USER.address : "系統分配異常";
+
+            window.onload = () => {
+                setTimeout(playAddressAnimation, 300);
+            };
+
+            // --- 科技解密動畫 ---
+            function playAddressAnimation() {
+                const el = document.getElementById('wallet-address');
+                if(!el) return;
+                
+                const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+                let iterations = 0;
+                const animationInterval = setInterval(() => {
+                    let randomStr = "0x";
+                    for(let i=0; i<38; i++) randomStr += chars.charAt(Math.floor(Math.random() * chars.length));
+                    el.innerHTML = `<span class="decoding-text">${randomStr}</span>`;
+                    iterations++;
+                    if (iterations > 20) { 
+                        clearInterval(animationInterval);
+                        el.innerText = finalAddress;
+                        el.style.color = "#00ff41";
+                        setTimeout(() => { el.style.color = "#ffffff"; }, 500);
+                    }
+                }, 60);
+            }
+
+            // --- 複製地址 ---
+            function copyAddress() {
+                if (finalAddress.includes("異常")) {
+                    alert("無法複製：請返回 Telegram 重新獲取專屬地址。");
+                    return;
+                }
+                navigator.clipboard.writeText(finalAddress).then(() => {
+                    const btn = document.getElementById('copy-btn');
+                    const originalHTML = btn.innerHTML; // 備份原始圖標與文字
+                    btn.innerHTML = "✅ 已複製 / SECURELY COPIED";
+                    btn.style.background = "#00ff41";
+                    btn.style.color = "#000";
+                    setTimeout(() => { 
+                        btn.innerHTML = originalHTML; 
+                        btn.style.background = "linear-gradient(135deg, var(--nk-gold-dark) 0%, var(--nk-gold-rich) 50%, var(--nk-gold-dark) 100%)"; 
+                        btn.style.color = "#000";
+                    }, 3000);
+                });
+            }
+
+            // --- 複製開通密碼 ---
+            function copyDynamicText(element) {
+                var codeText = element.querySelector('.static-code').innerText;
+                navigator.clipboard.writeText(codeText).then(function() {
+                    element.classList.add('copy-success');
+                    setTimeout(function() {
+                        element.classList.remove('copy-success');
+                    }, 1500);
+                });
+            }
+        </script>
+</body>
+</html>
